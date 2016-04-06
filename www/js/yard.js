@@ -8,7 +8,9 @@ angular.module('ame2', ['ionic'])
 .controller('AME2Ctrl', function($scope) {
   // No need for testing data anymore
   $scope.colonies = [
-      { name: '15-021'}
+      { name: '16-025'},
+      { name: '16-024'},
+      { name: '15-106'}
   ];
 
 

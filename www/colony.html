@@ -58,7 +58,9 @@
             <button menu-toggle="right" class="button button-icon ion-female"></button>
           </ion-nav-buttons>
           <ion-nav-title>
-            <h1 class="title">[Colony]</h1>
+            <a class="button button-icon ion-home" href='index.html'></a>
+            <a class="button button-icon ion-location" href='yard.html'></a>
+            <i class="icon ion-ios-box">15-021</i>
           </ion-nav-title>
           <ion-nav-buttons side="left">
             <!-- Toggle left side menu -->
@@ -69,14 +71,15 @@
 
 
           <div class="padding">
-            Apr 2016: note about the origin of this colony<br><br>
-
+            Apr 2016: note about the origin of this colony<br>
+            <button class="button button-small button-outline button-dark" ng-click="colonyInactive(colony)">Inactive</button>
+            <br>
             Display Summary of Last visit.
+
           </div>
 
         </ion-content>
         <div class="bar bar-footer">
-          <button class="button button-small button-outline button-dark" ng-click="colonyInactive(colony)">Inactive</button>
           <button class="button button-icon ion-clipboard" ng-click="createVisit(colony)">+</button>
         </div>
       </ion-side-menu-content>

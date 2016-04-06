@@ -52,7 +52,10 @@
             <button menu-toggle="right" class="button button-icon ion-ios-box"></button>
           </ion-nav-buttons>
           <ion-nav-title>
-            <h1 class="title">[Queen]</h1>
+            <a class="button button-icon ion-home" href='index.html'></a>
+            <a class="button button-icon ion-location" href='yard.html'></a>
+            <a class="button button-icon ion-ios-box" href='colony.html'></a>
+            <i class="icon ion-female">15-109</i>
           </ion-nav-title>
           <ion-nav-buttons side="left">
             <!-- Toggle left side menu -->
@@ -64,12 +67,13 @@
 
           <div class="padding">
             Apr 2016: note about the origin of this Queen<br><br>
+            <button class="button button-small button-outline button-dark" ng-click="queenInactive(queen)">Inactive</button>
 
           </div>
 
         </ion-content>
         <div class="bar bar-footer">
-          <button class="button button-small button-outline button-dark" ng-click="queenInactive(queen)">Inactive</button>
+          <button class="button button-icon ion-female" ng-click="createVisit(colony)">+</button>
         </div>
       </ion-side-menu-content>
     </ion-side-menus>
