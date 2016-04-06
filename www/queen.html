@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <!-- compiled css output -->
+    <link href="css/ionic.app.css" rel="stylesheet">
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <!-- this page's js -->
+    <script src="js/queen.js"></script>
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+  </head>
+  <body ng-app="ame5" ng-controller="AME5Ctrl">
+    <ion-side-menus>
+      <!-- Left menu = Past Visits -->
+      <ion-side-menu side="left">
+        <header class="bar bar-header">
+          <header class="bar bar-header bar-stable bar-dark">
+            <h1 class="title">Past Visits</h1>
+          </header>
+        </header>
+        <ion-content class="has-header">
+          <ion-list>
+            <ion-item ng-repeat="visit in visits">
+              <a class="item item-icon-left ion-clipboard" href="new-visit.html">
+                {{visit.date}}
+              </a>
+            </ion-item>
+          </ion-list>
+        </ion-content>
+      </ion-side-menu>
+
+      <!-- Right menu = Colonies the queen has been in -->
+      <ion-side-menu side="right">
+        <header class="bar bar-header bar-dark">
+          <h1 class="title">Queen's Colonies</h1>
+        </header>
+        <ion-content class="has-header">
+          <div class="list">
+            <item class="item" ng-repeat="colony in colonies" ng-click='goToColony(colony)'>
+              <label>{{colony.name}}</label>
+            </item>
+          </div>
+        </ion-content>
+      </ion-side-menu>
+      <ion-side-menu-content>
+        <ion-nav-bar class="bar-dark">
+          <ion-nav-buttons side="right">
+            <!-- Toggle Right side menu -->
+            <button menu-toggle="right" class="button button-icon ion-ios-box"></button>
+          </ion-nav-buttons>
+          <ion-nav-title>
+            <h1 class="title">[Queen]</h1>
+          </ion-nav-title>
+          <ion-nav-buttons side="left">
+            <!-- Toggle left side menu -->
+            <button menu-toggle="left" class="button button-icon ion-clipboard"></button>
+          </ion-nav-buttons>
+        </ion-nav-bar>
+        <ion-content class="has-header">
+
+
+          <div class="padding">
+            Apr 2016: note about the origin of this Queen<br><br>
+
+          </div>
+
+        </ion-content>
+        <div class="bar bar-footer">
+          <button class="button button-small button-outline button-dark" ng-click="queenInactive(queen)">Inactive</button>
+        </div>
+      </ion-side-menu-content>
+    </ion-side-menus>
+
+  </body>
+</html>
