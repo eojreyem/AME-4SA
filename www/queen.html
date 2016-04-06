@@ -18,7 +18,7 @@
       <ion-side-menu side="left">
         <header class="bar bar-header">
           <header class="bar bar-header bar-stable bar-dark">
-            <h1 class="title">Past Visits</h1>
+            <h1 class="title">Visits with Queen</h1>
           </header>
         </header>
         <ion-content class="has-header">
@@ -45,22 +45,17 @@
           </div>
         </ion-content>
       </ion-side-menu>
+
       <ion-side-menu-content>
         <ion-nav-bar class="bar-dark">
-          <ion-nav-buttons side="right">
-            <!-- Toggle Right side menu -->
-            <button menu-toggle="right" class="button button-icon ion-ios-box"></button>
-          </ion-nav-buttons>
-          <ion-nav-title>
+          <ion-nav-buttons side="left">
             <a class="button button-icon ion-home" href='index.html'></a>
             <a class="button button-icon ion-location" href='yard.html'></a>
-            <a class="button button-icon ion-ios-box" href='colony.html'></a>
+            <a class="button button-icon ion-ios-box" href='colony.html'></a>          </ion-nav-buttons>
+          <ion-nav-title>
             <i class="icon ion-female">15-109</i>
           </ion-nav-title>
-          <ion-nav-buttons side="left">
-            <!-- Toggle left side menu -->
-            <button menu-toggle="left" class="button button-icon ion-clipboard"></button>
-          </ion-nav-buttons>
+
         </ion-nav-bar>
         <ion-content class="has-header">
 
@@ -72,11 +67,14 @@
           </div>
 
         </ion-content>
-        <div class="bar bar-footer">
-          <button class="button button-icon ion-female" ng-click="createVisit(colony)">+</button>
-        </div>
+
       </ion-side-menu-content>
-    </ion-side-menus>
+      <ion-footer-bar>
+
+      <ion-footer-bar>
+      <button menu-toggle="left" class="button button-icon ion-clipboard"></button>
+          <button menu-toggle="right" class="button button-icon ion-ios-box"></button>
+      </ion-side-menus>
 
   </body>
 </html>

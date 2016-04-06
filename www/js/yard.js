@@ -23,8 +23,8 @@ angular.module('ame2', ['ionic'])
 
   };
 
-  $scope.goBack = function() {
-    window.history.back();
+  $scope.goHome = function() {
+    window.location = 'index.html'
   }
 
 });
