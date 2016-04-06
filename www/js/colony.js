@@ -13,7 +13,9 @@ angular.module('ame3', ['ionic'])
     { date: 'Apr 22, 2016'},
   ];
   $scope.queens = [
-    { name: '15-013', origin: 'daughter of 14-003'},
+    { name: '16-007', origin: 'daughter of 15-013'},
+    { name: '15-013', origin: 'daughter of 14-092'},
+    { name: '14-092', origin: 'cut out in Mpls'},
   ];
 
 
@@ -32,6 +34,10 @@ angular.module('ame3', ['ionic'])
 
   $scope.createVisit = function(colony) {
     window.location = 'new-visit.html'
+  }
+
+  $scope.goToQueen = function(queen) {
+    window.location = 'queen.html'
   }
 
 });
