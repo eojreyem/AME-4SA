@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>AME-4SA</title>
+
+    <!-- compiled css output -->
+    <link href="css/ionic.app.css" rel="stylesheet">
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <!-- your app's js -->
+    <script src="js/app.js"></script>
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+  </head>
+  <body ng-app="ame" ng-controller="AMECtrl">
+    <ion-side-menus>
+
+
+      <!-- Left menu = Search Colonies and Queens -->
+      <ion-side-menu side="left">
+        <header class="bar bar-header item-input-inset">
+          <label class="item-input-wrapper">
+            <i class="icon ion-ios-search placeholder-icon"></i>
+            <input type="search" placeholder="Search for Colony or Queen">
+          </label>
+        </header>
+        <ion-content class="has-header">
+        </ion-content>
+      </ion-side-menu>
+
+      <!-- Right menu = Create Yard -->
+      <ion-side-menu side="right">
+        <header class="bar bar-header bar-stable">
+          <h1 class="title">Create Yard</h1>
+        </header>
+        <ion-content class="has-header">
+          <form ng-submit="createYard(yard)">
+            <div class="list">
+              <label class="item item-input">
+                <input type="text" placeholder="Golden Meadows" ng-model="yard.name">
+              </label>
+              <label class="item item-input">
+                <input type="number" placeholder="# of Colonies" ng-model="yard.numColonies">
+              </label>
+            </div>
+            <div class="padding">
+              <button type="submit" class="button button-outline button-dark button-icon">Add Yard  <i class="icon ion-location"></i></button>
+            </div>
+          </form>
+        </ion-content>
+      </ion-side-menu>
+
+      <!-- Main = List Yards & basic info then navigate to them -->
+      <ion-side-menu-content>
+        <ion-nav-bar class="bar-dark">
+          <ion-nav-buttons side="right">
+            <!-- Toggle left side menu -->
+            <button menu-toggle="right" class="button button-icon ion-location">+</button>
+          </ion-nav-buttons>
+          <ion-nav-title>
+            <h1 class="title">Four Seasons Apiaries</h1>
+          </ion-nav-title>
+          <ion-nav-buttons side="left">
+            <!-- Toggle left side menu -->
+            <button menu-toggle="left" class="button button-icon ion-search"></button>
+          </ion-nav-buttons>
+        </ion-nav-bar>
+        <ion-content class="has-header">
+          <!-- List of Yards -->
+          <ion-list>
+
+            <ion-item ng-repeat="yard in yards">
+              <a class="item item-icon-left item-icon-right" href="yard.html">
+                <i class="icon ion-location">{{yard.name}}</i>
+                <i class="icon ion-ios-box">{{yard.numColonies}}</i>
+              </a>
+
+            </ion-item>
+          </ion-list>
+        </ion-content>
+
+      </ion-side-menu-content>
+
+
+    </ion-side-menus>
+
+  </body>
+</html>
