@@ -15,6 +15,18 @@
   <body ng-app="ame2" ng-controller="AME2Ctrl">
     <ion-side-menus>
 
+      <!-- Left menu = Search Colonies and Queens -->
+      <ion-side-menu side="left">
+        <header class="bar bar-header item-input-inset">
+          <label class="item-input-wrapper">
+            <i class="icon ion-ios-search placeholder-icon"></i>
+            <input type="search" placeholder="Search for Colony or Queen">
+          </label>
+        </header>
+        <ion-content class="has-header">
+        </ion-content>
+      </ion-side-menu>
+
       <!-- Right menu = Create Colony -->
       <ion-side-menu side="right">
         <header class="bar bar-header bar-stable">
@@ -36,8 +48,6 @@
                 <input type="text" placeholder="Note about start of this colony" ng-model="colony.origin">
               </label>
             </div>
-
-
             <div class="padding">
               <button type="submit" class="button button-outline button-dark button-icon">Add Colony  <i class="icon ion-ios-box"></i></button>
             </div>
@@ -48,19 +58,14 @@
       <!-- Main = List Yards & basic info then navigate to them -->
       <ion-side-menu-content>
         <ion-nav-bar class="bar-dark">
-          <ion-nav-buttons side="right">
-            <!-- Toggle Right side menu -->
-            <button menu-toggle="right" class="button button-icon ion-ios-box">+</button>
+          <ion-nav-buttons side="left">
+            <button class="button button-icon ion-home" ng-click='goHome()'>></button>
           </ion-nav-buttons>
           <ion-nav-title>
-            <h1 class="title">[Name of Yard]</h1>
+            <i class="icon ion-location">Maple Acres</i>
           </ion-nav-title>
-          <ion-nav-buttons side="left">
-            <button class="button button-icon ion-search" ng-click="goBack()"></button>
-          </ion-nav-buttons>
         </ion-nav-bar>
         <ion-content class="has-header">
-          <p>*long press to move colony</p>
           <!-- List of Colonies in this yard -->
           <ion-list>
 
@@ -70,10 +75,17 @@
               </a>
 
             </ion-item>
+            <div class="padding">
+              *long press to move colony
+            </div>
           </ion-list>
         </ion-content>
 
       </ion-side-menu-content>
+      <ion-footer-bar>
+        <button menu-toggle="left" class="button button-icon ion-search" ></button>
+        <button menu-toggle="right" class="button button-icon ion-ios-box">+</button>
+      </ion-footer-bar>
 
 
     </ion-side-menus>
