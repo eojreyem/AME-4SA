@@ -12,6 +12,9 @@ angular.module('ame3', ['ionic'])
     { date: 'Apr 31, 2016'},
     { date: 'Apr 22, 2016'},
   ];
+  $scope.queens = [
+    { name: '15-013', origin: 'daughter of 14-003'},
+  ];
 
 
   // Called when the form is submitted
