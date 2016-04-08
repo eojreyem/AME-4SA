@@ -17,6 +17,22 @@ angular.module('ame3', ['ionic'])
     { name: '15-013', origin: 'daughter of 14-092'},
     { name: '14-092', origin: 'cut out in Mpls'},
   ];
+  $scope.recentVisit = [
+    { hive_type: 'Production',
+      qty_boxes: '3',
+      weight: '123',
+      start_queen_status: 'Seen',
+      end_queen_status: 'confined',
+      frames_of_bees_start: '3',
+      frames_of_bees_end: '3',
+      frames_of_brood_start: '3',
+      frames_of_brood_end: '3',
+      bad_temper: 'true',
+      disease: 'EFB',
+      varroa_per_100: '6',
+      feeding: 'false'
+    }
+  ];
 
 
   // Called when the form is submitted

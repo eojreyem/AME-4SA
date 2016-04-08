@@ -18,39 +18,57 @@
   <body ng-app="ame4" ng-controller="AME4Ctrl">
     <ion-side-menus>
 
-      <!-- Left menu = Measurements-->
       <ion-side-menu side="left">
-        <header class="bar bar-header">
-          <header class="bar bar-header bar-stable bar-dark">
-            <h1 class="title">Measurements</h1>
-          </header>
-        </header>
-        <ion-content class="has-header">
-          <div class="list">
-
-            <label class="item item-input">
-              <span class="input-label">Varroa (<i class="icon ion-bug")>/100)</i></span>
-              <input type="number">
-            </label>
-            <label class="item item-input">
-              <span class="input-label">Weight (lbs)</span>
-              <input type="number">
-            </label>
-            <div class="item item-divider">
-              Hygienic Test
-            </div>
-            <label class="item item-input">
-              <span class="input-label">Empty Cells (Start)</span>
-              <input type="number">
-            </label>
-            <label class="item item-input">
-              <span class="input-label">Uncleaned Cells (End)</span>
-              <input type="number">
-            </label>
-
-
+        <ion-content>
+          <div class="item item-divider item-dark">
+            Enter a Note
           </div>
+          <form ng-submit="createNote(note)">
+            <div class="list">
+              <label class="item item-input item-stacked-label">
+                <textarea rows="4" placeholder="Type Note Text"></textarea>
+              </label>
+              <li class="item item-toggle">
+                Reminder
+                <label class="toggle toggle-assertive">
+                  <input type="checkbox">
+                  <div class="track">
+                    <div class="handle"></div>
+                  </div>
+                </label>
+              </li>
+              <item class="col col-50 col-offset-50 padding">
+                <button type="submit" class="button button-small button-block button-positive">Submit Note</button>
+              </item>
+            </div>
+            </div>
+          </form>
+          <div class="item item-divider item-dark">
+            Enter Measurement
+          </div>
+          <form ng-submit="createMeasurement">
+            <div class="list">
+              <label class="item item-input item-select">
+                <div class="input-label">
+                  Test Type
+                </div>
+                <select class="item item-input item-select">
+                  <option>Varroa/100</option>
+                  <option>Weight</option>
+                  <option>Hygienic Empty</option>
+                  <option>Hygienic Unclean</option>
+                </select>
+              </label>
+              <label class="item item-input">
+                <input type="number" placeholder="Qty measured">
+              </label>
+              <item class="col col-50 col-offset-50 padding">
+                <button type="submit" class="button button-small button-block button-positive">Submit</button>
+              </item>
 
+
+            </div>
+          </form>
 
 
         </ion-content>
@@ -136,6 +154,7 @@
 
         </ion-content>
         <ion-footer-bar>
+          <div class="col"></div>
           <button class="button button-icon ion-female">+</button>
         </ion-footer-bar>
       </ion-side-menu>
@@ -143,17 +162,14 @@
       <!-- Main = Observations -->
       <ion-side-menu-content>
         <ion-nav-bar class="bar-dark">
-          <ion-nav-buttons side="right">
-            <!-- Toggle right side menu -->
-            <button menu-toggle="right" class="button button-icon ion-android-hand"></button>
-          </ion-nav-buttons>
-          <ion-nav-title>
-            <h1 class="title"> [Colony] - New <i class="icon ion-clipboard"></i></h1>
-          </ion-nav-title>
           <ion-nav-buttons side="left">
-            <!-- Toggle left side menu -->
-            <button menu-toggle="left" class="button button-icon ion-thermometer"></button>
+            <a class="button button-icon ion-home" href='index.html'>></a>
+            <a class="button button-icon ion-location" href='yard.html'>></a>
+            <button class="button button-icon ion-ios-box" ng-click='goToColony(colony)'>15-021></button>
+            <button class="button button-icon ion-clipboard">New</button>
+
           </ion-nav-buttons>
+
         </ion-nav-bar>
         <ion-content class="has-header">
 
@@ -179,7 +195,7 @@
               Observed
             </div>
             <div class="row">
-              <label class="item col-90 item-input item-select">
+              <label class="item col-70 item-input item-select">
                 <div class="input-label">
                   Queen Status
                 </div>
@@ -233,19 +249,15 @@
                 <option>Other</option>
               </select>
             </label>
+            <item class="col col-offset-20 col-60 padding">
+              <button class="button button-block button-positive" ng-click='goToColony(colony)'>Visit Close</button>
+            </item>
 
           </div>
-
-
-
-
-
-
-
-
         </ion-content>
         <ion-footer-bar>
-          <button class="button button-icon ion-compose">+</button>
+          <button menu-toggle="left" class="button button-icon ion-compose">+</button>
+          <button menu-toggle="right" class="button button-icon ion-android-hand"></button>
         </ion-footer-bar>
 
       </ion-side-menu-content>

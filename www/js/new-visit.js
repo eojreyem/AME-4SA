@@ -11,4 +11,8 @@ angular.module('ame4', ['ionic'])
       { name: '15-021'}
   ];
 
+  $scope.goToColony = function(colony) {
+    window.location = 'colony.html'
+  }
+
 });
