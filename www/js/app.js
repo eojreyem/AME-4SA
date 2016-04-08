@@ -23,7 +23,9 @@ angular.module('ame', ['ionic'])
 
   };
 
-  
+  $scope.goToYard = function(yard) {
+    window.location = 'yard.html'
+  }
 
 
 });

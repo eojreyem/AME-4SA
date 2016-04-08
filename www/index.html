@@ -46,8 +46,8 @@
                 <input type="number" placeholder="# of Colonies" ng-model="yard.numColonies">
               </label>
             </div>
-            <div class="padding">
-              <button type="submit" class="button button-outline button-dark button-icon">Add Yard  <i class="icon ion-location"></i></button>
+            <div class="col col-50 col-offset-50">
+              <button type="submit" class="button button-positive">Add Yard <i class="icon ion-location"></i></button>
             </div>
           </form>
         </ion-content>
@@ -62,16 +62,15 @@
         </ion-nav-bar>
         <ion-content class="has-header">
           <!-- List of Yards -->
-          <ion-list>
+          <div class="card" ng-repeat="yard in yards" ng-click="goToYard()">
+            <div class="item item-divider item-dark">
+              <span class="ion-location"> {{yard.name}} - <i class="icon ion-ios-box"> {{yard.numColonies}}</i></span>
+            </div>
+            <div class="item item-text-wrap">
+              visited 9 days ago
+            </div>
+          </div>
 
-            <ion-item ng-repeat="yard in yards">
-              <a class="item item-icon-left item-icon-right" href="yard.html">
-                <i class="icon ion-location">{{yard.name}}</i>
-                <i class="icon ion-ios-box">{{yard.numColonies}}</i>
-              </a>
-
-            </ion-item>
-          </ion-list>
         </ion-content>
         <ion-footer-bar>
           <button menu-toggle="left" class="button button-icon ion-search"></button>
