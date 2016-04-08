@@ -31,28 +31,6 @@
         </ion-content>
       </ion-side-menu>
 
-      <!-- Right menu = Create Yard -->
-      <ion-side-menu side="right">
-        <header class="bar bar-header bar-stable">
-          <h1 class="title">Create Yard</h1>
-        </header>
-        <ion-content class="has-header">
-          <form ng-submit="createYard(yard)">
-            <div class="list">
-              <label class="item item-input">
-                <input type="text" placeholder="Golden Meadows" ng-model="yard.name">
-              </label>
-              <label class="item item-input">
-                <input type="number" placeholder="# of Colonies" ng-model="yard.numColonies">
-              </label>
-            </div>
-            <div class="col col-50 col-offset-50">
-              <button type="submit" class="button button-positive">Add Yard <i class="icon ion-location"></i></button>
-            </div>
-          </form>
-        </ion-content>
-      </ion-side-menu>
-
       <!-- Main = List Yards & basic info then navigate to them -->
       <ion-side-menu-content>
         <ion-nav-bar class="bar-dark">
@@ -62,19 +40,36 @@
         </ion-nav-bar>
         <ion-content class="has-header">
           <!-- List of Yards -->
-          <div class="card" ng-repeat="yard in yards" ng-click="goToYard()">
-            <div class="item item-divider item-dark">
-              <span class="ion-location"> {{yard.name}} - <i class="icon ion-ios-box"> {{yard.numColonies}}</i></span>
+          <div class="list">
+
+            <div class="item item-divider">
+              Yard - # Colonies - Days since visit
             </div>
-            <div class="item item-text-wrap">
-              visited 9 days ago
-            </div>
+
+            <a class="item" ng-repeat="yard in yards" ng-click="goToYard()">
+              <i class="icon ion-location"> {{yard.name}} -</i>
+              <i class="icon ion-ios-box"> {{yard.numColonies}} - </i>
+              <i class="icon ion-clipboard"> 4/9 days ago</i>
+
+            </a>
           </div>
+
+
+          <form ng-submit="createYard(yard)">
+            <div class="item item-input">
+              <label class="item item-input">
+                <input type="text" placeholder="New Yard Name" ng-model="yard.name">
+              </label>
+              <div class="col">
+                <button type="submit" class="button button-positive">Add Yard <i class="icon ion-location"></i></button>
+              </div>
+            </div>
+          </form>
+
 
         </ion-content>
         <ion-footer-bar>
           <button menu-toggle="left" class="button button-icon ion-search"></button>
-          <button menu-toggle="right" class="button button-icon ion-location">+</button>
         </ion-footer-bar>
 
       </ion-side-menu-content>
