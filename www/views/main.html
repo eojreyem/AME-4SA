@@ -1,0 +1,26 @@
+<ion-content class="has-header">
+  <!-- List of Yards -->
+  <div class="list">
+
+    <div class="item item-divider">
+      Yard - # Colonies - Days since visit
+    </div>
+    <a class="item" ng-repeat="yard in yards" ng-click="goToYard(yard)">
+      <i class="icon ion-location"> {{yard.name}} -</i>
+      <i class="icon ion-ios-box"> 3 - </i>
+      <i class="icon ion-clipboard"> 4/9 days ago</i>
+    </a>
+  </div>
+
+  <form ng-submit="createYard(name)">
+    <div class="item item-input">
+      <label class="item item-input">
+        <input id="newyardname" type="text" placeholder="New Yard Name">
+      </label>
+      <div class="col">
+        <button type="submit" class="button button-positive">Add Yard <i class="icon ion-location"></i></button>
+      </div>
+    </div>
+  </form>
+
+</ion-content>

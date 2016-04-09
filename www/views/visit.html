@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>AME-4SA</title>
+
+    <!-- compiled css output -->
+    <link href="css/ionic.app.css" rel="stylesheet">
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <!-- your app's js -->
+    <script src="js/new-visit.js"></script>
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+  </head>
+  <body ng-app="ame4" ng-controller="AME4Ctrl">
+    <ion-side-menus>
+
+      <ion-side-menu side="left">
+        <ion-content>
+          <div class="item item-divider item-dark">
+            Enter a Note
+          </div>
+          <form ng-submit="createNote(note)">
+            <div class="list">
+              <label class="item item-input item-stacked-label">
+                <textarea rows="4" placeholder="Type Note Text"></textarea>
+              </label>
+              <li class="item item-toggle">
+                Reminder
+                <label class="toggle toggle-assertive">
+                  <input type="checkbox">
+                  <div class="track">
+                    <div class="handle"></div>
+                  </div>
+                </label>
+              </li>
+              <item class="col col-50 col-offset-50 padding">
+                <button type="submit" class="button button-small button-block button-positive">Submit Note</button>
+              </item>
+            </div>
+            </div>
+          </form>
+          <div class="item item-divider item-dark">
+            Record Data
+          </div>
+          <form ng-submit="createMeasurement">
+            <div class="list">
+              <label class="item item-input item-select">
+                <div class="input-label">
+                  Test Type
+                </div>
+                <select class="item item-input item-select">
+                  <option>Varroa/300</option>
+                  <option>Weight</option>
+                  <option>Hygienic Empty</option>
+                  <option>Hygienic Unclean</option>
+                </select>
+              </label>
+              <label class="item item-input">
+                <input type="number" placeholder="Qty measured">
+              </label>
+              <item class="col col-50 col-offset-50 padding">
+                <button type="submit" class="button button-small button-block button-positive">Submit</button>
+              </item>
+
+
+            </div>
+          </form>
+
+
+        </ion-content>
+      </ion-side-menu>
+
+      <!-- Right menu = Visit Changes -->
+      <ion-side-menu side="right">
+        <header class="bar bar-header bar-dark">
+          <h1 class="title">Changes From Visit</h1>
+        </header>
+        <ion-content class="has-header">
+          <div class="list">
+
+            <label class="item item-input item-select">
+              <div class="input-label">
+                Hive Type
+              </div>
+              <select>
+                <option selected>Production</option>
+                <option>Nucleus</option>
+                <option>Mating Nuc</option>
+                <option>Other</option>
+              </select>
+            </label>
+            <label class="item item-input">
+              <span class="input-label">Hive Bodies</span>
+              <input type="number">
+            </label>
+            <div class="row">
+              <div class="col col-80">
+                <label class="item item-input item-select">
+                  <div class="input-label">
+                    Queen
+                  </div>
+                  <select>
+                    <option selected>15-103</option>
+                    <option>14-201</option>
+                    <option>none</option>
+                  </select>
+                </label>
+              </div>
+              <div class="col">
+                <badge class="badge badge-balanced ion-female"> </badge>
+              </div>
+            </div>
+
+            <label class="item item-input item-select">
+              <div class="input-label">
+                Queen Status
+              </div>
+              <select>
+                <option selected>Not Seen</option>
+                <option>Seen</option>
+                <option>Not Found</option>
+                <option>Confined</option>
+                <option>Cell(s)</option>
+                <option>Queenless</option>
+                <option>Virgin(s)</option>
+                <option>Other</option>
+              </select>
+            </label>
+            <label class="item item-input">
+              <span class="input-label">F.O.Bees</span>
+              <input type="number">
+            </label>
+            <label class="item item-input">
+              <span class="input-label">F.O.Brood</span>
+              <input type="number">
+            </label>
+            <li class="item item-toggle">
+              Feeding
+              <label class="toggle toggle-energized">
+                <input type="checkbox">
+                <div class="track">
+                  <div class="handle"></div>
+                </div>
+              </label>
+            </li>
+          </div>
+
+        </ion-content>
+        <ion-footer-bar>
+          <div class="col"></div>
+          <button class="button button-icon ion-female">+</button>
+        </ion-footer-bar>
+      </ion-side-menu>
+
+      <!-- Main = Observations -->
+      <ion-side-menu-content>
+        <ion-nav-bar class="bar-dark">
+          <ion-nav-buttons side="left">
+            <a class="button button-icon ion-home" href='index.html'>></a>
+            <a class="button button-icon ion-location" href='yard.html'>></a>
+            <button class="button button-icon ion-ios-box" ng-click='goToColony(colony)'>15-021></button>
+            <button class="button button-icon ion-clipboard">New</button>
+          </ion-nav-buttons>
+
+        </ion-nav-bar>
+        <ion-content class="has-header">
+
+          <div class="list">
+            <button class="button button-block button-outline button-dark col-80 col-offset-10">Apr 3, 2016 @ 6:50pm</button>
+            <div class="item item-divider item-dark">
+              Observed
+              <badge class="badge badge-light ion-female"> </badge>
+            </div>
+            <label class="item item-input item-select">
+
+              <select>
+                <option selected>Not Seen</option>
+                <option>Seen</option>
+                <option>Not Found</option>
+                <option>Confined</option>
+                <option>Cell(s)</option>
+                <option>Queenless</option>
+                <option>Virgin(s)</option>
+                <option>Other</option>
+              </select>
+              <div class="input-label">
+                Queen Status
+              </div>
+            </label>
+            <label class="item item-input">
+              <span class="input-label">F.O.Bees</span>
+              <input type="number">
+            </label>
+            <label class="item item-input">
+              <span class="input-label">F.O.Brood</span>
+              <input type="number">
+            </label>
+            <li class="item item-toggle">
+              Bad Temper
+              <label class="toggle toggle-assertive">
+                <input type="checkbox">
+                <div class="track">
+                  <div class="handle"></div>
+                </div>
+              </label>
+            </li>
+            <label class="item item-input item-select">
+              <div class="input-label">
+                Diseases
+              </div>
+              <select>
+                <option selected>None noticed</option>
+                <option>AFB</option>
+                <option>EFB</option>
+                <option>Hive Beetles</option>
+                <option>Chalkbrood</option>
+                <option>Deform Wing</option>
+                <option>Sacbrood</option>
+                <option>Dysentary</option>
+                <option>Other</option>
+              </select>
+            </label>
+            <item class="col col-offset-20 col-60 padding">
+              <button class="button button-block button-positive" ng-click='goToColony(colony)'>Visit Close</button>
+            </item>
+
+          </div>
+        </ion-content>
+        <ion-footer-bar>
+          <button menu-toggle="left" class="button button-icon ion-compose">+</button>
+          <button menu-toggle="right" class="button button-icon ion-android-hand"></button>
+        </ion-footer-bar>
+
+      </ion-side-menu-content>
+
+
+      </ion-side-menus>
+
+      </body>
+      </html>

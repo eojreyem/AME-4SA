@@ -5,16 +5,10 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('ameApp')
 
-.controller('QueenCtrl', function($scope) {
+.controller('VisitCtrl', function($scope) {
   // No need for testing data anymore
-  $scope.visits = [
-    { date: 'May 9, 2016'},
-    { date: 'Apr 31, 2016'},
-    { date: 'Apr 22, 2016'},
-  ];
-  $scope.colonies = [
-    { name: '16-012'},
-    { name: '15-129'},
+  $scope.queens = [
+      { name: '15-021'}
   ];
 
   $scope.goToColony = function(colony) {
