@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('ameApp')
 
-.controller('ColonyCtrl', function($scope) {
+.controller('ColonyCtrl', function($scope, $location) {
   // No need for testing data anymore
   $scope.visits = [
     { date: 'May 9, 2016'},
@@ -13,9 +13,9 @@ angular.module('ameApp')
     { date: 'Apr 22, 2016'},
   ];
   $scope.queens = [
-    { name: '16-007', origin: 'daughter of 15-013'},
-    { name: '15-013', origin: 'daughter of 14-092'},
-    { name: '14-092', origin: 'cut out in Mpls'},
+    { name: '16-007', in_colony: "15-021", origin: 'daughter of 15-013'},
+    { name: '15-013', in_colony: "15-021", origin: 'daughter of 14-092'},
+    { name: '14-092', in_colony: "15-021", origin: 'cut out in Mpls'},
   ];
   $scope.recentVisit = [
     { hive_type: 'Production',
@@ -53,7 +53,10 @@ angular.module('ameApp')
   }
 
   $scope.goToQueen = function(queen) {
-    window.location = 'queen.html'
+    console.log(queen);
+    $location.url('/yard/C'+queen.in_colony + '/Q' + queen.name);
   }
+
+
 
 });

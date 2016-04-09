@@ -19,22 +19,22 @@ angular
     controller: 'MainCtrl'
   })
   .state('yard', {
-    url: '/yard/{yardName}',
+    url: '/{yardName}',
     templateUrl: 'views/yard.html',
     controller: 'YardCtrl'
   })
   .state('colony', {
-    url: '/colony/{colonyName}',
+    url: '/{yardName}/C{colonyName}',
     templateUrl: 'views/colony.html',
     controller: 'ColonyCtrl'
   })
   .state('queen', {
-    url: '/:yard.name/:colony.name/:name',
+    url: '/{yardName}/C{colonyName}/Q{queenName}',
     templateUrl: 'views/queen.html',
     controller: 'QueenCtrl'
   })
   .state('visit', {
-    url: '/:yard.name/:colony.name/:date-:time',
+    url: '/{yardName}/C{colonyName}/Visit/{visitDate}',
     templateUrl: 'views/visit.html',
     controller: 'VisitCtrl'
   })

@@ -10,9 +10,9 @@ angular.module('ameApp')
   $scope.yardName = $stateParams.yardName;
 
   $scope.colonies = [
-      { name: '16-025'},
-      { name: '16-024'},
-      { name: '15-106'}
+      { name: '16-025', in_yard: "Maple Acres"},
+      { name: '16-024', in_yard: "Charlies"},
+      { name: '15-106', in_yard: "Maple Acres"}
   ];
 
 
@@ -27,7 +27,7 @@ angular.module('ameApp')
 
   $scope.goToColony = function (colony){
     console.log(colony);
-    $location.url('/colony/' + colony.name);
+    $location.url('/'+colony.in_yard + '/C' + colony.name);
   }
 
   $scope.goHome = function() {
