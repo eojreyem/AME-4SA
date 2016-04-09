@@ -9,35 +9,34 @@ var currentYards = [];
 var example = angular.module('ame', ['ionic', 'ngCordova'])
 
 example.run(function($ionicPlatform, $cordovaSQLite) {
-  $ionicPlatform.ready(function() {
-    if (window.cordova) {
-      db = $cordovaSQLite.openDB({ name: "ame.db" }); //device
-    }else{
-      db = window.openDatabase("ame.db", '1', 'my', 1024 * 1024 * 100); // browser http://stackoverflow.com/questions/26101120/how-do-i-use-the-ngcordova-sqlite-service-and-the-cordova-sqliteplugin-with-ioni
-    }
-    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS yards (id INTEGER PRIMARY KEY, name TEXT)");
-
-    var query = "SELECT * FROM yards";
-    $cordovaSQLite.execute(db, query).then(function(res) {
-        if(res.rows.length > 0) {
-          for (i = 0; i < res.rows.length; i++) {
-            console.log("SELECTED -> " + res.rows.item(i));
-            currentYards.push(res.rows.item(i));
+        $ionicPlatform.ready(function() {
+          if (window.cordova) {
+            db = $cordovaSQLite.openDB({ name: "ame.db" }); //device
+          }else{
+            db = window.openDatabase("ame.db", '1', 'my', 1024 * 1024 * 100); // browser http://stackoverflow.com/questions/26101120/how-do-i-use-the-ngcordova-sqlite-service-and-the-cordova-sqliteplugin-with-ioni
           }
+          $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS yards (id INTEGER PRIMARY KEY, name TEXT)");
 
-        } else {
-            console.log("No results found");
-        }
-    }, function (err) {
-        console.error(err);
+          var query = "SELECT * FROM yards";
+          $cordovaSQLite.execute(db, query).then(function(res) {
+              if(res.rows.length > 0) {
+                for (i = 0; i < res.rows.length; i++) {
+                  console.log("SELECTED -> " + res.rows.item(i));
+                  currentYards.push(res.rows.item(i));
+                }
+
+              } else {
+                  console.log("No results found");
+              }
+          }, function (err) {
+              console.error(err);
+          });
+
+        });
     });
 
-  });
-});
 
-
-
-example.controller('indexController', function($scope, $cordovaSQLite) {
+example.controller('indexController', function($scope, $cordovaSQLite, $location) {
   // No need for testing data anymore
   $scope.yards = currentYards;
 
@@ -56,11 +55,9 @@ example.controller('indexController', function($scope, $cordovaSQLite) {
   };
 
 
-
-
-
-  $scope.goToYard = function(yard) {
-    window.location = 'yard.html'
+  $scope.goToYard = function (yard){
+    console.log(yard);
+    $location.url('/AME/' + yard.name);
   }
 
 
