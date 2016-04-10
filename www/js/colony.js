@@ -5,8 +5,26 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('ameApp')
 
-.controller('ColonyCtrl', function($scope, $location) {
+.controller('ColonyCtrl', function($scope, $location, $stateParams, $cordovaSQLite) {
   // No need for testing data anymore
+
+  //Load current yard into currentYard
+  currentYard = [];
+  var query = "SELECT * FROM Yards WHERE id = ?";
+  $cordovaSQLite.execute(db, query, [$stateParams.yardId]).then(function(res) {
+    currentYard = res.rows.item(0);
+    $scope.yardName = currentYard.name;
+  });
+
+  //Load current colony into currentColony
+  currentColony = [];
+  var query = "SELECT * FROM Colonies WHERE id = ?";
+  $cordovaSQLite.execute(db, query, [$stateParams.colonyId]).then(function(res) {
+    currentColony = res.rows.item(0);
+    $scope.colonyName = currentColony.name;
+  });
+
+
   $scope.visits = [
     { date: 'May 9, 2016'},
     { date: 'Apr 31, 2016'},
@@ -35,18 +53,22 @@ angular.module('ameApp')
   ];
 
 
-
-  $scope.goBack = function() {
-    window.history.back();
-  }
-
   $scope.createVisit = function(colony) {
-    window.location = 'new-visit.html'
+    $location.url('/yard/2' + '/colony/2'  + '/visit/2');
   }
 
   $scope.goToQueen = function(queen) {
     console.log(queen);
-    $location.url('/yard/C'+queen.in_colony + '/Q' + queen.name);
+    $location.url('/yard/2' + '/colony/2' + '/queen/2');
+  }
+
+  $scope.goToYard = function() {
+    console.log("nav to yard");
+    $location.url('/yard/' + currentYard.id );
+  }
+
+  $scope.goHome = function () {
+    $location.url('/')
   }
 
 

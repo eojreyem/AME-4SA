@@ -23,8 +23,11 @@ angular
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Visit_Data (id INTEGER PRIMARY KEY, visit_id INTEGER, data_type_id INTEGER, data_value INTEGER)");
 
     //tables need work
+    //TODO: (date_entered, date_active, date_inactive, reason_inactive_id)
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Colonies (id INTEGER PRIMARY KEY, name TEXT, in_yard_id INTEGER, origin TEXT)");
+    //TODO: (date_entered, date_emerged, date_inactive, reason_inactive_id)
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Queens (id INTEGER PRIMARY KEY, name TEXT, in_colony_id INTEGER, mother_queen_id INTEGER, origin TEXT, date_entered DATETIME DEFAULT CURRENT_TIMESTAMP, mark_color_hex INTEGER)");
+    //TODO: (lots)
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Visits (id INTEGER PRIMARY KEY, )");
 
 
@@ -49,7 +52,7 @@ angular
     controller: 'YardCtrl'
   })
   .state('colony', {
-    url: '/yard/{yardID}/colony/{colonyId}',
+    url: '/yard/{yardId}/colony/{colonyId}',
     templateUrl: 'views/colony.html',
     controller: 'ColonyCtrl'
   })
