@@ -7,11 +7,20 @@ angular.module('ameApp')
 
 .controller('YardCtrl', function($scope, $stateParams, $location, $cordovaSQLite) {
   // No need for testing data anymore
-  $scope.yardName = $stateParams.yardName;
+
+  //Load current yard into currentYard
+  currentYard = [];
+  var query = "SELECT * FROM Yards WHERE id = ?";
+
+  $cordovaSQLite.execute(db, query, [$stateParams.yardId]).then(function(res) {
+    currentYard = res.rows.item(0);
+    $scope.yardName = currentYard.name;
+  });
 
   $scope.colonies = [];
-  var query = "SELECT * FROM Colonies";
-  $cordovaSQLite.execute(db, query).then(function(res) {
+  var query = "SELECT * FROM Colonies WHERE in_yard_id = ?";
+  $cordovaSQLite.execute(db, query, [$stateParams.yardId]).then(function(res) {
+    console.log(res)
       if(res.rows.length > 0) {
         for (i = 0; i < res.rows.length; i++) {
           console.log("SELECTED -> " + res.rows.item(i));
@@ -24,10 +33,10 @@ angular.module('ameApp')
   }, function (err) {
       console.error(err);
   });
-  
+
   $scope.goToColony = function (colony){
     console.log(colony);
-    $location.url('/'+colony.in_yard + '/C' + colony.name);
+    $location.url('/yard/'+ currentYard.id + '/colony/' + colony.id);
   }
 
   $scope.createColony = function() {
@@ -35,8 +44,8 @@ angular.module('ameApp')
     var colonyNumber = document.getElementById("newColonyNumber").value;
     var colonyOrigin = document.getElementById("newColonyOrigin").value;
     console.log(newColonyNumber)
-    var query = "INSERT INTO Colonies (name, origin) VALUES (?,?)";
-    $cordovaSQLite.execute(db, query, [colonyNumber, colonyOrigin]).then(function(res) {
+    var query = "INSERT INTO Colonies (name, in_yard_id, origin) VALUES (?,?,?)";
+    $cordovaSQLite.execute(db, query, [colonyNumber, currentYard.id, colonyOrigin]).then(function(res) {
         console.log("INSERT ID -> " + res.insertId);
         $scope.colonies.push([res]);
     }, function (err) {
@@ -46,8 +55,5 @@ angular.module('ameApp')
 
   };
 
-  $scope.goHome = function() {
-    window.location = 'index.html'
-  }
 
 });
