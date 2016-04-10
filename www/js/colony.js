@@ -35,14 +35,6 @@ angular.module('ameApp')
   ];
 
 
-  // Called when the form is submitted
-  $scope.createColony = function(colony) {
-    $scope.colonies.push({
-      name: colony.name,
-    });
-    colony.name = "";
-
-  };
 
   $scope.goBack = function() {
     window.history.back();
