@@ -16,7 +16,7 @@ angular
     }else{
       db = window.openDatabase("AME_4SA.db", '1', 'my', 1024 * 1024 * 100); // browser
     }
-    //$cordovaSQLite.execute(db, "DROP TABLE Colonies"); //Use to remove a table
+    //$cordovaSQLite.execute(db, "DROP TABLE Yards"); //Use to remove a table
     //complete tables
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Yards (id INTEGER PRIMARY KEY, name TEXT)");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Visit_Notes (id INTEGER PRIMARY KEY, visit_id INTEGER, note TEXT, is_reminder INTEGER)");
