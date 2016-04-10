@@ -1,4 +1,4 @@
-<ion-side-menus>
+<ion-side-menus >
 
   <!-- Right menu = Create Colony -->
   <ion-side-menu side="right">
@@ -14,7 +14,7 @@
           </label>
           <label class="item item-input item-stacked-label">
             <span class="input-label">Colony Number</span>
-            <input id = "newColonyNumber" type="text" placeholder="001" ng-model="colony.number">
+            <input id = "newColonyNumber" type="text" placeholder="15-001" ng-model="colony.number">
           </label>
           <label class="item item-input item-stacked-label">
             <span  class="input-label">Origin</span>
@@ -29,7 +29,7 @@
   </ion-side-menu>
 
   <!-- Main = List Yards & basic info then navigate to them -->
-  <ion-side-menu-content>
+  <ion-side-menu-content ng-init="loadColonies()">
 
     <ion-content class="has-header">
       <!-- List of Colonies in this yard -->

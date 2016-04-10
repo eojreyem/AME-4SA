@@ -17,10 +17,12 @@ angular.module('ameApp')
     $scope.yardName = currentYard.name;
   });
 
-  $scope.colonies = [];
-  var query = "SELECT * FROM Colonies WHERE in_yard_id = ?";
-  $cordovaSQLite.execute(db, query, [$stateParams.yardId]).then(function(res) {
-    console.log(res)
+  //loads a list of colonies in currentYard
+  $scope.loadColonies = function() {
+    //clear current list
+    $scope.colonies = [];
+    var query = "SELECT * FROM Colonies WHERE in_yard_id = ?";
+    $cordovaSQLite.execute(db, query, [$stateParams.yardId]).then(function(res) {
       if(res.rows.length > 0) {
         for (i = 0; i < res.rows.length; i++) {
           console.log("SELECTED -> " + res.rows.item(i));
@@ -30,9 +32,11 @@ angular.module('ameApp')
       } else {
           console.log("No results found");
       }
-  }, function (err) {
-      console.error(err);
-  });
+    }, function (err) {
+        console.error(err);
+    });
+  };
+
 
   $scope.goToColony = function (colony){
     console.log(colony);
@@ -47,7 +51,7 @@ angular.module('ameApp')
     var query = "INSERT INTO Colonies (name, in_yard_id, origin) VALUES (?,?,?)";
     $cordovaSQLite.execute(db, query, [colonyNumber, currentYard.id, colonyOrigin]).then(function(res) {
         console.log("INSERT ID -> " + res.insertId);
-        $scope.colonies.push([res]);
+        $scope.loadColonies();
     }, function (err) {
         console.error(err);
     });
