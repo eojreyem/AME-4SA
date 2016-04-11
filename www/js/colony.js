@@ -53,13 +53,13 @@ angular.module('ameApp')
   ];
 
 
-  $scope.createVisit = function(colony) {
-    $location.url('/yard/2' + '/colony/2'  + '/visit/2');
+  $scope.createVisit = function() {
+    $location.url('/yard/' + currentYard.id + '/colony/' + currentColony.id  + '/visit/new');
   }
 
   $scope.goToQueen = function(queen) {
     console.log(queen);
-    $location.url('/yard/2' + '/colony/2' + '/queen/2');
+    $location.url('/yard/' + currentYard.id + '/colony/' + currentColony.id  + '/queen/2');
   }
 
   $scope.goToYard = function() {

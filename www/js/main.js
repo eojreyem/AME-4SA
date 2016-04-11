@@ -49,7 +49,6 @@ angular.module('ameApp')
 
 
   $scope.goToYard = function (yard){
-    console.log(yard);
     $location.url('/yard/' + yard.id);
   }
 

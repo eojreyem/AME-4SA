@@ -8,10 +8,14 @@
     </header>
     <ion-content class="has-header">
       <ion-list>
+        <ion-item>
+          fake data
+        </ion-item>
+
         <ion-item ng-repeat="visit in visits">
-          <a class="item item-icon-left ion-clipboard" href="new-visit.html">
+          <item class="item item-icon-left ion-clipboard" ng-click="goToVisit()">
             {{visit.date}}
-          </a>
+          </item>
         </ion-item>
       </ion-list>
     </ion-content>
@@ -39,7 +43,7 @@
   <ion-side-menu-content>
     <ion-header-bar class="bar-dark">
       <button menu-toggle="left" class="button button-icon ion-clipboard"></button>
-      <h1 class="title">C{{colonyName}}</h1>
+      <h1 class="title"><i class="icon  ion-ios-box"></i> {{colonyName}}</h1>
       <button menu-toggle="right" class="button button-icon ion-female"></button>
     </ion-header-bar>
     <ion-content class="has-header">
@@ -50,7 +54,7 @@
         <button class="button button-small button-outline button-dark" ng-click="colonyInactive(colony)">Inactive</button>
         <br>
         <div class="col-offset-20 col-60">
-          <button class="button button-block button-positive" ng-click="createVisit(colony)">New Visit</button>
+          <button class="button button-block button-positive" ng-click="createVisit()">New Visit</button>
         </div>
         Display Summary of Last visit.
 
@@ -58,7 +62,7 @@
     </ion-content>
     <ion-footer-bar class="bar bar-stable">
       <button class="button button-icon ion-home" ng-click="goHome()">></button>
-      <button class="button button-icon ion-location" ng-click="goToYard()">{{yardName}}</button>
+      <button class="button button-icon ion-location" ng-click="goToYard()">{{yardName}} ></button>
       <div class="col"></div>
     </ion-footer-bar>
 

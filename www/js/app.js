@@ -62,8 +62,9 @@ angular
     controller: 'QueenCtrl'
   })
   .state('visit', {
-    url: '/yard/{yardID}/colony/{colonyId}/visit/{visitId}',
+    url: '/yard/{yardId}/colony/{colonyId}/visit/{visitId}',
     templateUrl: 'views/visit.html',
     controller: 'VisitCtrl'
   })
+  $urlRouterProvider.otherwise('/');
 });

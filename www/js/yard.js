@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('ameApp')
 
-.controller('YardCtrl', function($scope, $stateParams, $location, $cordovaSQLite) {
+.controller('YardCtrl', function($scope, $stateParams, $location, $cordovaSQLite, $ionicSideMenuDelegate) {
   // No need for testing data anymore
 
   //Load current yard into currentYard
@@ -38,7 +38,6 @@ angular.module('ameApp')
 
 
   $scope.goToColony = function (colony){
-    console.log(colony);
     $location.url('/yard/'+ currentYard.id + '/colony/' + colony.id);
   }
 
@@ -51,6 +50,7 @@ angular.module('ameApp')
     $cordovaSQLite.execute(db, query, [colonyNumber, currentYard.id, colonyOrigin]).then(function(res) {
         console.log("INSERT ID -> " + res.insertId);
         $scope.loadColonies();
+        $ionicSideMenuDelegate.toggleRight();
     }, function (err) {
         console.error(err);
     });
