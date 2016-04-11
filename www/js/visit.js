@@ -16,13 +16,16 @@ angular.module('ameApp')
   if (visitId == "new"){
    $scope.visitTitle=" New";
    //initalize visit date and time
-   $scope.currentVisit.date_time = new Date();
+   $scope.currentVisit.date_time = "test with no date";
   }
   else if (visitId >= 0){
    $scope.visitTitle= " Visit ID:" + visitId
    var query = "SELECT * FROM Visits WHERE id = ?";
    $cordovaSQLite.execute(db, query, [visitId]).then(function(res) {
      $scope.currentVisit = res.rows.item(0);
+     $scope.currentVisit.has_temper = Boolean($scope.currentVisit.has_temper)
+     $scope.currentVisit.is_feeding = Boolean($scope.currentVisit.is_feeding)
+
    });
   }
   else {
@@ -60,37 +63,47 @@ angular.module('ameApp')
 
   $scope.saveVisit = function() {
 
-    //creates the visit.
-    console.log($scope.currentVisit);
+    //create visit if new.
     if (visitId == "new"){
-      var query = "INSERT INTO Visits (date_time, colony_id, yard_id) VALUES (?,?,?)";
-      $cordovaSQLite.execute(db, query, [$scope.currentVisit.date_time, currentColony.id, currentYard.id]).then(function(res) {
+      var query = "INSERT INTO Visits (colony_id, date_time, yard_id, qty_boxes, frames_of_bees_start, frames_of_bees_end, frames_of_brood_start, frames_of_brood_end, has_temper, is_feeding) "+
+      "VALUES ("
+      +currentColony.id+","
+      +"\"Apr 10\""+"," //will be date_time
+      +currentYard.id+","
+      +$scope.currentVisit.qty_boxes+","
+      +$scope.currentVisit.frames_of_bees_start+","
+      +$scope.currentVisit.frames_of_bees_end+","
+      +$scope.currentVisit.frames_of_brood_start+","
+      +$scope.currentVisit.frames_of_brood_end+",null,null)"
+    //  +($scope.currentVisit.has_temper?1:0)+","
+    //  +($scope.currentVisit.is_feeding?1:0)+")";
+      console.log(query);
+      $cordovaSQLite.execute(db, query).then(function(res) {
           console.log("INSERT ID -> " + res.insertId);
           visitId = res.insertId;
       }, function (err) {
           console.error(err);
       });
     }
+    else {
 
-    //TODO: wait for promise that says new visit stored and has an id!!!
-    //updates the visit with any edits in the fields
-    var query = "UPDATE Visits SET"+
-    " frames_of_bees_start = " +$scope.currentVisit.frames_of_bees_start+
-    ", frames_of_bees_end = " +$scope.currentVisit.frames_of_bees_end+
-    ", frames_of_brood_start = " +$scope.currentVisit.frames_of_brood_start+
-    ", frames_of_brood_end = " +$scope.currentVisit.frames_of_brood_end+
-    ", has_temper = " +$scope.currentVisit.has_temper+
-    ", is_feeding = " +$scope.currentVisit.is_feeding+
-    ", qty_boxes = " +$scope.currentVisit.qty_boxes+
-    " WHERE id = " + visitId;
-    console.log(query);
-    $cordovaSQLite.execute(db, query).then(function(res) {
-        console.log("Visit Updated ");
-    }, function (err) {
-        console.error(err);
-    });
-
-
+      //update existing visit with any edits in the fields
+      var query = "UPDATE Visits SET"+
+      " frames_of_bees_start = " +$scope.currentVisit.frames_of_bees_start+
+      ", frames_of_bees_end = " +$scope.currentVisit.frames_of_bees_end+
+      ", frames_of_brood_start = " +$scope.currentVisit.frames_of_brood_start+
+      ", frames_of_brood_end = " +$scope.currentVisit.frames_of_brood_end+
+      ", has_temper = " +($scope.currentVisit.has_temper?1:0)+
+      ", is_feeding = " +($scope.currentVisit.is_feeding?1:0)+
+      ", qty_boxes = " +$scope.currentVisit.qty_boxes+
+      " WHERE id = " + visitId;
+      console.log(query);
+      $cordovaSQLite.execute(db, query).then(function(res) {
+          console.log("Visit Updated ");
+      }, function (err) {
+          console.error(err);
+      });
+    }
 
 
 
