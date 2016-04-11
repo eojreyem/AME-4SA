@@ -24,11 +24,11 @@ angular
 
     //tables need work
     //TODO: (date_entered, date_active, date_inactive, reason_inactive_id)
-    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Colonies (id INTEGER PRIMARY KEY, name TEXT, in_yard_id INTEGER, origin TEXT)");
+    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Colonies (id INTEGER PRIMARY KEY, name TEXT, in_yard_id INTEGER, date_entered DATETIME DEFAULT CURRENT_TIMESTAMP, origin TEXT)");
     //TODO: (date_entered, date_emerged, date_inactive, reason_inactive_id)
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Queens (id INTEGER PRIMARY KEY, name TEXT, in_colony_id INTEGER, mother_queen_id INTEGER, origin TEXT, date_entered DATETIME DEFAULT CURRENT_TIMESTAMP, mark_color_hex INTEGER)");
     //TODO: (lots)
-    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Visits (id INTEGER PRIMARY KEY, )");
+    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Visits (id INTEGER PRIMARY KEY, date_entered DATETIME DEFAULT CURRENT_TIMESTAMP)");
 
 
 
