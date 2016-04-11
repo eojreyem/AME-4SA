@@ -56,6 +56,18 @@ angular.module('ameApp')
     });
   };
 
+  $scope.moveColony = function(colony) {
+    //TODO: popup list of yards for a move
+    console.log("moving " + colony.name + colony.id)
+    //testing this just moves colony to yard_id = 1
+    var query = "UPDATE Colonies SET in_yard_id = ? WHERE id = ?";
+    $cordovaSQLite.execute(db, query, [1, colony.id]).then(function(res) {
+        $scope.loadColonies();
+    }, function (err) {
+        console.error(err);
+    });
+  };
+
   $scope.goHome = function () {
     $location.url('/')
   }

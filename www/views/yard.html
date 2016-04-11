@@ -38,13 +38,13 @@
       <ion-list>
 
         <ion-item ng-repeat="colony in colonies">
-          <a class="item item-icon-left item-icon-right" ng-click="goToColony(colony)" on-hold="moveColony()">
+          <a class="item item-icon-left item-icon-right" ng-click="goToColony(colony)" on-hold="moveColony(colony)">
             <i class="icon ion-ios-box">{{colony.name}}</i>
           </a>
 
         </ion-item>
         <div class="padding">
-          *long press to move colony
+          *long press to move colony to yard 1
         </div>
       </ion-list>
     </ion-content>
