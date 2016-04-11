@@ -9,7 +9,7 @@ angular.module('ameApp')
   // No need for testing data anymore
 
   //Load current yard into currentYard
-  $scope.queenName = "15-FAKE"
+  
 
   currentYard = [];
   var query = "SELECT * FROM Yards WHERE id = ?";
@@ -24,6 +24,14 @@ angular.module('ameApp')
   $cordovaSQLite.execute(db, query, [$stateParams.colonyId]).then(function(res) {
     currentColony = res.rows.item(0);
     $scope.colonyName = currentColony.name;
+  });
+
+  //Load current queen into currentQueen
+  currentQueen = [];
+  var query = "SELECT * FROM Queens WHERE id = ?";
+  $cordovaSQLite.execute(db, query, [$stateParams.queenId]).then(function(res) {
+    currentQueen = res.rows.item(0);
+    $scope.queenName = currentQueen.name;
   });
 
 

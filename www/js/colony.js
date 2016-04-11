@@ -24,16 +24,31 @@ angular.module('ameApp')
     $scope.colonyName = currentColony.name;
   });
 
+  //loads a list of Queens in currentColony
+  $scope.loadQueens = function() {
+    //clear current list
+    $scope.queens = [];
+    var query = "SELECT * FROM Queens WHERE in_colony_id = ?";
+    $cordovaSQLite.execute(db, query, [$stateParams.colonyId]).then(function(res) {
+      if(res.rows.length > 0) {
+        for (i = 0; i < res.rows.length; i++) {
+          console.log("SELECTED -> " + res.rows.item(i));
+          $scope.queens.push(res.rows.item(i));
+        }
+
+      } else {
+          console.log("No results found");
+      }
+    }, function (err) {
+        console.error(err);
+    });
+  };
+
 
   $scope.visits = [
     { date: 'May 9, 2016'},
     { date: 'Apr 31, 2016'},
     { date: 'Apr 22, 2016'},
-  ];
-  $scope.queens = [
-    { name: '16-007', in_colony: "15-021", origin: 'daughter of 15-013'},
-    { name: '15-013', in_colony: "15-021", origin: 'daughter of 14-092'},
-    { name: '14-092', in_colony: "15-021", origin: 'cut out in Mpls'},
   ];
   $scope.recentVisit = [
     { hive_type: 'Production',
@@ -58,7 +73,7 @@ angular.module('ameApp')
   }
 
   $scope.goToQueen = function(queen) {
-    $location.url('/yard/' + currentYard.id + '/colony/' + currentColony.id  + '/queen/2');
+    $location.url('/yard/' + currentYard.id + '/colony/' + currentColony.id  + '/queen/' + queen.id);
   }
 
   $scope.goToYard = function() {
