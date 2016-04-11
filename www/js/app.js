@@ -10,8 +10,9 @@ angular
 
 .run(function($ionicPlatform, $cordovaSQLite){
   $ionicPlatform.ready(function() {
+
     if (window.cordova) {
-      db = $cordovaSQLite.openDB("AME_4SA.db"); //device
+      db = $cordovaSQLite.openDB({name: 'AME_4SA.db', location: 'default'}); //device
     }else{
       db = window.openDatabase("AME_4SA.db", '1', 'my', 1024 * 1024 * 100); // browser
     }

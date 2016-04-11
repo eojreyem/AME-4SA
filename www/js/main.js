@@ -35,7 +35,7 @@ angular.module('ameApp')
   $scope.createYard = function() {
     //TODO: check if yard name is unique
     var name = document.getElementById("newyardname");
-    console.log(name)
+    //console.log(name.value)
     var query = "INSERT INTO Yards (name) VALUES (?)";
     $cordovaSQLite.execute(db, query, [name.value]).then(function(res) {
       console.log("INSERT ID -> " + res.insertId);
