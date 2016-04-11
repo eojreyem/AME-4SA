@@ -58,7 +58,6 @@ angular.module('ameApp')
   }
 
   $scope.goToQueen = function(queen) {
-    console.log(queen);
     $location.url('/yard/' + currentYard.id + '/colony/' + currentColony.id  + '/queen/2');
   }
 

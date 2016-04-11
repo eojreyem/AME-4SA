@@ -5,20 +5,40 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('ameApp')
 
-.controller('QueenCtrl', function($scope) {
+.controller('QueenCtrl', function($scope, $location, $stateParams, $cordovaSQLite) {
   // No need for testing data anymore
-  $scope.visits = [
-    { date: 'May 9, 2016'},
-    { date: 'Apr 31, 2016'},
-    { date: 'Apr 22, 2016'},
-  ];
-  $scope.colonies = [
-    { name: '16-012'},
-    { name: '15-129'},
-  ];
 
-  $scope.goToColony = function(colony) {
-    window.location = 'colony.html'
+  //Load current yard into currentYard
+  $scope.queenName = "15-FAKE"
+
+  currentYard = [];
+  var query = "SELECT * FROM Yards WHERE id = ?";
+  $cordovaSQLite.execute(db, query, [$stateParams.yardId]).then(function(res) {
+    currentYard = res.rows.item(0);
+    $scope.yardName = currentYard.name;
+  });
+
+  //Load current colony into currentColony
+  currentColony = [];
+  var query = "SELECT * FROM Colonies WHERE id = ?";
+  $cordovaSQLite.execute(db, query, [$stateParams.colonyId]).then(function(res) {
+    currentColony = res.rows.item(0);
+    $scope.colonyName = currentColony.name;
+  });
+
+
+
+  $scope.goToColony = function() {
+    $location.url('/yard/' + currentYard.id + '/colony/' + currentColony.id);
+  }
+
+  $scope.goToYard = function() {
+    console.log("nav to yard");
+    $location.url('/yard/' + currentYard.id );
+  }
+
+  $scope.goHome = function () {
+    $location.url('/')
   }
 
 });

@@ -57,7 +57,7 @@ angular
     controller: 'ColonyCtrl'
   })
   .state('queen', {
-    url: '/yard/{yardID}/colony/{colonyId}/queen/{queenId}',
+    url: '/yard/{yardId}/colony/{colonyId}/queen/{queenId}',
     templateUrl: 'views/queen.html',
     controller: 'QueenCtrl'
   })

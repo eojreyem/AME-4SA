@@ -11,7 +11,6 @@ angular.module('ameApp')
   //Load current yard into currentYard
   currentYard = [];
   var query = "SELECT * FROM Yards WHERE id = ?";
-  console.log("yardid:" + $stateParams.yardId);
   $cordovaSQLite.execute(db, query, [$stateParams.yardId]).then(function(res) {
     currentYard = res.rows.item(0);
     $scope.yardName = currentYard.name;
