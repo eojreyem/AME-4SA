@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('ameApp')
 
-.controller('VisitCtrl', function($scope, $location, $stateParams, $cordovaSQLite) {
+.controller('VisitCtrl', function($scope, $location, $stateParams, $cordovaSQLite, $ionicSideMenuDelegate) {
   // No need for testing data anymore
 
   //Load current yard into currentYard
@@ -23,6 +23,20 @@ angular.module('ameApp')
     currentColony = res.rows.item(0);
     $scope.colonyName = currentColony.name;
   });
+
+  $scope.createQueen = function() {
+    //TODO: check if queen name is unique
+    var queenNumber = document.getElementById("newQueenNumber").value;
+    var queenOrigin = document.getElementById("newQueenOrigin").value;
+    var query = "INSERT INTO Queens (name, in_colony_id, origin) VALUES (?,?,?)";
+    $cordovaSQLite.execute(db, query, [queenNumber, currentColony.id, queenOrigin]).then(function(res) {
+        console.log("INSERT ID -> " + res.insertId);
+
+        $ionicSideMenuDelegate.toggleRight();
+    }, function (err) {
+        console.error(err);
+    });
+  };
 
   $scope.goToColony = function() {
     $location.url('/yard/' + currentYard.id + '/colony/' + currentColony.id);

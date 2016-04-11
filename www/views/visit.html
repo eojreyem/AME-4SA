@@ -58,84 +58,30 @@
 
   <!-- Right menu = Visit Changes -->
   <ion-side-menu side="right">
-    <header class="bar bar-header bar-dark">
-      <h1 class="title">Changes From Visit</h1>
+    <header class="bar bar-header bar-stable">
+      <h1 class="title">Create Queen</h1>
     </header>
     <ion-content class="has-header">
-      <div class="list">
-
-        <label class="item item-input item-select">
-          <div class="input-label">
-            Hive Type
-          </div>
-          <select>
-            <option selected>Production</option>
-            <option>Nucleus</option>
-            <option>Mating Nuc</option>
-            <option>Other</option>
-          </select>
-        </label>
-        <label class="item item-input">
-          <span class="input-label">Hive Bodies</span>
-          <input type="number">
-        </label>
-        <div class="row">
-          <div class="col col-80">
-            <label class="item item-input item-select">
-              <div class="input-label">
-                Queen
-              </div>
-              <select>
-                <option selected>15-103</option>
-                <option>14-201</option>
-                <option>none</option>
-              </select>
-            </label>
-          </div>
-          <div class="col">
-            <badge class="badge badge-balanced ion-female"> </badge>
-          </div>
-        </div>
-
-        <label class="item item-input item-select">
-          <div class="input-label">
-            Queen Status
-          </div>
-          <select>
-            <option selected>Not Seen</option>
-            <option>Seen</option>
-            <option>Not Found</option>
-            <option>Confined</option>
-            <option>Cell(s)</option>
-            <option>Queenless</option>
-            <option>Virgin(s)</option>
-            <option>Other</option>
-          </select>
-        </label>
-        <label class="item item-input">
-          <span class="input-label">F.O.Bees</span>
-          <input type="number">
-        </label>
-        <label class="item item-input">
-          <span class="input-label">F.O.Brood</span>
-          <input type="number">
-        </label>
-        <li class="item item-toggle">
-          Feeding
-          <label class="toggle toggle-energized">
-            <input type="checkbox">
-            <div class="track">
-              <div class="handle"></div>
-            </div>
+      <form ng-submit="createQueen()">
+        <div class="list">
+          <label class="item item-input">
+            <span class="input-label">Date</span>
+            <input type="date">
           </label>
-        </li>
-      </div>
-
+          <label class="item item-input item-stacked-label">
+            <span class="input-label">Queen Number</span>
+            <input id = "newQueenNumber" type="text" placeholder="15-001">
+          </label>
+          <label class="item item-input item-stacked-label">
+            <span  class="input-label">Origin</span>
+            <input id = "newQueenOrigin" type="text" placeholder="Note about start of this colony">
+          </label>
+        </div>
+        <div class="padding">
+          <button type="submit" class="button button-outline button-dark button-icon">Add Queen  <i class="icon ion-female"></i></button>
+        </div>
+      </form>
     </ion-content>
-    <ion-footer-bar>
-      <div class="col"></div>
-      <button class="button button-icon ion-female">+</button>
-    </ion-footer-bar>
   </ion-side-menu>
 
   <!-- Main = Observations -->
@@ -144,14 +90,17 @@
       <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon ion-compose">+</button>
         <h1 class="title ion-clipboard"> New</h1>
-        <button menu-toggle="right" class="button button-icon ion-android-hand"></button>
+        <button menu-toggle="right" class="button button-icon ion-female">+</button>
       </ion-nav-buttons>
 
     </ion-nav-bar>
     <ion-content class="has-header">
 
       <div class="list">
-        <button class="button button-block button-outline button-dark col-80 col-offset-10">Apr 3, 2016 @ 6:50pm</button>
+        <div class="item">
+          <button class="button button-outline button-dark">Apr 3, 2016 @ 6:50pm</button>
+          <button class="button button-positive" ng-click='goToColony()'>Save</button>
+        </div>
         <div class="item item-divider item-dark">
           Observed
           <badge class="badge badge-light ion-female"> </badge>
@@ -205,6 +154,75 @@
             <option>Other</option>
           </select>
         </label>
+        <div class="item item-divider item-dark">
+          Changes from Visit
+          <badge class="badge badge-light ion-female"> </badge>
+        </div>
+        <label class="item item-input item-select">
+          <div class="input-label">
+            Hive Type
+          </div>
+          <select>
+            <option selected>Production</option>
+            <option>Nucleus</option>
+            <option>Mating Nuc</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Hive Bodies</span>
+          <input type="number">
+        </label>
+        <div class="row">
+          <div class="col col-80">
+            <label class="item item-input item-select">
+              <div class="input-label">
+                Queen
+              </div>
+              <select>
+                <option selected>15-103</option>
+                <option>14-201</option>
+                <option>none</option>
+              </select>
+            </label>
+          </div>
+          <div class="col">
+            <badge class="badge badge-balanced ion-female"> </badge>
+          </div>
+        </div>
+        <label class="item item-input item-select">
+          <div class="input-label">
+            Queen Status
+          </div>
+          <select>
+            <option selected>Not Seen</option>
+            <option>Seen</option>
+            <option>Not Found</option>
+            <option>Confined</option>
+            <option>Cell(s)</option>
+            <option>Queenless</option>
+            <option>Virgin(s)</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label class="item item-input">
+          <span class="input-label">F.O.Bees</span>
+          <input type="number">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">F.O.Brood</span>
+          <input type="number">
+        </label>
+        <li class="item item-toggle">
+          Feeding
+          <label class="toggle toggle-energized">
+            <input type="checkbox">
+            <div class="track">
+              <div class="handle"></div>
+            </div>
+          </label>
+        </li>
+
         <item class="col col-offset-20 col-60 padding">
           <button class="button button-block button-positive" ng-click='goToColony()'>Visit Close</button>
         </item>
