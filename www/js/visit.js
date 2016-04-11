@@ -11,18 +11,18 @@ angular.module('ameApp')
 
   //Load current yard into currentYard
   $scope.currentVisit = [];
+  visitId = $stateParams.visitId;
 
-  if ($stateParams.visitId == "new"){
+  if (visitId == "new"){
    $scope.visitTitle=" New";
    //initalize visit date and time
    $scope.currentVisit.date_time = new Date();
   }
-  else if ($stateParams.visitId >= 0){
-   $scope.visitTitle= " Visit ID:" + $stateParams.visitId
+  else if (visitId >= 0){
+   $scope.visitTitle= " Visit ID:" + visitId
    var query = "SELECT * FROM Visits WHERE id = ?";
-   $cordovaSQLite.execute(db, query, [$stateParams.visitId]).then(function(res) {
+   $cordovaSQLite.execute(db, query, [visitId]).then(function(res) {
      $scope.currentVisit = res.rows.item(0);
-
    });
   }
   else {
@@ -59,17 +59,20 @@ angular.module('ameApp')
   };
 
   $scope.saveVisit = function() {
+
     //creates the visit.
     console.log($scope.currentVisit);
-    if ($stateParams.visitId == "new"){
+    if (visitId == "new"){
       var query = "INSERT INTO Visits (date_time, colony_id, yard_id) VALUES (?,?,?)";
       $cordovaSQLite.execute(db, query, [$scope.currentVisit.date_time, currentColony.id, currentYard.id]).then(function(res) {
           console.log("INSERT ID -> " + res.insertId);
+          visitId = res.insertId;
       }, function (err) {
           console.error(err);
       });
     }
 
+    //TODO: wait for promise that says new visit stored and has an id!!!
     //updates the visit with any edits in the fields
     var query = "UPDATE Visits SET"+
     " frames_of_bees_start = " +$scope.currentVisit.frames_of_bees_start+
@@ -79,13 +82,17 @@ angular.module('ameApp')
     ", has_temper = " +$scope.currentVisit.has_temper+
     ", is_feeding = " +$scope.currentVisit.is_feeding+
     ", qty_boxes = " +$scope.currentVisit.qty_boxes+
-    " WHERE id = ?";
+    " WHERE id = " + visitId;
     console.log(query);
-    $cordovaSQLite.execute(db, query,[$stateParams.visitId]).then(function(res) {
+    $cordovaSQLite.execute(db, query).then(function(res) {
         console.log("Visit Updated ");
     }, function (err) {
         console.error(err);
     });
+
+
+
+
 
     /* TODO: format for saving time in db
       var ss = currentTime.getSeconds();
