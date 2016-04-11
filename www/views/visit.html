@@ -1,5 +1,6 @@
 <ion-side-menus>
 
+  //Enter a note or data
   <ion-side-menu side="left">
     <ion-content>
       <div class="item item-divider item-dark">
@@ -20,7 +21,7 @@
             </label>
           </li>
           <item class="col col-50 col-offset-50 padding">
-            <button type="submit" class="button button-small button-block button-positive">Submit Note</button>
+            <button type="submit" class="button button-block button-positive">Save Note</button>
           </item>
         </div>
         </div>
@@ -36,7 +37,8 @@
             </div>
             <select class="item item-input item-select">
               <option>Varroa/300</option>
-              <option>Weight</option>
+              <option>Hive Weight (lbs)</option>
+              <option>Honey Harvest (lbs)</option>
               <option>Hygienic Empty</option>
               <option>Hygienic Unclean</option>
             </select>
@@ -45,7 +47,7 @@
             <input type="number" placeholder="Qty measured">
           </label>
           <item class="col col-50 col-offset-50 padding">
-            <button type="submit" class="button button-small button-block button-positive">Submit</button>
+            <button type="submit" class="button button-block button-positive">Save Data</button>
           </item>
 
 
@@ -56,7 +58,7 @@
     </ion-content>
   </ion-side-menu>
 
-  <!-- Right menu = Visit Changes -->
+  <!-- Right menu = Create a queen -->
   <ion-side-menu side="right">
     <header class="bar bar-header bar-stable">
       <h1 class="title">Create Queen</h1>
@@ -78,7 +80,7 @@
           </label>
         </div>
         <div class="padding">
-          <button type="submit" class="button button-outline button-dark button-icon">Add Queen  <i class="icon ion-female"></i></button>
+          <button type="submit" class="button button-outline button-dark button-icon">Create Queen <i class="icon ion-female"></i></button>
         </div>
       </form>
     </ion-content>
@@ -92,14 +94,15 @@
         <h1 class="title ion-clipboard"> New</h1>
         <button menu-toggle="right" class="button button-icon ion-female">+</button>
       </ion-nav-buttons>
-
     </ion-nav-bar>
+
+
     <ion-content class="has-header">
 
       <div class="list">
         <div class="item">
           <button class="button button-outline button-dark">Apr 3, 2016 @ 6:50pm</button>
-          <button class="button button-positive" ng-click='goToColony()'>Save</button>
+          <button class="button button-positive" ng-click='saveVisit()'>Save Visit</button>
         </div>
         <div class="item item-divider item-dark">
           Observed
@@ -123,16 +126,16 @@
         </label>
         <label class="item item-input">
           <span class="input-label">F.O.Bees</span>
-          <input type="number">
+          <input type="number" ng-model="currentVisit.frames_of_bees_start">
         </label>
         <label class="item item-input">
           <span class="input-label">F.O.Brood</span>
-          <input type="number">
+          <input type="number" ng-model="currentVisit.frames_of_brood_start">
         </label>
         <li class="item item-toggle">
           Bad Temper
           <label class="toggle toggle-assertive">
-            <input type="checkbox">
+            <input type="checkbox" ng-model="currentVisit.has_temper">
             <div class="track">
               <div class="handle"></div>
             </div>
@@ -171,7 +174,7 @@
         </label>
         <label class="item item-input">
           <span class="input-label">Hive Bodies</span>
-          <input type="number">
+          <input type="number" ng-model="currentVisit.qty_boxes">
         </label>
         <div class="row">
           <div class="col col-80">
@@ -207,16 +210,16 @@
         </label>
         <label class="item item-input">
           <span class="input-label">F.O.Bees</span>
-          <input type="number">
+          <input type="number" ng-model="currentVisit.frames_of_bees_end">
         </label>
         <label class="item item-input">
           <span class="input-label">F.O.Brood</span>
-          <input type="number">
+          <input type="number" ng-model="currentVisit.frames_of_brood_end">
         </label>
         <li class="item item-toggle">
           Feeding
           <label class="toggle toggle-energized">
-            <input type="checkbox">
+            <input type="checkbox" ng-model="currentVisit.is_feeding">
             <div class="track">
               <div class="handle"></div>
             </div>
@@ -224,12 +227,13 @@
         </li>
 
         <item class="col col-offset-20 col-60 padding">
-          <button class="button button-block button-positive" ng-click='goToColony()'>Visit Close</button>
+          <button class="button button-block button-positive" ng-click='saveVisit()'>Save Visit</button>
         </item>
 
       </div>
     </ion-content>
 
+    //Footer navigation
     <ion-footer-bar class="bar bar-stable">
       <button class="button button-icon ion-home" ng-click="goHome()">></button>
       <button class="button button-icon ion-location" ng-click="goToYard()">{{yardName}} ></button>

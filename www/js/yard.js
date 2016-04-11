@@ -29,7 +29,7 @@ angular.module('ameApp')
         }
 
       } else {
-          console.log("No results found");
+          console.log("No colonies found in this yard");
       }
     }, function (err) {
         console.error(err);

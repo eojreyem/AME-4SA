@@ -9,6 +9,7 @@ angular.module('ameApp')
   // No need for testing data anymore
 
   //Load current yard into currentYard
+  $scope.currentVisit = [];
   currentYard = [];
   var query = "SELECT * FROM Yards WHERE id = ?";
   $cordovaSQLite.execute(db, query, [$stateParams.yardId]).then(function(res) {
@@ -36,6 +37,21 @@ angular.module('ameApp')
     }, function (err) {
         console.error(err);
     });
+  };
+
+  $scope.saveVisit = function() {
+    console.log($scope.currentVisit);
+
+    /*
+    TODO: create or update visit in db
+    var query = "INSERT INTO Visits VALUES ?";
+    $cordovaSQLite.execute(db, query, $scope.currentVisit).then(function(res) {
+        console.log("INSERT ID -> " + res.insertId);
+    }, function (err) {
+        console.error(err);
+    });
+    */
+    $location.url('/yard/' + currentYard.id + '/colony/' + currentColony.id);
   };
 
   $scope.goToColony = function() {

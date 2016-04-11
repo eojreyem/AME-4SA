@@ -37,7 +37,7 @@ angular.module('ameApp')
         }
 
       } else {
-          console.log("No results found");
+          console.log("No queens found in colony");
       }
     }, function (err) {
         console.error(err);
