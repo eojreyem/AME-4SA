@@ -6,30 +6,33 @@
 angular.module('ameApp')
 
 .controller('VisitCtrl', function($scope, $location, $stateParams, $cordovaSQLite, $ionicSideMenuDelegate) {
-
-
-
   //Load current yard into currentYard
-  $scope.currentVisit = [];
+  $scope.currentVisit = [null];
   visitId = $stateParams.visitId;
 
   if (visitId == "new"){
+   //load starting point for new visit.
    $scope.visitTitle=" New";
-   //initalize visit date and time
-   $scope.currentVisit.date_time = "test with no date";
+   //TODO: get current date and time and format
+   $scope.currentVisit.date_time = "Apr 10";
+   $scope.currentVisit.frames_of_bees_start = null;
+   $scope.currentVisit.frames_of_bees_end = null;
+   $scope.currentVisit.frames_of_brood_start = null;
+   $scope.currentVisit.frames_of_brood_end = null;
+   $scope.currentVisit.qty_boxes = null; // I could load the previous visit's # of boxes? Probably no.
   }
   else if (visitId >= 0){
+  //if a visitId was passed, load old visit for editing/viewing
    $scope.visitTitle= " Visit ID:" + visitId
    var query = "SELECT * FROM Visits WHERE id = ?";
    $cordovaSQLite.execute(db, query, [visitId]).then(function(res) {
      $scope.currentVisit = res.rows.item(0);
      $scope.currentVisit.has_temper = Boolean($scope.currentVisit.has_temper)
      $scope.currentVisit.is_feeding = Boolean($scope.currentVisit.is_feeding)
-
    });
   }
   else {
-    console.log("error, no visit");
+    console.log("Visit does not exist.");
   }
 
   currentYard = [];
@@ -105,8 +108,6 @@ angular.module('ameApp')
       });
     }
 
-
-
     /* TODO: format for saving time in db
       var ss = currentTime.getSeconds();
       var mi = currentTime.getMinutes();
@@ -127,7 +128,6 @@ angular.module('ameApp')
         mo='0'+mo}
       currentTime = (yyyy + '-' + mo + '-' + dd + ' ' + hh + ':' + mi + ':' + ss);
     */
-
     $location.url('/yard/' + currentYard.id + '/colony/' + currentColony.id);
   };
 
