@@ -1,6 +1,5 @@
 // Ionic Starter App
-var db = null;
-var currentYards = [];
+var db;
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 angular
@@ -12,10 +11,11 @@ angular
 .run(function($ionicPlatform, $cordovaSQLite){
   $ionicPlatform.ready(function() {
     if (window.cordova) {
-      db = $cordovaSQLite.openDB({ name: "AME_4SA.db" }); //device
+      db = $cordovaSQLite.openDB("AME_4SA.db"); //device
     }else{
       db = window.openDatabase("AME_4SA.db", '1', 'my', 1024 * 1024 * 100); // browser
     }
+
     //$cordovaSQLite.execute(db, "DROP TABLE Yards"); //Use to remove a table
     //complete tables
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Yards (id INTEGER PRIMARY KEY, name TEXT)");
@@ -30,17 +30,12 @@ angular
     //TODO: (lots)
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Visits (id INTEGER PRIMARY KEY, date_entered DATETIME DEFAULT CURRENT_TIMESTAMP, colony_id INTEGER, yard_id INTEGER, queen_id INTEGER, qty_boxes INTEGER, frames_of_bees_start INTEGER, frames_of_bees_end INTEGER, frames_of_brood_start INTEGER, frames_of_brood_end INTEGER, has_temper INTEGER, is_feeding INTEGER)");
 
-
-
-
   });
 })
 
 .config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
 
-
   $stateProvider
-
   .state('index', {
     url: '/',
     templateUrl: 'views/main.html',
