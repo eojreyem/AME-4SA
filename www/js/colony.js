@@ -21,7 +21,7 @@ angular.module('ameApp')
   var query = "SELECT * FROM Colonies WHERE id = ?";
   $cordovaSQLite.execute(db, query, [$stateParams.colonyId]).then(function(res) {
     currentColony = res.rows.item(0);
-    $scope.colonyName = currentColony.name;
+    $scope.currentColony = currentColony;
   });
 
   //loads a list of Queens in currentColony

@@ -45,7 +45,7 @@
     <ion-nav-bar class="bar-dark">
       <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon ion-clipboard"></button>
-        <h1 class="title"><i class="icon  ion-female"></i> {{queenName}}</h1>
+        <h1 class="title"><i class="icon  ion-female"></i> {{currentQueen.name}}</h1>
         <button menu-toggle="right" class="button button-icon ion-ios-box"></button>
 
       </ion-nav-buttons>
@@ -54,7 +54,7 @@
 
 
       <div class="padding">
-        Apr 2016: note about the origin of this Queen<br><br>
+        Apr 2016: Origin: {{currentQueen.origin}}<br><br>
         <button class="button button-small button-outline button-dark" ng-click="queenInactive(queen)">Inactive</button>
 
       </div>

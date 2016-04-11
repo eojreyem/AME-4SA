@@ -6,10 +6,16 @@
 angular.module('ameApp')
 
 .controller('VisitCtrl', function($scope, $location, $stateParams, $cordovaSQLite, $ionicSideMenuDelegate) {
-  // No need for testing data anymore
+
+
 
   //Load current yard into currentYard
   $scope.currentVisit = [];
+
+  //initalize visit date
+  var currentTime = new Date();
+  $scope.currentVisit.date_time = currentTime;
+
   currentYard = [];
   var query = "SELECT * FROM Yards WHERE id = ?";
   $cordovaSQLite.execute(db, query, [$stateParams.yardId]).then(function(res) {
@@ -42,8 +48,7 @@ angular.module('ameApp')
   $scope.saveVisit = function() {
     console.log($scope.currentVisit);
 
-    /*
-    TODO: create or update visit in db
+    /*TODO: create or update visit in db
     var query = "INSERT INTO Visits VALUES ?";
     $cordovaSQLite.execute(db, query, $scope.currentVisit).then(function(res) {
         console.log("INSERT ID -> " + res.insertId);
@@ -51,6 +56,28 @@ angular.module('ameApp')
         console.error(err);
     });
     */
+
+    /* TODO: format for saving time in db
+      var ss = currentTime.getSeconds();
+      var mi = currentTime.getMinutes();
+      var hh = currentTime.getHours();
+      var dd = currentTime.getDate();
+      var mo = currentTime.getMonth()+1; //January is 0!
+      var yyyy = currentTime.getFullYear();
+      //format numbers less than 10 to add a 0
+      if(ss<10) {
+        ss='0'+ss}
+      if(mi<10) {
+        mi='0'+mi}
+      if(hh<10) {
+        hh='0'+hh}
+      if(dd<10) {
+        dd='0'+dd}
+      if(mo<10) {
+        mo='0'+mo}
+      currentTime = (yyyy + '-' + mo + '-' + dd + ' ' + hh + ':' + mi + ':' + ss);
+    */
+
     $location.url('/yard/' + currentYard.id + '/colony/' + currentColony.id);
   };
 
