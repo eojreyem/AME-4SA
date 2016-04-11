@@ -1,6 +1,6 @@
-<ion-side-menus ng-init="loadQueens()">
+<ion-side-menus >
   <!-- Left menu = Past Visits -->
-  <ion-side-menu side="left">
+  <ion-side-menu side="left" ng-init="loadVisits()">
     <header class="bar bar-header">
       <header class="bar bar-header bar-stable bar-dark">
         <h1 class="title">Past Visits</h1>
@@ -8,13 +8,10 @@
     </header>
     <ion-content class="has-header">
       <ion-list>
-        <ion-item>
-          fake data
-        </ion-item>
 
-        <ion-item ng-repeat="visit in visits">
-          <item class="item item-icon-left ion-clipboard" ng-click="goToVisit()">
-            {{visit.date}}
+        <ion-item ng-repeat="visit in visits" ng-click="goToVisit(visit)">
+          <item class="item item-icon-left ion-clipboard">
+            {{visit.date_time}}
           </item>
         </ion-item>
       </ion-list>
@@ -22,7 +19,7 @@
   </ion-side-menu>
 
   <!-- Right menu = Queens -->
-  <ion-side-menu side="right">
+  <ion-side-menu side="right" ng-init="loadQueens()">
     <header class="bar bar-header bar-dark">
       <h1 class="title">Queens in Colony</h1>
     </header>

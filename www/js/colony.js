@@ -24,6 +24,27 @@ angular.module('ameApp')
     $scope.currentColony = currentColony;
   });
 
+  //loads a list of Visits for currentColony
+  $scope.loadVisits = function() {
+    //clear current list
+    $scope.visits = [];
+    var query = "SELECT * FROM Visits WHERE colony_id = ?";
+    $cordovaSQLite.execute(db, query, [$stateParams.colonyId]).then(function(res) {
+      if(res.rows.length > 0) {
+        for (i = 0; i < res.rows.length; i++) {
+          console.log("SELECTED -> " + res.rows.item(i));
+          $scope.visits.push(res.rows.item(i));
+        }
+
+      } else {
+          console.log("No visits found for colony");
+      }
+    }, function (err) {
+        console.error(err);
+    });
+  };
+
+
   //loads a list of Queens in currentColony
   $scope.loadQueens = function() {
     //clear current list
@@ -74,6 +95,10 @@ angular.module('ameApp')
 
   $scope.goToQueen = function(queen) {
     $location.url('/yard/' + currentYard.id + '/colony/' + currentColony.id  + '/queen/' + queen.id);
+  }
+
+  $scope.goToVisit = function(visit) {
+    $location.url('/yard/' + currentYard.id + '/colony/' + currentColony.id  + '/visit/' + visit.id);
   }
 
   $scope.goToYard = function() {
