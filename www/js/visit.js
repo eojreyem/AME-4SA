@@ -66,8 +66,8 @@ angular.module('ameApp')
 
   $scope.saveVisit = function() {
 
-    //create visit if new.
-    if (visitId == "new"){
+
+    if (visitId == "new"){  //create visit if new.
       var query = "INSERT INTO Visits (colony_id, date_time, yard_id, qty_boxes, frames_of_bees_start, frames_of_bees_end, frames_of_brood_start, frames_of_brood_end, has_temper, is_feeding) "+
       "VALUES ("
       +currentColony.id+","
@@ -77,9 +77,9 @@ angular.module('ameApp')
       +$scope.currentVisit.frames_of_bees_start+","
       +$scope.currentVisit.frames_of_bees_end+","
       +$scope.currentVisit.frames_of_brood_start+","
-      +$scope.currentVisit.frames_of_brood_end+",null,null)"
-    //  +($scope.currentVisit.has_temper?1:0)+","
-    //  +($scope.currentVisit.is_feeding?1:0)+")";
+      +$scope.currentVisit.frames_of_brood_end+","
+      +($scope.currentVisit.has_temper?1:0)+","
+      +($scope.currentVisit.is_feeding?1:0)+")";
       console.log(query);
       $cordovaSQLite.execute(db, query).then(function(res) {
           console.log("INSERT ID -> " + res.insertId);
@@ -88,9 +88,7 @@ angular.module('ameApp')
           console.error(err);
       });
     }
-    else {
-
-      //update existing visit with any edits in the fields
+    else { //update existing visit with any edits in the fields
       var query = "UPDATE Visits SET"+
       " frames_of_bees_start = " +$scope.currentVisit.frames_of_bees_start+
       ", frames_of_bees_end = " +$scope.currentVisit.frames_of_bees_end+

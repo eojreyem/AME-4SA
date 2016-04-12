@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('ameApp')
 
-.controller('YardCtrl', function($scope, $stateParams, $location, $cordovaSQLite, $ionicSideMenuDelegate) {
+.controller('YardCtrl', function($scope, $stateParams, $location, $cordovaSQLite, $ionicSideMenuDelegate, ColonyHelper) {
   // No need for testing data anymore
 
   //Load current yard into currentYard
@@ -42,30 +42,22 @@ angular.module('ameApp')
   }
 
   $scope.createColony = function() {
-    //TODO: check if yard name is unique
-    var colonyNumber = document.getElementById("newColonyNumber").value;
-    var colonyOrigin = document.getElementById("newColonyOrigin").value;
-    console.log(newColonyNumber)
-    var query = "INSERT INTO Colonies (name, in_yard_id, origin) VALUES (?,?,?)";
-    $cordovaSQLite.execute(db, query, [colonyNumber, currentYard.id, colonyOrigin]).then(function(res) {
-        console.log("INSERT ID -> " + res.insertId);
-        $scope.loadColonies();
-        $ionicSideMenuDelegate.toggleRight();
-    }, function (err) {
-        console.error(err);
-    });
+    var newColonyActiveDate = "Apr 10"
+    var newColonyNumber = document.getElementById("newColonyNumber").value;
+    var newColonyOrigin = document.getElementById("newColonyOrigin").value;
+
+    ColonyHelper.saveColony(currentYard.id, newColonyNumber, newColonyActiveDate, newColonyOrigin);
+    $scope.loadColonies();
+    $ionicSideMenuDelegate.toggleRight();
   };
 
   $scope.moveColony = function(colony) {
-    //TODO: popup list of yards for a move
-    console.log("moving " + colony.name + colony.id)
+    //TODO: popup list of yards as options
     //testing this just moves colony to yard_id = 1
-    var query = "UPDATE Colonies SET in_yard_id = ? WHERE id = ?";
-    $cordovaSQLite.execute(db, query, [1, colony.id]).then(function(res) {
-        $scope.loadColonies();
-    }, function (err) {
-        console.error(err);
-    });
+    selectedYard = { id: '1'};
+    console.log("moving C:" + colony.id + "to yard:" +selectedYard.id)
+    ColonyHelper.updateColonyYard(colony.id, selectedYard.id)
+    $scope.loadColonies();
   };
 
   $scope.goHome = function () {

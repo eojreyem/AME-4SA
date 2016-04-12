@@ -1,12 +1,7 @@
-// Ionic Starter App
-
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
 angular.module('ameApp')
 
-.controller('ColonyCtrl', function($scope, $location, $stateParams, $cordovaSQLite) {
-  // No need for testing data anymore
+.controller('ColonyCtrl', function($scope, $location, $stateParams, $cordovaSQLite, ColonyHelper) {
+
 
   //Load current yard into currentYard
   currentYard = [];
@@ -17,12 +12,10 @@ angular.module('ameApp')
   });
 
   //Load current colony into currentColony
-  currentColony = [];
-  var query = "SELECT * FROM Colonies WHERE id = ?";
-  $cordovaSQLite.execute(db, query, [$stateParams.colonyId]).then(function(res) {
-    currentColony = res.rows.item(0);
-    $scope.currentColony = currentColony;
-  });
+  currentColony = ColonyHelper.getColonyById($stateParams.colonyId);
+  console.log("cur col>" +currentColony);
+  $scope.currentColony = currentColony;
+
 
   //loads a list of Visits for currentColony
   $scope.loadVisits = function() {
@@ -65,31 +58,7 @@ angular.module('ameApp')
     });
   };
 
-
-  $scope.visits = [
-    { date: 'May 9, 2016'},
-    { date: 'Apr 31, 2016'},
-    { date: 'Apr 22, 2016'},
-  ];
-  $scope.recentVisit = [
-    { hive_type: 'Production',
-      qty_boxes: '3',
-      weight: '123',
-      start_queen_status: 'Seen',
-      end_queen_status: 'confined',
-      frames_of_bees_start: '3',
-      frames_of_bees_end: '3',
-      frames_of_brood_start: '3',
-      frames_of_brood_end: '3',
-      bad_temper: 'true',
-      disease: 'EFB',
-      varroa_per_100: '6',
-      feeding: 'false'
-    }
-  ];
-
-
-  $scope.createVisit = function() {
+  $scope.newVisit = function() {
     $location.url('/yard/' + currentYard.id + '/colony/' + currentColony.id  + '/visit/new');
   }
 
