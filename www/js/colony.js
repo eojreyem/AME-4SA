@@ -1,6 +1,6 @@
 angular.module('ameApp')
 
-.controller('ColonyCtrl', function($scope, $location, $stateParams, $cordovaSQLite, ColonyHelper) {
+.controller('ColonyCtrl', function($scope, $location, $stateParams, $cordovaSQLite, ColonyHelper, QueenHelper) {
 
 
   //Load current yard into currentYard
@@ -58,6 +58,17 @@ angular.module('ameApp')
     });
   };
 
+  $scope.moveQueen = function(queen) {
+    //TODO: popup to get colony target
+    //testing this just moves queen to colony_id = 1
+    selectedColony = { id: '1'};
+    console.log("moving Q:" + queen.id + "to colony:" +selectedColony.id)
+    QueenHelper.updateQueenColony(queen.id, selectedColony.id)
+    $scope.loadQueens();
+  };
+
+
+  //Navigation functions
   $scope.newVisit = function() {
     $location.url('/yard/' + currentYard.id + '/colony/' + currentColony.id  + '/visit/new');
   }
