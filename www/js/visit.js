@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('ameApp')
 
-.controller('VisitCtrl', function($scope, $location, $stateParams, $cordovaSQLite, $ionicSideMenuDelegate, ColonyHelper) {
+.controller('VisitCtrl', function($scope, $location, $stateParams, $cordovaSQLite, $ionicSideMenuDelegate, ColonyHelper, VisitHelper) {
   //Load current yard into currentYard
   $scope.currentVisit = [null];
   visitId = $stateParams.visitId;
@@ -64,25 +64,21 @@ angular.module('ameApp')
 
 
     if (visitId == "new"){  //create visit if new.
-      var query = "INSERT INTO Visits (colony_id, date_time, yard_id, qty_boxes, frames_of_bees_start, frames_of_bees_end, frames_of_brood_start, frames_of_brood_end, has_temper, is_feeding) "+
-      "VALUES ("
-      +currentColony.id+","
-      +"\"Apr 10\""+"," //will be date_time
-      +currentYard.id+","
-      +$scope.currentVisit.qty_boxes+","
-      +$scope.currentVisit.frames_of_bees_start+","
-      +$scope.currentVisit.frames_of_bees_end+","
-      +$scope.currentVisit.frames_of_brood_start+","
-      +$scope.currentVisit.frames_of_brood_end+","
-      +($scope.currentVisit.has_temper?1:0)+","
-      +($scope.currentVisit.is_feeding?1:0)+")";
-      console.log(query);
-      $cordovaSQLite.execute(db, query).then(function(res) {
-          console.log("INSERT ID -> " + res.insertId);
-          visitId = res.insertId;
-      }, function (err) {
-          console.error(err);
-      });
+      VisitHelper.saveVisit(
+        "Apr 32nd", //TODO: get real date.
+        currentYard.id,
+        currentColony.id,
+        999, //queenId
+        $scope.currentVisit.qty_boxes,
+        999, //queenStatusStartId
+        999,  //queenStatusEndId
+        $scope.currentVisit.frames_of_bees_start,
+        $scope.currentVisit.frames_of_bees_end,
+        $scope.currentVisit.frames_of_brood_start,
+        $scope.currentVisit.frames_of_brood_end,
+        ($scope.currentVisit.has_temper?1:0),
+        ($scope.currentVisit.is_feeding?1:0),
+        999); //deseaseId
     }
     else { //update existing visit with any edits in the fields
       var query = "UPDATE Visits SET"+

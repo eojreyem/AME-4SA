@@ -7,7 +7,7 @@ angular.module('ameApp')
   var queen = [];
   var service = {};
 
-  service.getQueenById = function(id) { //returns a colony object when given a valid ID
+  service.getQueenById = function(id) { //returns a queen object when given a valid ID
     var query = "SELECT * FROM Queens WHERE id = " + id;
     $cordovaSQLite.execute(db, query).then(function(res) {
       queen = res.rows.item(0);

@@ -53,4 +53,18 @@ angular.module('ameApp')
   }
 
 
+  $scope.dropYards = function (){
+    $cordovaSQLite.execute(db, "DROP TABLE Yards"); //Use to remove a table
+  }
+  $scope.dropColonies = function (){
+    $cordovaSQLite.execute(db, "DROP TABLE Colonies"); //Use to remove a table
+  }
+  $scope.dropQueens = function (){
+    $cordovaSQLite.execute(db, "DROP TABLE Queens"); //Use to remove a table
+  }
+  $scope.dropVisits = function (){
+    $cordovaSQLite.execute(db, "DROP TABLE Visits"); //Use to remove a table
+  }
+
+
 });
