@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('ameApp')
 
-.controller('VisitCtrl', function($scope, $location, $stateParams, $cordovaSQLite, $ionicSideMenuDelegate) {
+.controller('VisitCtrl', function($scope, $location, $stateParams, $cordovaSQLite, $ionicSideMenuDelegate, ColonyHelper) {
   //Load current yard into currentYard
   $scope.currentVisit = [null];
   visitId = $stateParams.visitId;
@@ -43,12 +43,8 @@ angular.module('ameApp')
   });
 
   //Load current colony into currentColony
-  currentColony = [];
-  var query = "SELECT * FROM Colonies WHERE id = ?";
-  $cordovaSQLite.execute(db, query, [$stateParams.colonyId]).then(function(res) {
-    currentColony = res.rows.item(0);
-    $scope.colonyName = currentColony.name;
-  });
+  currentColony = ColonyHelper.getColonyById($stateParams.colonyId);
+  $scope.currentColony = currentColony;
 
   $scope.createQueen = function() {
     //TODO: check if queen name is unique

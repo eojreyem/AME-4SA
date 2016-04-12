@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('ameApp')
 
-.controller('QueenCtrl', function($scope, $location, $stateParams, $cordovaSQLite) {
+.controller('QueenCtrl', function($scope, $location, $stateParams, $cordovaSQLite, ColonyHelper) {
   // No need for testing data anymore
 
   //Load current yard into currentYard
@@ -19,12 +19,8 @@ angular.module('ameApp')
   });
 
   //Load current colony into currentColony
-  currentColony = [];
-  var query = "SELECT * FROM Colonies WHERE id = ?";
-  $cordovaSQLite.execute(db, query, [$stateParams.colonyId]).then(function(res) {
-    currentColony = res.rows.item(0);
-    $scope.colonyName = currentColony.name;
-  });
+  currentColony = ColonyHelper.getColonyById($stateParams.colonyId);
+  $scope.currentColony = currentColony;
 
   //Load current queen into currentQueen
   currentQueen = [];
