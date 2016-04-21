@@ -1,28 +1,22 @@
 angular.module('ameApp')
 
-.controller('ColonyCtrl', function($scope, $location, $stateParams, $cordovaSQLite, ColonyHelper, QueenHelper) {
-
-
+.controller('ColonyCtrl', function($scope, $location, $stateParams, $cordovaSQLite, YardHelper, ColonyHelper, QueenHelper) {
+  console.log($stateParams.colonyId);
   //Load current yard into currentYard
   currentYard = [];
-  var query = "SELECT * FROM Yards WHERE id = ?";
-  $cordovaSQLite.execute(db, query, [$stateParams.yardId]).then(function(res) {
-    currentYard = res.rows.item(0);
-    $scope.yardName = currentYard.name;
-  });
+  currentColony = [];
+  //Load current yard into currentYard
+  currentYard = YardHelper.getYardById($stateParams.yardId);
 
   //Load current colony into currentColony
   currentColony = ColonyHelper.getColonyById($stateParams.colonyId);
-  console.log("cur col>" +currentColony);
-  $scope.currentColony = currentColony;
-
 
   //loads a list of Visits for currentColony
   $scope.loadVisits = function() {
     //clear current list
     $scope.visits = [];
     var query = "SELECT * FROM Visits WHERE colony_id = ?";
-    $cordovaSQLite.execute(db, query, [$stateParams.colonyId]).then(function(res) {
+    $cordovaSQLite.execute(db, query, [currentColony.id]).then(function(res) {
       if(res.rows.length > 0) {
         for (i = 0; i < res.rows.length; i++) {
           console.log("SELECTED -> " + res.rows.item(i));
@@ -43,7 +37,7 @@ angular.module('ameApp')
     //clear current list
     $scope.queens = [];
     var query = "SELECT * FROM Queens WHERE in_colony_id = ?";
-    $cordovaSQLite.execute(db, query, [$stateParams.colonyId]).then(function(res) {
+    $cordovaSQLite.execute(db, query, [currentColony.id]).then(function(res) {
       if(res.rows.length > 0) {
         for (i = 0; i < res.rows.length; i++) {
           console.log("SELECTED -> " + res.rows.item(i));

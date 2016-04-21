@@ -5,41 +5,18 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('ameApp')
 
-.controller('YardCtrl', function($scope, $stateParams, $location, $cordovaSQLite, $ionicSideMenuDelegate, ColonyHelper) {
-  // No need for testing data anymore
+.controller('YardCtrl', function($scope, $ionicPopup, $stateParams, $location, $cordovaSQLite, $ionicSideMenuDelegate, ColonyHelper, YardHelper) {
 
+  var moveYardPopup = $ionicPopup;
   //Load current yard into currentYard
   currentYard = [];
-  var query = "SELECT * FROM Yards WHERE id = ?";
-  $cordovaSQLite.execute(db, query, [$stateParams.yardId]).then(function(res) {
-    currentYard = res.rows.item(0);
-    $scope.yardName = currentYard.name;
-  });
+  //Load current yard into currentYard
+  currentYard = YardHelper.getYardById($stateParams.yardId);
 
   //loads a list of colonies in currentYard
   $scope.loadColonies = function() {
-    //clear current list
-    $scope.colonies = [];
-    var query = "SELECT * FROM Colonies WHERE in_yard_id = ?";
-    $cordovaSQLite.execute(db, query, [$stateParams.yardId]).then(function(res) {
-      if(res.rows.length > 0) {
-        for (i = 0; i < res.rows.length; i++) {
-          console.log("SELECTED -> " + res.rows.item(i));
-          $scope.colonies.push(res.rows.item(i));
-        }
-
-      } else {
-          console.log("No colonies found in this yard");
-      }
-    }, function (err) {
-        console.error(err);
-    });
+    $scope.colonies = YardHelper.getColoniesInYard($stateParams.yardId);
   };
-
-
-  $scope.goToColony = function (colony){
-    $location.url('/yard/'+ currentYard.id + '/colony/' + colony.id);
-  }
 
   $scope.createColony = function() {
     var newColonyActiveDate = "Apr 10"
@@ -51,14 +28,37 @@ angular.module('ameApp')
     $ionicSideMenuDelegate.toggleRight();
   };
 
-  $scope.moveColony = function(colony) {
-    //TODO: popup list of yards as options
-    //testing this just moves colony to yard_id = 1
-    selectedYard = { id: '1'};
-    console.log("moving C:" + colony.id + "to yard:" +selectedYard.id)
-    ColonyHelper.updateColonyYard(colony.id, selectedYard.id)
-    $scope.loadColonies();
+  $scope.showMoveColonyPopup = function(colony) {
+    $scope.yards = YardHelper.getAllYards();
+    $scope.selectedColony = colony;
+    console.log(yards);
+    var moveYardPopup = $ionicPopup.show({
+      template: '<ion-list>                                '+
+                '  <ion-item ng-repeat="yard in yards" ng-click="moveColony(selectedColony.id, yard.id)"">    '+
+                '    {{yard.name}}                         '+
+                '  </ion-item>                             '+
+                '</ion-list>                               ',
+      title: 'Select a Yard',
+      subTitle: 'to move colony ' +colony.number+ " to.",
+      scope: $scope,
+      buttons: [
+        { text: 'Done',
+          type: 'button-positive'},
+      ]
+    });
   };
+
+  $scope.moveColony = function(colonyId, yardId) {
+    ColonyHelper.updateColonyYard(colonyId, yardId);
+    $scope.colonies = YardHelper.getColoniesInYard($stateParams.yardId);
+    console.log("moving colony ID" + colonyId + "to yard ID:" +yardId)
+  }
+
+
+
+  $scope.goToColony = function (colony){
+    $location.url('/yard/'+ currentYard.id + '/colony/' + colony.id);
+  }
 
   $scope.goHome = function () {
     $location.url('/')

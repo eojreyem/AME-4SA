@@ -38,7 +38,7 @@
       <ion-list>
 
         <ion-item ng-repeat="colony in colonies">
-          <a class="item item-icon-left item-icon-right" ng-click="goToColony(colony)" on-hold="moveColony(colony)">
+          <a class="item item-icon-left item-icon-right" ng-click="goToColony(colony)" on-hold="showMoveColonyPopup(colony)">
             <i class="icon ion-ios-box">{{colony.number}}</i>
           </a>
 

@@ -11,7 +11,7 @@
     </div>
     <a class="item" ng-repeat="yard in yards" ng-click="goToYard(yard)">
       <i class="icon ion-location"> {{yard.name}} -</i>
-      <i class="icon ion-ios-box"> 3 - </i>
+      <i class="icon ion-ios-box" ng-init="countColoniesInYard(yard.id)"> {{numColoniesInYard}} - </i>
       <i class="icon ion-clipboard"> 4/9 days ago</i>
     </a>
   </div>

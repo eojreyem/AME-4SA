@@ -34,5 +34,6 @@ angular.module('ameApp')
         console.error(err);
     });
   }
+
   return service;
 });

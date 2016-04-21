@@ -8,10 +8,13 @@ angular.module('ameApp')
   var service = {};
 
   service.getColonyById = function(id) { //returns a colony object when given a valid ID
+
     var query = "SELECT * FROM Colonies WHERE id = " + id;
     $cordovaSQLite.execute(db, query).then(function(res) {
       colony = res.rows.item(0);
+      console.log("Selected colony");
     });
+
     return colony;
   }
 

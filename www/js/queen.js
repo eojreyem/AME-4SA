@@ -5,18 +5,16 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('ameApp')
 
-.controller('QueenCtrl', function($scope, $location, $stateParams, $cordovaSQLite, ColonyHelper) {
+.controller('QueenCtrl', function($scope, $location, $stateParams, $cordovaSQLite, ColonyHelper, YardHelper) {
   // No need for testing data anymore
 
   //Load current yard into currentYard
 
 
   currentYard = [];
-  var query = "SELECT * FROM Yards WHERE id = ?";
-  $cordovaSQLite.execute(db, query, [$stateParams.yardId]).then(function(res) {
-    currentYard = res.rows.item(0);
-    $scope.yardName = currentYard.name;
-  });
+
+  //Load current yard into currentYard
+  currentYard = YardHelper.getYardById($stateParams.yardId);
 
   //Load current colony into currentColony
   currentColony = ColonyHelper.getColonyById($stateParams.colonyId);

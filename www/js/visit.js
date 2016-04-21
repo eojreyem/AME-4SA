@@ -5,42 +5,35 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('ameApp')
 
-.controller('VisitCtrl', function($scope, $location, $stateParams, $cordovaSQLite, $ionicSideMenuDelegate, ColonyHelper, VisitHelper) {
-  //Load current yard into currentYard
-  $scope.currentVisit = [null];
+.controller('VisitCtrl', function($scope, $location, $stateParams, $cordovaSQLite, $ionicSideMenuDelegate, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
+  $scope.currentVisit =[null];
   visitId = $stateParams.visitId;
 
-  if (visitId == "new"){
-   //load starting point for new visit.
-   $scope.visitTitle=" New";
-   //TODO: get current date and time and format
-   $scope.currentVisit.date_time = "Apr 10";
-   $scope.currentVisit.frames_of_bees_start = null;
-   $scope.currentVisit.frames_of_bees_end = null;
-   $scope.currentVisit.frames_of_brood_start = null;
-   $scope.currentVisit.frames_of_brood_end = null;
-   $scope.currentVisit.qty_boxes = null; // I could load the previous visit's # of boxes? Probably no.
+  //Load current yard into currentYard
+  currentYard = [];
+
+  //Load current yard into currentYard
+  currentYard = YardHelper.getYardById($stateParams.yardId);
+
+  if (visitId == "new"){ //pre-populate fields for new visit.
+    $scope.visitTitle=" New";
+    $scope.currentVisit.date_time = "apr 10"; //TODO: get current date and time and format
+    $scope.currentVisit.qty_boxes = null; // I could load the previous visit's # of boxes? Probably no.
+    $scope.currentVisit.frames_of_bees_start = null;
+    $scope.currentVisit.frames_of_bees_end = null;
+    $scope.currentVisit.frames_of_brood_start = null;
+    $scope.currentVisit.frames_of_brood_end = null;
+    $scope.currentVisit.has_temper = false; // true or false
+    $scope.currentVisit.is_feeding = false; // true or false
+
   }
-  else if (visitId >= 0){
-  //if a visitId was passed, load old visit for editing/viewing
-   $scope.visitTitle= " Visit ID:" + visitId
-   var query = "SELECT * FROM Visits WHERE id = ?";
-   $cordovaSQLite.execute(db, query, [visitId]).then(function(res) {
-     $scope.currentVisit = res.rows.item(0);
-     $scope.currentVisit.has_temper = Boolean($scope.currentVisit.has_temper)
-     $scope.currentVisit.is_feeding = Boolean($scope.currentVisit.is_feeding)
-   });
+  else if (visitId >= 0){  //if a visitId was passed, load old visit for editing/viewing
+    $scope.visitTitle=" Visit ID:" + visitId;
+    $scope.currentVisit = VisitHelper.getVisitById($stateParams.visitId)
   }
-  else {
+  else {  // console log error
     console.log("Visit does not exist.");
   }
-
-  currentYard = [];
-  var query = "SELECT * FROM Yards WHERE id = ?";
-  $cordovaSQLite.execute(db, query, [$stateParams.yardId]).then(function(res) {
-    currentYard = res.rows.item(0);
-    $scope.yardName = currentYard.name;
-  });
 
   //Load current colony into currentColony
   currentColony = ColonyHelper.getColonyById($stateParams.colonyId);
@@ -48,54 +41,55 @@ angular.module('ameApp')
 
   $scope.createQueen = function() {
     //TODO: check if queen name is unique
-    var queenNumber = document.getElementById("newQueenNumber").value;
-    var queenOrigin = document.getElementById("newQueenOrigin").value;
-    var query = "INSERT INTO Queens (name, in_colony_id, origin) VALUES (?,?,?)";
-    $cordovaSQLite.execute(db, query, [queenNumber, currentColony.id, queenOrigin]).then(function(res) {
-        console.log("INSERT ID -> " + res.insertId);
-
-        $ionicSideMenuDelegate.toggleRight();
-    }, function (err) {
-        console.error(err);
-    });
+    var queenNumber = document.getElementById("newQueenNumber");
+    var queenOrigin = document.getElementById("newQueenOrigin");
+    QueenHelper.saveQueen(
+      queenNumber.value,
+      currentColony.id,
+      null, //motherId
+      queenOrigin.value,
+      null, //dateEmerged
+      null //hexColor
+    )
+    $ionicSideMenuDelegate.toggleRight();
+    queenNumber.value = null;
+    queenOrigin.value = null;
   };
 
   $scope.saveVisit = function() {
-
-
     if (visitId == "new"){  //create visit if new.
       VisitHelper.saveVisit(
-        "Apr 32nd", //TODO: get real date.
+        null, //TODO: get real date.
         currentYard.id,
         currentColony.id,
-        999, //queenId
+        null, //queenId
         $scope.currentVisit.qty_boxes,
-        999, //queenStatusStartId
-        999,  //queenStatusEndId
+        null, //queenStatusStartId
+        null,  //queenStatusEndId
         $scope.currentVisit.frames_of_bees_start,
         $scope.currentVisit.frames_of_bees_end,
         $scope.currentVisit.frames_of_brood_start,
         $scope.currentVisit.frames_of_brood_end,
-        ($scope.currentVisit.has_temper?1:0),
-        ($scope.currentVisit.is_feeding?1:0),
-        999); //deseaseId
+        ($scope.currentVisit.has_temper), // true or false
+        ($scope.currentVisit.is_feeding), // true or false
+        null); //deseaseId
     }
     else { //update existing visit with any edits in the fields
-      var query = "UPDATE Visits SET"+
-      " frames_of_bees_start = " +$scope.currentVisit.frames_of_bees_start+
-      ", frames_of_bees_end = " +$scope.currentVisit.frames_of_bees_end+
-      ", frames_of_brood_start = " +$scope.currentVisit.frames_of_brood_start+
-      ", frames_of_brood_end = " +$scope.currentVisit.frames_of_brood_end+
-      ", has_temper = " +($scope.currentVisit.has_temper?1:0)+
-      ", is_feeding = " +($scope.currentVisit.is_feeding?1:0)+
-      ", qty_boxes = " +$scope.currentVisit.qty_boxes+
-      " WHERE id = " + visitId;
-      console.log(query);
-      $cordovaSQLite.execute(db, query).then(function(res) {
-          console.log("Visit Updated ");
-      }, function (err) {
-          console.error(err);
-      });
+      VisitHelper.updateVisit(
+        visitId,
+        null, //dateTime
+        null, //queenId
+        $scope.currentVisit.qty_boxes,
+        null, //queenStatusStartId
+        null, //queenStatusEndId
+        $scope.currentVisit.frames_of_bees_start,
+        $scope.currentVisit.frames_of_bees_end,
+        $scope.currentVisit.frames_of_brood_start,
+        $scope.currentVisit.frames_of_brood_end,
+        $scope.currentVisit.has_temper, // true or false
+        $scope.currentVisit.is_feeding, // true or false
+        null); //deseaseId
+
     }
 
     /* TODO: format for saving time in db
