@@ -1,9 +1,7 @@
 angular.module('ameApp')
 
-.controller('ColonyCtrl', function($scope, $location, $stateParams, $cordovaSQLite, YardHelper, ColonyHelper, QueenHelper) {
+.controller('ColonyCtrl', function($scope, $location, $ionicPopup, $stateParams, $cordovaSQLite, YardHelper, ColonyHelper, QueenHelper) {
   console.log($stateParams.colonyId);
-  //Load current yard into currentYard
-  currentYard = [];
   currentColony = [];
   //Load current yard into currentYard
   currentYard = YardHelper.getYardById($stateParams.yardId);
@@ -52,13 +50,34 @@ angular.module('ameApp')
     });
   };
 
-  $scope.moveQueen = function(queen) {
-    //TODO: popup to get colony target
-    //testing this just moves queen to colony_id = 1
-    selectedColony = { id: '1'};
-    console.log("moving Q:" + queen.id + "to colony:" +selectedColony.id)
-    QueenHelper.updateQueenColony(queen.id, selectedColony.id)
-    $scope.loadQueens();
+  $scope.showMoveQueenPopup = function(queen) {
+    $scope.selectedQueen = queen;
+    $scope.destination = {};
+    var moveQueenPopup = $ionicPopup.show({
+      title: 'Enter the Colony\'s number',
+      subTitle: 'that queen ' +queen.name+ " will move to.",
+      template: '<label class="item item-input">  <input type="number" ng-model="destination.ColonyNum"></label>',
+      scope: $scope,
+      buttons: [
+        { text: 'Cancel' },
+        { text: 'Move',
+          type: 'button-positive',
+          onTap: function(e) {
+          if ($scope.destinationColonyNum>0) {
+            //don't allow the user to close unless he enters wifi password
+            e.preventDefault();
+          } else {
+            console.log("move queen " +queen.name+ " to " +$scope.destination.ColonyNum);
+            //TODO: convert destination.ColonyNum to colonyId
+            QueenHelper.updateQueenColony(queen.id, 2)
+            $scope.loadQueens();
+            }
+          }
+        }
+      ]
+    })
+
+
   };
 
 

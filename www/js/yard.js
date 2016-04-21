@@ -7,7 +7,7 @@ angular.module('ameApp')
 
 .controller('YardCtrl', function($scope, $ionicPopup, $stateParams, $location, $cordovaSQLite, $ionicSideMenuDelegate, ColonyHelper, YardHelper) {
 
-  var moveYardPopup = $ionicPopup;
+  var moveColonyPopup = $ionicPopup;
   //Load current yard into currentYard
   currentYard = [];
   //Load current yard into currentYard
@@ -30,30 +30,34 @@ angular.module('ameApp')
 
   $scope.showMoveColonyPopup = function(colony) {
     $scope.yards = YardHelper.getAllYards();
-    $scope.selectedColony = colony;
-    console.log(yards);
-    var moveYardPopup = $ionicPopup.show({
+    $scope.choice = {};
+    var moveColonyPopup = $ionicPopup.show({
       template: '<ion-list>                                '+
-                '  <ion-item ng-repeat="yard in yards" ng-click="moveColony(selectedColony.id, yard.id)"">    '+
-                '    {{yard.name}}                         '+
-                '  </ion-item>                             '+
+                '  <ion-radio ng-repeat="yard in yards" ng-model="choice.yardId" ng-value="{{yard.id}}">{{yard.name}}</ion-radio>'+
                 '</ion-list>                               ',
       title: 'Select a Yard',
       subTitle: 'to move colony ' +colony.number+ " to.",
       scope: $scope,
       buttons: [
-        { text: 'Done',
-          type: 'button-positive'},
+      { text: 'Cancel' },
+      {
+        text: '<b>Move</b>',
+        type: 'button-positive',
+        onTap: function(e) {
+          if (!$scope.choice.yardId) {
+            console.log("nothing selected?");
+            //don't allow "move" button to do anything if no yard is selected.
+            e.preventDefault();
+          } else {
+            ColonyHelper.updateColonyYard(colony.id, $scope.choice.yardId);
+            $scope.colonies = YardHelper.getColoniesInYard($stateParams.yardId);
+            console.log("moving colony ID" + colony.id + "to yard ID:" +$scope.choice.yardId)
+            }
+        }
+      }
       ]
     });
   };
-
-  $scope.moveColony = function(colonyId, yardId) {
-    ColonyHelper.updateColonyYard(colonyId, yardId);
-    $scope.colonies = YardHelper.getColoniesInYard($stateParams.yardId);
-    console.log("moving colony ID" + colonyId + "to yard ID:" +yardId)
-  }
-
 
 
   $scope.goToColony = function (colony){
