@@ -5,7 +5,9 @@ angular.module('ameApp')
   //Load current colony into currentColony
   ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
     $scope.currentColony = colony;
-    $scope.queens = QueenHelper.getQueensInColony(colony.id);
+    QueenHelper.getQueensInColony(colony.id).then(function(queens){
+      $scope.queens = queens;
+    });
     $scope.visits = VisitHelper.getVisitsForColony(colony.id);
     //Load colony's yard into currentYard
     YardHelper.getYardById(colony.in_yard_id).then(function (yard){
@@ -32,7 +34,9 @@ angular.module('ameApp')
             ColonyHelper.getColonyByNumber($scope.destination.colonyNum).then(function (destinationColony){
               console.log("move queen " +queen.name+ " to " +destinationColony.number);
               QueenHelper.updateQueenColony(queen.id, destinationColony.id)
-              $scope.queens = QueenHelper.getQueensInColony($scope.currentColony.id);
+              QueenHelper.getQueensInColony($scope.currentColony.id).then(function(queens){
+                $scope.queens = queens;
+              });
             });
 
           } else {

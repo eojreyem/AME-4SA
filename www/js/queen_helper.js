@@ -66,6 +66,7 @@ angular.module('ameApp')
 
 
   service.getQueensInColony = function(colonyId) { //return all queens in a colonyId
+    var deferred = $q.defer();
     queens = [];
     var query = "SELECT * FROM Queens WHERE in_colony_id = ?";
     $cordovaSQLite.execute(db, query, [colonyId]).then(function(res) {
@@ -74,14 +75,16 @@ angular.module('ameApp')
           console.log("SELECTED -> " + res.rows.item(i));
           queens.push(res.rows.item(i));
         }
+        deferred.resolve(queens);
 
-      } else {
+      }else {
           console.log("No queens found in this colony");
+          deferred.resolve(null);
       }
     }, function (err) {
         console.error(err);
     });
-    return queens;
+    return deferred.promise;
 
   }
 

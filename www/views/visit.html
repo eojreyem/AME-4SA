@@ -140,14 +140,7 @@
           </div>
           <select>
             <option selected>None noticed</option>
-            <option>AFB</option>
-            <option>EFB</option>
-            <option>Hive Beetles</option>
-            <option>Chalkbrood</option>
-            <option>Deform Wing</option>
-            <option>Sacbrood</option>
-            <option>Dysentary</option>
-            <option>Other</option>
+            <option ng-repeat="disease in diseases">{{disease.disease}}</option>
           </select>
         </label>
         <div class="item item-divider item-dark">
@@ -166,23 +159,15 @@
           <span class="input-label">Hive Bodies</span>
           <input type="number" ng-model="currentVisit.qty_boxes">
         </label>
-        <div class="row">
-          <div class="col col-80">
-            <label class="item item-input item-select">
-              <div class="input-label">
-                Queen
-              </div>
-              <select>
-                <option selected>15-103</option>
-                <option>14-201</option>
-                <option>none</option>
-              </select>
-            </label>
+        <label class="item item-input item-select">
+          <div class="input-label">
+            Queen
           </div>
-          <div class="col">
-            <badge class="badge badge-balanced ion-female"> </badge>
-          </div>
-        </div>
+          <select>
+            <option ng-repeat="queen in colonysQueens">{{queen.name}}</option>
+            <option>none</option>
+          </select>
+        </label>
         <label class="item item-input item-select">
           <div class="input-label">
             Queen Status

@@ -14,7 +14,9 @@ angular.module('ameApp')
   VisitHelper.getHiveTypes().then(function (types){
     $scope.hiveTypes = types;
   });
-
+  VisitHelper.getDiseases().then(function (diseases){
+    $scope.diseases = diseases;
+  });
 
   if (visitId == "new"){ //pre-populate fields for new visit.
     $scope.visitTitle=" New";
@@ -26,15 +28,19 @@ angular.module('ameApp')
     $scope.currentVisit.frames_of_brood_end = null;
     $scope.currentVisit.has_temper = false; // true or false
     $scope.currentVisit.is_feeding = false; // true or false
-    //Load current yard into currentYard
-    YardHelper.getYardById($stateParams.yardId).then(function (yard){
-      $scope.currentYard = yard;
-    });
+
     //Load current colony into currentColony
     ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
       $scope.currentColony = colony;
-    });
+      //Load current yard into currentYard
+      YardHelper.getYardById(colony.in_yard_id).then(function (yard){
+        $scope.currentYard = yard;
+      });
+      QueenHelper.getQueensInColony(colony.id).then(function (queens){
+        $scope.colonysQueens = queens;
+      });
 
+    });
 
   }
   else if (visitId >= 0){  //if a visitId was passed, load old visit for editing/viewing
@@ -47,6 +53,9 @@ angular.module('ameApp')
         //Load colony's yard into currentYard
         YardHelper.getYardById(colony.in_yard_id).then(function (yard){
           $scope.currentYard = yard;
+        });
+        QueenHelper.getQueensInColony($stateParams.colonyId).then(function (queens){
+          $scope.colonysQueens = queens;
         });
       });
     });

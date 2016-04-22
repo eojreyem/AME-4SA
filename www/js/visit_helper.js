@@ -55,6 +55,23 @@ angular.module('ameApp')
     return deferred.promise;
   }
 
+  service.getDiseases = function() { //returns diseases
+    var deferred = $q.defer();
+    diseases = [];
+    var query = "SELECT * FROM Diseases";
+    $cordovaSQLite.execute(db, query).then(function(res) {
+      if(res.rows.length > 0) {
+        for (i = 0; i < res.rows.length; i++) {
+          diseases.push(res.rows.item(i));
+        }
+        deferred.resolve(diseases);
+      } else {
+          console.log("No disease key in db!");
+      }
+    });
+    return deferred.promise;
+  }
+
   service.getVisitsForColony = function(id) { //returns visits for a given colony
 
       visits = [];
