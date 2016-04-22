@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('ameApp')
 
-.controller('QueenCtrl', function($scope, $location, $stateParams, ColonyHelper, YardHelper, QueenHelper) {
+.controller('QueenCtrl', function($scope, $location, $stateParams, $ionicPopup, ColonyHelper, YardHelper, QueenHelper) {
 
   //Load current yard into currentYard
   YardHelper.getYardById($stateParams.yardId).then(function (yard){
@@ -17,10 +17,41 @@ angular.module('ameApp')
     $scope.currentColony = currentColony;
   });
 
-  //Load current queen into currentQueen
-  QueenHelper.getQueenById($stateParams.queenId).then(function (queen){
-    $scope.currentQueen = queen;
-  });
+    //Load current queen into currentQueen
+    QueenHelper.getQueenById($stateParams.queenId).then(function (queen){
+      $scope.currentQueen = queen;
+    });
+
+  $scope.showQueenInactivePopup = function(queen) {
+    $scope.choice = {};
+    QueenHelper.getQueenInactiveReasons().then(function(reasons){
+      $scope.reasons = reasons;
+      var queenInactivePopup = $ionicPopup.show({
+        title: 'Choose the Reason',
+        subTitle: 'that queen ' +queen.name+ " is inactive.",
+        template: '<ion-list>                                '+
+                  '  <ion-radio ng-repeat="reason in reasons" ng-model="choice.reasonId" ng-value="{{reason.id}}">{{reason.reason}}</ion-radio>'+
+                  '</ion-list>  ',
+        scope: $scope,
+        buttons: [
+          { text: 'Cancel' },
+          { text: 'Remove',
+            type: 'button-assertive',
+            onTap: function(e) {
+            if ($scope.choice.reasonId>0) {
+              console.log("selected "+reasons[$scope.choice.reasonId-1].reason+", store to queen");
+              QueenHelper.updateQueenInactive(queen.id, $scope.choice.reasonId);
+            } else {
+              console.log("Select reason to remove queen.");
+              e.preventDefault();
+              }
+            }
+          }
+        ]
+      })
+    });
+
+  };
 
   $scope.goToColony = function() {
     $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id);

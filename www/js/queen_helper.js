@@ -19,6 +19,23 @@ angular.module('ameApp')
     return deferred.promise;
   }
 
+  service.getQueenInactiveReasons = function() { //returns reasons a queen might be inactive
+    var deferred = $q.defer();
+    reasons = [];
+    var query = "SELECT * FROM Queen_Inactive_Reasons";
+    $cordovaSQLite.execute(db, query).then(function(res) {
+      if(res.rows.length > 0) {
+        for (i = 0; i < res.rows.length; i++) {
+          reasons.push(res.rows.item(i));
+        }
+        deferred.resolve(reasons);
+      } else {
+          console.log("No Q Inactive Reasons found!");
+      }
+    });
+    return deferred.promise;
+  }
+
   service.saveQueen = function (name, colonyId, motherId, origin, dateEmerged, hexColor) {
     var query = "INSERT INTO Queens (name, in_colony_id, mother_queen_id, origin, date_emerged, mark_color_hex) VALUES (?,?,?,?,?,?)";
     $cordovaSQLite.execute(db, query, [name, colonyId, motherId, origin, dateEmerged, hexColor]).then(function(res) {
@@ -32,6 +49,16 @@ angular.module('ameApp')
     var query = "UPDATE Queens SET in_colony_id = ? WHERE id = ?";
     $cordovaSQLite.execute(db, query, [colonyId, queenId]).then(function(res) {
       console.log("Moved Queen");
+    }, function (err) {
+        console.error(err);
+    });
+  }
+
+  service.updateQueenInactive = function (queenId, reasonId) {
+    var date = new Date();
+    var query = "UPDATE Queens SET date_inactive = ?, reason_inactive_id = ? WHERE id = ?";
+    $cordovaSQLite.execute(db, query, [date, reasonId, queenId]).then(function(res) {
+      console.log("Queen Inactive");
     }, function (err) {
         console.error(err);
     });

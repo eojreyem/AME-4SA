@@ -19,6 +19,7 @@ angular
     //TODO: remove these drop statements and do an Insert if not exist.
     $cordovaSQLite.execute(db, "DROP TABLE Queen_Statuses");
     $cordovaSQLite.execute(db, "DROP TABLE Hive_Types");
+    $cordovaSQLite.execute(db, "DROP TABLE Queen_Inactive_Reasons");
     //Tables of data
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Yards (id INTEGER PRIMARY KEY, name TEXT)");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Visit_Notes (id INTEGER PRIMARY KEY, visit_id INTEGER, note TEXT, is_reminder INTEGER)");
@@ -32,6 +33,8 @@ angular
     $cordovaSQLite.execute(db, "INSERT INTO Queen_Statuses (status) VALUES ('Not Seen'), ('Seen'), ('Not Found'), ('Confined'), ('Cell'), ('Queenless'), ('Virgin'), ('Other')");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Hive_Types (id INTEGER PRIMARY KEY, type TEXT)");
     $cordovaSQLite.execute(db, "INSERT INTO Hive_Types (type) VALUES ('10 Frame'), ('5 Frame'), ('Mating Nuc'), ('Other')");
+    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Queen_Inactive_Reasons (id INTEGER PRIMARY KEY, reason TEXT)");
+    $cordovaSQLite.execute(db, "INSERT INTO Queen_Inactive_Reasons (reason) VALUES ('Superceded'), ('Poor Performance'), ('Drone Layer'), ('Inujured'), ('Accident'), ('Swarmed'), ('Unknown'), ('Not Accepted'), ('Sold'), ('Other')");
 
   });
 })

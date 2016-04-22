@@ -52,12 +52,24 @@
     </ion-nav-bar>
     <ion-content class="has-header">
 
+      <div class="list list-inset">
+        <button class="button button-block button-calm">Change Mark Color</button>
+        <div class="item">
+          <b>Date Emerged:</b> {{currentQueen.date_emerged}}
+        </div>
+        <div class="item">
+          <b>Origin:</b> {{currentQueen.origin}}
+        </div>
+        <div class="item">
+          <b>Mother:</b> {{currentQueen.mother_queen_id}}
+        </div>
 
-      <div class="padding">
-        Apr 2016: Origin: {{currentQueen.origin}}<br><br>
-        <button class="button button-small button-outline button-dark" ng-click="queenInactive(queen)">Inactive</button>
-
+        <div class="item">
+          <button class="button button-small button-outline button-dark" ng-click="showQueenInactivePopup(currentQueen)">Inactive</button>
+        </div>
       </div>
+
+
 
     </ion-content>
     <ion-footer-bar class="bar bar-stable">
