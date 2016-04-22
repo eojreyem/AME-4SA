@@ -1,6 +1,6 @@
 angular.module('ameApp')
 
-.controller('ColonyCtrl', function($scope, $location, $ionicPopup, $stateParams, $cordovaSQLite, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
+.controller('ColonyCtrl', function($scope, $location, $ionicPopup, $stateParams, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
   console.log($stateParams.colonyId);
 
   //Load current yard into currentYard
@@ -44,8 +44,6 @@ angular.module('ameApp')
         }
       ]
     })
-
-
   };
 
 

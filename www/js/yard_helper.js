@@ -21,20 +21,17 @@ angular.module('ameApp')
 
   service.getAllYards = function() { //returns all yards
     yards =[];
+    var deferred = $q.defer();
     var query = "SELECT * FROM Yards";
     $cordovaSQLite.execute(db, query).then(function(res) {
-        if(res.rows.length > 0) {
-          for (i = 0; i < res.rows.length; i++) {
-            yards.push(res.rows.item(i));
-          }
-
-        } else {
-            console.log("No results found");
+      if(res.rows.length > 0) {
+        for (i = 0; i < res.rows.length; i++) {
+          yards.push(res.rows.item(i));
         }
-    }, function (err) {
-        console.error(err);
+      deferred.resolve(yards);
+      }
     });
-    return yards;
+    return deferred.promise;
   }
 
   service.saveYard = function(name) { //save new yard to the database
@@ -50,7 +47,7 @@ angular.module('ameApp')
       console.log("INSERT ID -> " + res.insertId);
     }, function (err) {
       console.error(err);
-    });
+    })
 
   }
 
@@ -64,6 +61,8 @@ angular.module('ameApp')
           colonies.push(res.rows.item(i));
         }
         deferred.resolve(colonies);
+      }else{
+        deferred.resolve(null);
       }
     });
     return deferred.promise;

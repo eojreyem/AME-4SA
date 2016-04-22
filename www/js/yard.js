@@ -29,7 +29,9 @@ angular.module('ameApp')
   };
 
   $scope.showMoveColonyPopup = function(colony) {
-    $scope.yards = YardHelper.getAllYards();
+    YardHelper.getAllYards().then(function (yards){
+      $scope.yards = yards;
+    });
     $scope.choice = {};
     var moveColonyPopup = $ionicPopup.show({
       template: '<ion-list>                                '+
@@ -50,7 +52,9 @@ angular.module('ameApp')
             e.preventDefault();
           } else {
             ColonyHelper.updateColonyYard(colony.id, $scope.choice.yardId);
-            $scope.colonies = YardHelper.getColoniesInYard($stateParams.yardId);
+            YardHelper.getColoniesInYard($scope.currentYard.id).then(function (colonies){
+              $scope.colonies = colonies;
+            });
             console.log("moving colony ID" + colony.id + "to yard ID:" +$scope.choice.yardId)
             }
         }

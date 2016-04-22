@@ -6,29 +6,26 @@
 
 angular.module('ameApp')
 
-.controller('MainCtrl', function($scope, $cordovaSQLite, $location, YardHelper) {
+.controller('MainCtrl', function($scope, $location, YardHelper) {
   // No need for testing data anymore
 
   //loads a list of yards in 4SA
-  $scope.yards = YardHelper.getAllYards();
+  YardHelper.getAllYards().then(function(yards){
+    $scope.yards = yards;
+  });
 
   //Create a new yard
   $scope.createYard = function() {
     var name = document.getElementById("newyardname");
     YardHelper.saveYard(name.value);
     name.value = ""
-    $scope.yards = YardHelper.getAllYards();
+    YardHelper.getAllYards().then(function(yards){
+      $scope.yards = yards;
+    });
   };
 
   $scope.goToYard = function (yard){
     $location.url('/yard/' + yard.id);
-  }
-
-  $scope.countColoniesInYard = function (yard) {
-    // TODO: make this work!!
-    YardHelper.getColoniesInYard(yard.id).then(function (colonies){
-      $scope.numColoniesInYard = colonies.length;
-    });
   }
 
   $scope.dropYards = function (){
