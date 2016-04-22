@@ -16,15 +16,22 @@ angular
     }else{
       db = window.openDatabase("AME_4SA.db", '1', 'my', 1024 * 1024 * 100); // browser
     }
-
-    //$cordovaSQLite.execute(db, "DROP TABLE Colonies"); //Use to remove a table
-    //complete tables
+    //TODO: remove these drop statements and do an Insert if not exist.
+    $cordovaSQLite.execute(db, "DROP TABLE Queen_Statuses");
+    $cordovaSQLite.execute(db, "DROP TABLE Hive_Types");
+    //Tables of data
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Yards (id INTEGER PRIMARY KEY, name TEXT)");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Visit_Notes (id INTEGER PRIMARY KEY, visit_id INTEGER, note TEXT, is_reminder INTEGER)");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Visit_Data (id INTEGER PRIMARY KEY, visit_id INTEGER, data_type_id INTEGER, data_value INTEGER)");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Colonies (id INTEGER PRIMARY KEY, date_entered DATETIME DEFAULT CURRENT_TIMESTAMP, in_yard_id INTEGER, number INTEGER, date_active TEXT, origin TEXT, date_inactive TEXT, reason_inactive_id INTEGER)");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Queens (id INTEGER PRIMARY KEY, name TEXT, in_colony_id INTEGER, mother_queen_id INTEGER, origin TEXT, date_entered DATETIME DEFAULT CURRENT_TIMESTAMP, date_emerged TEXT, date_inactive TEXT, reason_inactive_id, mark_color_hex INTEGER)");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Visits (id INTEGER PRIMARY KEY, date_entered DATETIME DEFAULT CURRENT_TIMESTAMP, date_time TEXT, yard_id INTEGER, colony_id INTEGER, queen_id INTEGER, qty_boxes INTEGER, queen_status_start_id INTEGER, queen_status_end_id INTEGER, frames_of_bees_start INTEGER, frames_of_bees_end INTEGER, frames_of_brood_start INTEGER, frames_of_brood_end INTEGER, has_temper INTEGER, is_feeding INTEGER, disease_id INTEGER)");
+
+    //Tables of Keys
+    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Queen_Statuses (id INTEGER PRIMARY KEY, status TEXT)");
+    $cordovaSQLite.execute(db, "INSERT INTO Queen_Statuses (status) VALUES ('Not Seen'), ('Seen'), ('Not Found'), ('Confined'), ('Cell'), ('Queenless'), ('Virgin'), ('Other')");
+    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Hive_Types (id INTEGER PRIMARY KEY, type TEXT)");
+    $cordovaSQLite.execute(db, "INSERT INTO Hive_Types (type) VALUES ('10 Frame'), ('5 Frame'), ('Mating Nuc'), ('Other')");
 
   });
 })

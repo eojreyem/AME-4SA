@@ -3,20 +3,22 @@
 
 angular.module('ameApp')
 
-.factory('VisitHelper', function($cordovaSQLite) {
+.factory('VisitHelper', function($cordovaSQLite, $q) {
   var visit = [];
   var service = {};
 
   service.getVisitById = function(id) { //returns a visit object when given a valid ID
+    var deferred = $q.defer();
     var query = "SELECT * FROM Visits WHERE id = " + id;
     $cordovaSQLite.execute(db, query).then(function(res) {
       visit = res.rows.item(0);
       visit.has_temper = Boolean(visit.has_temper)
       visit.is_feeding = Boolean(visit.is_feeding)
+      deferred.resolve(visit);
     }, function (err) {
         console.error(err);
     });
-    return visit;
+    return deferred.promise;
   }
 
   service.getVisitsForColony = function(id) { //returns visits for a given colony

@@ -33,7 +33,7 @@ angular.module('ameApp')
             ColonyHelper.getColonyByNumber($scope.destination.colonyNum).then(function (destinationColony){
               console.log("move queen " +queen.name+ " to " +destinationColony.number);
               QueenHelper.updateQueenColony(queen.id, destinationColony.id)
-              $scope.loadQueens();
+              $scope.queens = QueenHelper.getQueensInColony($scope.currentColony.id);
             });
 
           } else {

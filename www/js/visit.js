@@ -10,10 +10,14 @@ angular.module('ameApp')
   visitId = $stateParams.visitId;
 
   //Load current yard into currentYard
-  currentYard = [];
+  YardHelper.getYardById($stateParams.yardId).then(function (yard){
+    $scope.currentYard = yard;
+  });
 
-  //Load current yard into currentYard
-  currentYard = YardHelper.getYardById($stateParams.yardId);
+  //Load current colony into currentColony
+  ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
+    $scope.currentColony = colony;
+  });
 
   if (visitId == "new"){ //pre-populate fields for new visit.
     $scope.visitTitle=" New";
@@ -29,15 +33,13 @@ angular.module('ameApp')
   }
   else if (visitId >= 0){  //if a visitId was passed, load old visit for editing/viewing
     $scope.visitTitle=" Visit ID:" + visitId;
-    $scope.currentVisit = VisitHelper.getVisitById($stateParams.visitId)
+    VisitHelper.getVisitById($stateParams.visitId).then(function(visit){
+      $scope.currentVisit = visit
+    });
   }
   else {  // console log error
     console.log("Visit does not exist.");
   }
-
-  //Load current colony into currentColony
-  currentColony = ColonyHelper.getColonyById($stateParams.colonyId);
-  $scope.currentColony = currentColony;
 
   $scope.createQueen = function() {
     //TODO: check if queen name is unique
@@ -45,7 +47,7 @@ angular.module('ameApp')
     var queenOrigin = document.getElementById("newQueenOrigin");
     QueenHelper.saveQueen(
       queenNumber.value,
-      currentColony.id,
+      $scope.currentColony.id,
       null, //motherId
       queenOrigin.value,
       null, //dateEmerged
@@ -60,8 +62,8 @@ angular.module('ameApp')
     if (visitId == "new"){  //create visit if new.
       VisitHelper.saveVisit(
         null, //TODO: get real date.
-        currentYard.id,
-        currentColony.id,
+        $scope.currentYard.id,
+        $scope.currentColony.id,
         null, //queenId
         $scope.currentVisit.qty_boxes,
         null, //queenStatusStartId
@@ -112,16 +114,16 @@ angular.module('ameApp')
         mo='0'+mo}
       currentTime = (yyyy + '-' + mo + '-' + dd + ' ' + hh + ':' + mi + ':' + ss);
     */
-    $location.url('/yard/' + currentYard.id + '/colony/' + currentColony.id);
+    $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id);
   };
 
   $scope.goToColony = function() {
-    $location.url('/yard/' + currentYard.id + '/colony/' + currentColony.id);
+    $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id);
   }
 
   $scope.goToYard = function() {
     console.log("nav to yard");
-    $location.url('/yard/' + currentYard.id );
+    $location.url('/yard/' + $scope.currentYard.id );
   }
 
   $scope.goHome = function () {

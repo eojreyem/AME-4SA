@@ -80,7 +80,7 @@
           </label>
         </div>
         <div class="padding">
-          <button type="submit" class="button button-outline button-dark button-icon">Create Queen <i class="icon ion-female"></i></button>
+          <button type="submit" class="button button-positive button-block">Create Queen <i class="icon ion-female"></i></button>
         </div>
       </form>
     </ion-content>
@@ -236,7 +236,7 @@
     //Footer navigation
     <ion-footer-bar class="bar bar-stable">
       <button class="button button-icon ion-home" ng-click="goHome()">></button>
-      <button class="button button-icon ion-location" ng-click="goToYard()">{{yardName}} ></button>
+      <button class="button button-icon ion-location" ng-click="goToYard()">{{currentYard.name}} ></button>
       <button class="button button-icon ion-ios-box" ng-click="goToColony()"> {{currentColony.number}} ></button>
       <div class="col"></div>
     </ion-footer-bar>
