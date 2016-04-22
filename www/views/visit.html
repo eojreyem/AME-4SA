@@ -111,14 +111,7 @@
         <label class="item item-input item-select">
 
           <select>
-            <option selected>Not Seen</option>
-            <option>Seen</option>
-            <option>Not Found</option>
-            <option>Confined</option>
-            <option>Cell(s)</option>
-            <option>Queenless</option>
-            <option>Virgin(s)</option>
-            <option>Other</option>
+            <option ng-repeat="status in queenStatuses">{{status.status}}</option>
           </select>
           <div class="input-label">
             Queen Status
@@ -166,10 +159,7 @@
             Hive Type
           </div>
           <select>
-            <option selected>Production</option>
-            <option>Nucleus</option>
-            <option>Mating Nuc</option>
-            <option>Other</option>
+            <option ng-repeat="type in hiveTypes">{{type.type}}</option>
           </select>
         </label>
         <label class="item item-input">
@@ -198,14 +188,7 @@
             Queen Status
           </div>
           <select>
-            <option selected>Not Seen</option>
-            <option>Seen</option>
-            <option>Not Found</option>
-            <option>Confined</option>
-            <option>Cell(s)</option>
-            <option>Queenless</option>
-            <option>Virgin(s)</option>
-            <option>Other</option>
+            <option ng-repeat="status in queenStatuses">{{status.status}}</option>
           </select>
         </label>
         <label class="item item-input">

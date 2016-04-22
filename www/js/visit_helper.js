@@ -21,6 +21,40 @@ angular.module('ameApp')
     return deferred.promise;
   }
 
+  service.getQueenStatuses = function() { //returns queen statuses
+    var deferred = $q.defer();
+    statuses = [];
+    var query = "SELECT * FROM Queen_Statuses";
+    $cordovaSQLite.execute(db, query).then(function(res) {
+      if(res.rows.length > 0) {
+        for (i = 0; i < res.rows.length; i++) {
+          statuses.push(res.rows.item(i));
+        }
+        deferred.resolve(statuses);
+      } else {
+          console.log("No queen statuses found!");
+      }
+    });
+    return deferred.promise;
+  }
+
+  service.getHiveTypes = function() { //returns hive types
+    var deferred = $q.defer();
+    types = [];
+    var query = "SELECT * FROM Hive_Types";
+    $cordovaSQLite.execute(db, query).then(function(res) {
+      if(res.rows.length > 0) {
+        for (i = 0; i < res.rows.length; i++) {
+          types.push(res.rows.item(i));
+        }
+        deferred.resolve(types);
+      } else {
+          console.log("No hive types found!");
+      }
+    });
+    return deferred.promise;
+  }
+
   service.getVisitsForColony = function(id) { //returns visits for a given colony
 
       visits = [];

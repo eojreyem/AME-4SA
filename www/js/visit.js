@@ -8,6 +8,13 @@ angular.module('ameApp')
 .controller('VisitCtrl', function($scope, $location, $stateParams, $ionicSideMenuDelegate, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
   $scope.currentVisit =[null];
   visitId = $stateParams.visitId;
+  VisitHelper.getQueenStatuses().then(function (statuses){
+    $scope.queenStatuses = statuses;
+  });
+  VisitHelper.getHiveTypes().then(function (types){
+    $scope.hiveTypes = types;
+  });
+
 
   if (visitId == "new"){ //pre-populate fields for new visit.
     $scope.visitTitle=" New";
