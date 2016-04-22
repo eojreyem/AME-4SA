@@ -12,7 +12,9 @@ angular.module('ameApp')
   //Load current yard into currentYard
   YardHelper.getYardById($stateParams.yardId).then(function (yard){
     $scope.currentYard = yard;
-    $scope.colonies = YardHelper.getColoniesInYard(yard.id);
+    YardHelper.getColoniesInYard(yard.id).then(function (colonies){
+      $scope.colonies = colonies;
+    });
   });
 
 

@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('ameApp')
 
-.controller('QueenCtrl', function($scope, $location, $stateParams, $cordovaSQLite, ColonyHelper, YardHelper) {
+.controller('QueenCtrl', function($scope, $location, $stateParams, $cordovaSQLite, ColonyHelper, YardHelper, QueenHelper) {
 
   //Load current yard into currentYard
   YardHelper.getYardById($stateParams.yardId).then(function (yard){
@@ -18,13 +18,9 @@ angular.module('ameApp')
   });
 
   //Load current queen into currentQueen
-  currentQueen = [];
-  var query = "SELECT * FROM Queens WHERE id = ?";
-  $cordovaSQLite.execute(db, query, [$stateParams.queenId]).then(function(res) {
-    $scope.currentQueen = res.rows.item(0);
+  QueenHelper.getQueenById($stateParams.queenId).then(function (queen){
+    $scope.currentQueen = queen;
   });
-
-
 
   $scope.goToColony = function() {
     $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id);

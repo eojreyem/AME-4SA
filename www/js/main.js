@@ -24,9 +24,11 @@ angular.module('ameApp')
     $location.url('/yard/' + yard.id);
   }
 
-  $scope.countColoniesInYard = function (yardId) {
+  $scope.countColoniesInYard = function (yard) {
     // TODO: make this work!!
-    $scope.numColoniesInYard = YardHelper.getColoniesInYard(yardId).length;
+    YardHelper.getColoniesInYard(yard.id).then(function (colonies){
+      $scope.numColoniesInYard = colonies.length;
+    });
   }
 
   $scope.dropYards = function (){

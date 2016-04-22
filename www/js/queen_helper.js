@@ -3,18 +3,20 @@
 
 angular.module('ameApp')
 
-.factory('QueenHelper', function($cordovaSQLite) {
+.factory('QueenHelper', function($cordovaSQLite, $q) {
   var queen = [];
   var service = {};
 
   service.getQueenById = function(id) { //returns a queen object when given a valid ID
+    var deferred = $q.defer();
     var query = "SELECT * FROM Queens WHERE id = " + id;
     $cordovaSQLite.execute(db, query).then(function(res) {
       queen = res.rows.item(0);
+      deferred.resolve(queen);
     }, function (err) {
         console.error(err);
     });
-    return queen;
+    return deferred.promise;
   }
 
   service.saveQueen = function (name, colonyId, motherId, origin, dateEmerged, hexColor) {

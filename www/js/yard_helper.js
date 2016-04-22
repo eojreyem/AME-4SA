@@ -25,7 +25,6 @@ angular.module('ameApp')
     $cordovaSQLite.execute(db, query).then(function(res) {
         if(res.rows.length > 0) {
           for (i = 0; i < res.rows.length; i++) {
-            console.log("SELECTED -> " + res.rows.item(i));
             yards.push(res.rows.item(i));
           }
 
@@ -56,23 +55,18 @@ angular.module('ameApp')
   }
 
   service.getColoniesInYard = function(yardId) { //return all colonies in a yardId
+    var deferred = $q.defer();
     colonies = [];
     var query = "SELECT * FROM Colonies WHERE in_yard_id = ?";
     $cordovaSQLite.execute(db, query, [yardId]).then(function(res) {
       if(res.rows.length > 0) {
         for (i = 0; i < res.rows.length; i++) {
-          console.log("SELECTED -> " + res.rows.item(i));
           colonies.push(res.rows.item(i));
         }
-
-      } else {
-          console.log("No colonies found in this yard");
+        deferred.resolve(colonies);
       }
-    }, function (err) {
-        console.error(err);
     });
-    return colonies;
-
+    return deferred.promise;
   }
 
   return service;
