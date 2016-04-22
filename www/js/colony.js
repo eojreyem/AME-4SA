@@ -1,8 +1,6 @@
 angular.module('ameApp')
 
 .controller('ColonyCtrl', function($scope, $location, $ionicPopup, $stateParams, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
-  console.log($stateParams.colonyId);
-
 
   //Load current colony into currentColony
   ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){

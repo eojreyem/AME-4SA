@@ -6,7 +6,7 @@
 
 angular.module('ameApp')
 
-.controller('MainCtrl', function($scope, $location, YardHelper) {
+.controller('MainCtrl', function($scope, $location, $cordovaSQLite, YardHelper) {
   // No need for testing data anymore
 
   //loads a list of yards in 4SA

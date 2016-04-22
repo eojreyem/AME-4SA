@@ -35,18 +35,15 @@
     </ion-header-bar>
     <ion-content class="has-header">
       <!-- List of Colonies in this yard -->
-      <ion-list>
+      <div class="card padding" ng-repeat="colony in colonies">
+        <a class="item item-icon-left" ng-click="goToColony(colony)" on-hold="showMoveColonyPopup(colony)">
+          <i class="icon ion-ios-box"> {{colony.number}}</i>
+        </a>
+      </div>
+      <div class="padding">
+        *long press to move colony
+      </div>
 
-        <ion-item ng-repeat="colony in colonies">
-          <a class="item item-icon-left item-icon-right" ng-click="goToColony(colony)" on-hold="showMoveColonyPopup(colony)">
-            <i class="icon ion-ios-box">{{colony.number}}</i>
-          </a>
-
-        </ion-item>
-        <div class="padding">
-          *long press to move colony
-        </div>
-      </ion-list>
     </ion-content>
     <ion-footer-bar class="bar bar-stable">
       <button class="button button-icon ion-home" ng-click="goHome()">></button>
