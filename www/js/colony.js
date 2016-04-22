@@ -3,16 +3,17 @@ angular.module('ameApp')
 .controller('ColonyCtrl', function($scope, $location, $ionicPopup, $stateParams, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
   console.log($stateParams.colonyId);
 
-  //Load current yard into currentYard
-  YardHelper.getYardById($stateParams.yardId).then(function (yard){
-    $scope.currentYard = yard;
-  });
 
   //Load current colony into currentColony
-  ColonyHelper.getColonyById($stateParams.colonyId).then(function (currentColony){
-    $scope.currentColony = currentColony;
-    $scope.queens = QueenHelper.getQueensInColony(currentColony.id);
-    $scope.visits = VisitHelper.getVisitsForColony(currentColony.id);
+  ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
+    $scope.currentColony = colony;
+    $scope.queens = QueenHelper.getQueensInColony(colony.id);
+    $scope.visits = VisitHelper.getVisitsForColony(colony.id);
+    //Load colony's yard into currentYard
+    YardHelper.getYardById(colony.in_yard_id).then(function (yard){
+      $scope.currentYard = yard;
+    });
+
   });
 
   $scope.showMoveQueenPopup = function(queen) {

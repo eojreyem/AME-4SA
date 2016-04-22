@@ -7,20 +7,18 @@ angular.module('ameApp')
 
 .controller('QueenCtrl', function($scope, $location, $stateParams, $ionicPopup, ColonyHelper, YardHelper, QueenHelper) {
 
-  //Load current yard into currentYard
-  YardHelper.getYardById($stateParams.yardId).then(function (yard){
-    $scope.currentYard = yard;
-  });
-
-  //Load current colony into currentColony
-  ColonyHelper.getColonyById($stateParams.colonyId).then(function (currentColony){
-    $scope.currentColony = currentColony;
-  });
-
-    //Load current queen into currentQueen
-    QueenHelper.getQueenById($stateParams.queenId).then(function (queen){
-      $scope.currentQueen = queen;
+  //Load current queen into currentQueen
+  QueenHelper.getQueenById($stateParams.queenId).then(function (queen){
+    $scope.currentQueen = queen;
+    //Load her colony into currentColony
+    ColonyHelper.getColonyById(queen.in_colony_id).then(function (colony){
+      $scope.currentColony = colony;
+      //Load colony's yard into currentYard
+      YardHelper.getYardById(colony.in_yard_id).then(function (yard){
+        $scope.currentYard = yard;
+      });
     });
+  });
 
   $scope.showQueenInactivePopup = function(queen) {
     $scope.choice = {};

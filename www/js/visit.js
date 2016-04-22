@@ -9,16 +9,6 @@ angular.module('ameApp')
   $scope.currentVisit =[null];
   visitId = $stateParams.visitId;
 
-  //Load current yard into currentYard
-  YardHelper.getYardById($stateParams.yardId).then(function (yard){
-    $scope.currentYard = yard;
-  });
-
-  //Load current colony into currentColony
-  ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
-    $scope.currentColony = colony;
-  });
-
   if (visitId == "new"){ //pre-populate fields for new visit.
     $scope.visitTitle=" New";
     $scope.currentVisit.date_time = "apr 10"; //TODO: get current date and time and format
@@ -29,12 +19,29 @@ angular.module('ameApp')
     $scope.currentVisit.frames_of_brood_end = null;
     $scope.currentVisit.has_temper = false; // true or false
     $scope.currentVisit.is_feeding = false; // true or false
+    //Load current yard into currentYard
+    YardHelper.getYardById($stateParams.yardId).then(function (yard){
+      $scope.currentYard = yard;
+    });
+    //Load current colony into currentColony
+    ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
+      $scope.currentColony = colony;
+    });
+
 
   }
   else if (visitId >= 0){  //if a visitId was passed, load old visit for editing/viewing
     $scope.visitTitle=" Visit ID:" + visitId;
     VisitHelper.getVisitById($stateParams.visitId).then(function(visit){
       $scope.currentVisit = visit
+      //Load that visit's colony into currentColony
+      ColonyHelper.getColonyById(visit.colony_id).then(function (colony){
+        $scope.currentColony = colony;
+        //Load colony's yard into currentYard
+        YardHelper.getYardById(colony.in_yard_id).then(function (yard){
+          $scope.currentYard = yard;
+        });
+      });
     });
   }
   else {  // console log error
