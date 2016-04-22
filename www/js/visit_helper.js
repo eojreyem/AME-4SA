@@ -67,7 +67,6 @@ angular.module('ameApp')
     ", is_feeding = " +(feeding?1:0)+
     ", disease_id = " +diseaseId+
     " WHERE id = " + visitId;
-    console.log(query);
     $cordovaSQLite.execute(db, query).then(function(res) {
         console.log("Visit ID:" +visitId* " Updated ");
     }, function (err) {
