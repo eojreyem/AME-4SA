@@ -35,5 +35,27 @@ angular.module('ameApp')
     });
   }
 
+
+  service.getQueensInColony = function(colonyId) { //return all queens in a colonyId
+    queens = [];
+    var query = "SELECT * FROM Queens WHERE in_colony_id = ?";
+    $cordovaSQLite.execute(db, query, [colonyId]).then(function(res) {
+      if(res.rows.length > 0) {
+        for (i = 0; i < res.rows.length; i++) {
+          console.log("SELECTED -> " + res.rows.item(i));
+          queens.push(res.rows.item(i));
+        }
+
+      } else {
+          console.log("No queens found in this colony");
+      }
+    }, function (err) {
+        console.error(err);
+    });
+    return queens;
+
+  }
+
+
   return service;
 });

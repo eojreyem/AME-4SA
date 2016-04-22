@@ -35,7 +35,6 @@ angular.module('ameApp')
         console.error(err);
     });
     return yards;
-
   }
 
   service.saveYard = function(name) { //save new yard to the database

@@ -19,6 +19,27 @@ angular.module('ameApp')
     return visit;
   }
 
+  service.getVisitsForColony = function(id) { //returns visits for a given colony
+
+      visits = [];
+      var query = "SELECT * FROM Visits WHERE colony_id = ?";
+      $cordovaSQLite.execute(db, query, [id]).then(function(res) {
+        if(res.rows.length > 0) {
+          for (i = 0; i < res.rows.length; i++) {
+            console.log("SELECTED -> " + res.rows.item(i));
+            visits.push(res.rows.item(i));
+          }
+
+        } else {
+            console.log("No visits found for colony");
+        }
+      }, function (err) {
+          console.error(err);
+      });
+      return visits;
+    };
+
+
   service.saveVisit = function (dateTime, yardId, colonyId, queenId, numberBoxes, queenStatusStartId, queenStatusEndId, FObeesStart, FObeesEnd, FObroodStart, FObroodEnd, temper, feeding, deseaseId) {
     var query = "INSERT INTO Visits (date_time, yard_id, colony_id, queen_id, qty_boxes, queen_status_start_id, queen_status_end_id, frames_of_bees_start, frames_of_bees_end, frames_of_brood_start, frames_of_brood_end, has_temper, is_feeding, disease_id) "+
     "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)"

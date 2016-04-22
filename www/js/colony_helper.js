@@ -3,19 +3,32 @@
 
 angular.module('ameApp')
 
-.factory('ColonyHelper', function($cordovaSQLite) {
+.factory('ColonyHelper', function($cordovaSQLite, $q) {
   var colony = [];
   var service = {};
 
   service.getColonyById = function(id) { //returns a colony object when given a valid ID
-
+    var deferred = $q.defer();
     var query = "SELECT * FROM Colonies WHERE id = " + id;
     $cordovaSQLite.execute(db, query).then(function(res) {
       colony = res.rows.item(0);
+      deferred.resolve(colony);
+      console.log("Selected colony");
+    });
+    return deferred.promise;
+  }
+
+  service.getColonyByNumber = function(number) { //returns a colony object when given a valid ID
+    var deferred = $q.defer();
+
+    var query = "SELECT * FROM Colonies WHERE number = " + number;
+    $cordovaSQLite.execute(db, query).then(function(res) {
+      colony = res.rows.item(0);
+      deferred.resolve(colony);
       console.log("Selected colony");
     });
 
-    return colony;
+    return deferred.promise;
   }
 
   service.saveColony = function (yardId, colonyNumber, colonyActiveDate, colonyOrigin) {
