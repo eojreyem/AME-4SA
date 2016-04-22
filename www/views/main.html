@@ -5,10 +5,6 @@
 <ion-content class="has-header">
   <!-- List of Yards -->
   <div class="list">
-
-    <div class="item item-divider">
-      Yard - # Colonies - Days since visit
-    </div>
     <a class="item" ng-repeat="yard in yards" ng-click="goToYard(yard)">
       <i class="icon ion-location"> {{yard.name}}</i>
     </a>

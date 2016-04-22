@@ -117,15 +117,14 @@ angular.module('ameApp')
     $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id);
   };
 
+  // Navigational functions
   $scope.goToColony = function() {
     $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id);
   }
-
   $scope.goToYard = function() {
     console.log("nav to yard");
     $location.url('/yard/' + $scope.currentYard.id );
   }
-
   $scope.goHome = function () {
     $location.url('/')
   }
