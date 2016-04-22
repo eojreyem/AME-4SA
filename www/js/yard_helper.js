@@ -3,19 +3,20 @@
 
 angular.module('ameApp')
 
-.factory('YardHelper', function($cordovaSQLite) {
+.factory('YardHelper', function($cordovaSQLite, $q) {
   var yard = [];
   var service = {};
 
   service.getYardById = function(id) { //returns a yard object when given a valid ID
-
+    var deferred = $q.defer();
     var query = "SELECT * FROM Yards WHERE id = " + id;
     $cordovaSQLite.execute(db, query).then(function(res) {
       yard = res.rows.item(0);
+      deferred.resolve(yard);
       console.log("Selected yard");
     });
 
-    return yard;
+    return deferred.promise;
   }
 
   service.getAllYards = function() { //returns all yards

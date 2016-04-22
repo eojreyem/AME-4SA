@@ -4,7 +4,9 @@ angular.module('ameApp')
   console.log($stateParams.colonyId);
 
   //Load current yard into currentYard
-  currentYard = YardHelper.getYardById($stateParams.yardId);
+  YardHelper.getYardById($stateParams.yardId).then(function (yard){
+    $scope.currentYard = yard;
+  });
 
   //Load current colony into currentColony
   ColonyHelper.getColonyById($stateParams.colonyId).then(function (currentColony){
@@ -49,17 +51,17 @@ angular.module('ameApp')
 
   //Navigation functions
   $scope.newVisit = function() {
-    $location.url('/yard/' + currentYard.id + '/colony/' + $scope.currentColony.id  + '/visit/new');
+    $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id  + '/visit/new');
   }
   $scope.goToQueen = function(queen) {
-    $location.url('/yard/' + currentYard.id + '/colony/' + $scope.currentColony.id  + '/queen/' + queen.id);
+    $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id  + '/queen/' + queen.id);
   }
   $scope.goToVisit = function(visit) {
-    $location.url('/yard/' + currentYard.id + '/colony/' + $scope.currentColony.id  + '/visit/' + visit.id);
+    $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id  + '/visit/' + visit.id);
   }
   $scope.goToYard = function() {
     console.log("nav to yard");
-    $location.url('/yard/' + currentYard.id );
+    $location.url('/yard/' + $scope.currentYard.id );
   }
   $scope.goHome = function () {
     $location.url('/')

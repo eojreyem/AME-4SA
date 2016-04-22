@@ -8,22 +8,20 @@ angular.module('ameApp')
 .controller('YardCtrl', function($scope, $ionicPopup, $stateParams, $location, $cordovaSQLite, $ionicSideMenuDelegate, ColonyHelper, YardHelper) {
 
   var moveColonyPopup = $ionicPopup;
-  //Load current yard into currentYard
-  currentYard = [];
-  //Load current yard into currentYard
-  currentYard = YardHelper.getYardById($stateParams.yardId);
 
-  //loads a list of colonies in currentYard
-  $scope.loadColonies = function() {
-    $scope.colonies = YardHelper.getColoniesInYard($stateParams.yardId);
-  };
+  //Load current yard into currentYard
+  YardHelper.getYardById($stateParams.yardId).then(function (yard){
+    $scope.currentYard = yard;
+    $scope.colonies = YardHelper.getColoniesInYard(yard.id);
+  });
+
 
   $scope.createColony = function() {
     var newColonyActiveDate = "Apr 10"
     var newColonyNumber = document.getElementById("newColonyNumber").value;
     var newColonyOrigin = document.getElementById("newColonyOrigin").value;
 
-    ColonyHelper.saveColony(currentYard.id, newColonyNumber, newColonyActiveDate, newColonyOrigin);
+    ColonyHelper.saveColony($scope.currentYard.id, newColonyNumber, newColonyActiveDate, newColonyOrigin);
     $scope.loadColonies();
     $ionicSideMenuDelegate.toggleRight();
   };
@@ -61,7 +59,7 @@ angular.module('ameApp')
 
 
   $scope.goToColony = function (colony){
-    $location.url('/yard/'+ currentYard.id + '/colony/' + colony.id);
+    $location.url('/yard/'+ $scope.currentYard.id + '/colony/' + colony.id);
   }
 
   $scope.goHome = function () {

@@ -6,19 +6,16 @@
 angular.module('ameApp')
 
 .controller('QueenCtrl', function($scope, $location, $stateParams, $cordovaSQLite, ColonyHelper, YardHelper) {
-  // No need for testing data anymore
 
   //Load current yard into currentYard
-
-
-  currentYard = [];
-
-  //Load current yard into currentYard
-  currentYard = YardHelper.getYardById($stateParams.yardId);
+  YardHelper.getYardById($stateParams.yardId).then(function (yard){
+    $scope.currentYard = yard;
+  });
 
   //Load current colony into currentColony
-  currentColony = ColonyHelper.getColonyById($stateParams.colonyId);
-  $scope.currentColony = currentColony;
+  ColonyHelper.getColonyById($stateParams.colonyId).then(function (currentColony){
+    $scope.currentColony = currentColony;
+  });
 
   //Load current queen into currentQueen
   currentQueen = [];
@@ -30,12 +27,12 @@ angular.module('ameApp')
 
 
   $scope.goToColony = function() {
-    $location.url('/yard/' + currentYard.id + '/colony/' + currentColony.id);
+    $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id);
   }
 
   $scope.goToYard = function() {
     console.log("nav to yard");
-    $location.url('/yard/' + currentYard.id );
+    $location.url('/yard/' + $scope.currentYard.id );
   }
 
   $scope.goHome = function () {
