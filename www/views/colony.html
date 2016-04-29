@@ -11,7 +11,7 @@
 
         <ion-item ng-repeat="visit in visits" ng-click="goToVisit(visit)">
           <item class="item item-icon-left ion-clipboard">
-            ID: {{visit.id}} - {{visit.date_time}}
+            {{visit.date_time | date:'short'}}
           </item>
         </ion-item>
       </ion-list>
@@ -43,18 +43,27 @@
       <button menu-toggle="right" class="button button-icon ion-female"></button>
     </ion-header-bar>
     <ion-content class="has-header">
+      <div class="list list-inset">
+        <div class="divider">
+          10 Frame
+        </div>
+        <div class="list">
+          <div class="item">
+            10 Frame  (+1) 5 hive bodies
+          </div>
+        </div>
 
-
-      <div class="padding">
-        Apr 2016: Origin: {{currentColony.origin}}<br>
-        <button class="button button-small button-outline button-dark" ng-click="colonyInactive(colony)">Inactive</button>
-        <br>
-        <div class="col-offset-20 col-60">
+        <div class="row">
           <button class="button button-block button-positive" ng-click="newVisit()">New Visit</button>
         </div>
-        Display Summary of Last visit.
+        <div class="row">
+          Create Date: {{currentColony.date_created}} <button class="button button-small button-outline button-dark" ng-click="colonyInactive(colony)">Inactive</button>
+        </div>
+        <p>Origin: {{currentColony.origin}}</p>
 
       </div>
+
+
     </ion-content>
     <ion-footer-bar class="bar bar-stable">
       <button class="button button-icon ion-home" ng-click="goHome()">></button>

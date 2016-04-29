@@ -38,7 +38,7 @@
             <select class="item item-input item-select">
               <option>Varroa/300</option>
               <option>Hive Weight (lbs)</option>
-              <option>Honey Harvest (lbs)</option>
+              <option selected>Honey Harvest (lbs)</option>
               <option>Hygienic Empty</option>
               <option>Hygienic Unclean</option>
             </select>
@@ -100,10 +100,8 @@
     <ion-content class="has-header">
 
       <div class="list">
-        <div class="item">
-          <button class="button button-outline button-dark">{{currentVisit.date_time}}</button>
-          <button class="button button-positive" ng-click='saveVisit()'>Save Visit</button>
-        </div>
+        <button class="button col-80 col-offset-10 button-block button-outline button-dark">{{currentVisit.date_time | date:'EEE - MMM d, yyyy @ hh:mm a'}}</button>
+
         <div class="item item-divider item-dark">
           Observed
           <badge class="badge badge-light ion-female"> </badge>

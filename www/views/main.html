@@ -6,7 +6,7 @@
   <!-- List of Yards -->
   <div class="card padding" ng-repeat="yard in yards" >
     <a class="item item-icon-left"  ng-click="goToYard(yard)">
-      <i class="icon ion-location"> {{yard.name}}</i>
+      <i class="icon ion-location"> {{yard.name}} {{yard.numberOfColonies}}</i>
     </a>
   </div>
 

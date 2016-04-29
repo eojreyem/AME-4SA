@@ -16,11 +16,16 @@ angular
     }else{
       db = window.openDatabase("AME_4SA.db", '1', 'my', 1024 * 1024 * 100); // browser
     }
+
     //TODO: remove these drop statements and do an Insert if not exist.
     $cordovaSQLite.execute(db, "DROP TABLE Queen_Statuses");
     $cordovaSQLite.execute(db, "DROP TABLE Hive_Types");
     $cordovaSQLite.execute(db, "DROP TABLE Queen_Inactive_Reasons");
+    $cordovaSQLite.execute(db, "DROP TABLE Colony_Inactive_Reasons");
     $cordovaSQLite.execute(db, "DROP TABLE Diseases");
+    $cordovaSQLite.execute(db, "DROP TABLE Data_Types");
+
+
     //Tables of data
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Yards (id INTEGER PRIMARY KEY, name TEXT)");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Visit_Notes (id INTEGER PRIMARY KEY, visit_id INTEGER, note TEXT, is_reminder INTEGER)");
@@ -38,7 +43,10 @@ angular
     $cordovaSQLite.execute(db, "INSERT INTO Queen_Inactive_Reasons (reason) VALUES ('Superceded'), ('Poor Performance'), ('Drone Layer'), ('Inujured'), ('Accident'), ('Swarmed'), ('Unknown'), ('Not Accepted'), ('Sold'), ('Other')");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Diseases (id INTEGER PRIMARY KEY, disease TEXT)");
     $cordovaSQLite.execute(db, "INSERT INTO Diseases (disease) VALUES ('AFB'), ('EFB'), ('Chalkbrood'), ('Hive Beetles'), ('DWV'), ('PMS'), ('The Crud'), ('Wax Moths'), ('Sacbrood'), ('Mold'), ('Dysentry'), ('Other')");
-
+    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Colony_Inactive_Reasons (id INTEGER PRIMARY KEY, reason TEXT)");
+    $cordovaSQLite.execute(db, "INSERT INTO Colony_Inactive_Reasons (reason) VALUES ('Colapsed'), ('Disease'), ('Starvation'), ('Robbed'), ('Sold'), ('Combined'), ('Small Cluster'), ('Other')");
+    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Data_Types (id INTEGER PRIMARY KEY, type TEXT)");
+    $cordovaSQLite.execute(db, "INSERT INTO Data_Types (type) VALUES ('Weight'), ('Varroa/300'), ('Hygienic Empty'), ('Hygienic Unclean')");
   });
 })
 

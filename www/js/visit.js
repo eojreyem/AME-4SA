@@ -5,8 +5,9 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('ameApp')
 
-.controller('VisitCtrl', function($scope, $location, $stateParams, $ionicSideMenuDelegate, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
+.controller('VisitCtrl', function($scope, $location, $stateParams, $ionicSideMenuDelegate, DateHelper, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
   $scope.currentVisit =[null];
+
   visitId = $stateParams.visitId;
   VisitHelper.getQueenStatuses().then(function (statuses){
     $scope.queenStatuses = statuses;
@@ -20,7 +21,8 @@ angular.module('ameApp')
 
   if (visitId == "new"){ //pre-populate fields for new visit.
     $scope.visitTitle=" New";
-    $scope.currentVisit.date_time = "apr 10"; //TODO: get current date and time and format
+    var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+    $scope.currentVisit.date_time = (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1);
     $scope.currentVisit.qty_boxes = null; // I could load the previous visit's # of boxes? Probably no.
     $scope.currentVisit.frames_of_bees_start = null;
     $scope.currentVisit.frames_of_bees_end = null;
@@ -28,6 +30,7 @@ angular.module('ameApp')
     $scope.currentVisit.frames_of_brood_end = null;
     $scope.currentVisit.has_temper = false; // true or false
     $scope.currentVisit.is_feeding = false; // true or false
+
 
     //Load current colony into currentColony
     ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
@@ -41,6 +44,7 @@ angular.module('ameApp')
       });
 
     });
+
 
   }
   else if (visitId >= 0){  //if a visitId was passed, load old visit for editing/viewing
@@ -84,7 +88,7 @@ angular.module('ameApp')
   $scope.saveVisit = function() {
     if (visitId == "new"){  //create visit if new.
       VisitHelper.saveVisit(
-        null, //TODO: get real date.
+        $scope.currentVisit.date_time,
         $scope.currentYard.id,
         $scope.currentColony.id,
         null, //queenId
@@ -117,26 +121,8 @@ angular.module('ameApp')
 
     }
 
-    /* TODO: format for saving time in db
-      var ss = currentTime.getSeconds();
-      var mi = currentTime.getMinutes();
-      var hh = currentTime.getHours();
-      var dd = currentTime.getDate();
-      var mo = currentTime.getMonth()+1; //January is 0!
-      var yyyy = currentTime.getFullYear();
-      //format numbers less than 10 to add a 0
-      if(ss<10) {
-        ss='0'+ss}
-      if(mi<10) {
-        mi='0'+mi}
-      if(hh<10) {
-        hh='0'+hh}
-      if(dd<10) {
-        dd='0'+dd}
-      if(mo<10) {
-        mo='0'+mo}
-      currentTime = (yyyy + '-' + mo + '-' + dd + ' ' + hh + ':' + mi + ':' + ss);
-    */
+
+
     $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id);
   };
 
