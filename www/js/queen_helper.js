@@ -55,7 +55,8 @@ angular.module('ameApp')
   }
 
   service.updateQueenInactive = function (queenId, reasonId) {
-    var date = new Date();
+    var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
+    date = (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1);    
     var query = "UPDATE Queens SET date_inactive = ?, reason_inactive_id = ? WHERE id = ?";
     $cordovaSQLite.execute(db, query, [date, reasonId, queenId]).then(function(res) {
       console.log("Queen Inactive");

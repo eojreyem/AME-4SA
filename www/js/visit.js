@@ -7,6 +7,10 @@ angular.module('ameApp')
 
 .controller('VisitCtrl', function($scope, $location, $stateParams, $ionicSideMenuDelegate, DateHelper, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
   $scope.currentVisit =[null];
+  var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
+  queenEmergeDate = (new Date(Date.now() - tzoffset));
+  queenEmergeDate.setMonth(queenEmergeDate.getMonth()-1);
+  $scope.queenEmergeDate = queenEmergeDate.toISOString().slice(0,-1);;
 
   visitId = $stateParams.visitId;
   VisitHelper.getQueenStatuses().then(function (statuses){
@@ -21,7 +25,6 @@ angular.module('ameApp')
 
   if (visitId == "new"){ //pre-populate fields for new visit.
     $scope.visitTitle=" New";
-    var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
     $scope.currentVisit.date_time = (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1);
     $scope.currentVisit.qty_boxes = null; // I could load the previous visit's # of boxes? Probably no.
     $scope.currentVisit.frames_of_bees_start = null;
@@ -70,6 +73,7 @@ angular.module('ameApp')
 
   $scope.createQueen = function() {
     //TODO: check if queen name is unique
+
     var queenNumber = document.getElementById("newQueenNumber");
     var queenOrigin = document.getElementById("newQueenOrigin");
     QueenHelper.saveQueen(
@@ -77,7 +81,7 @@ angular.module('ameApp')
       $scope.currentColony.id,
       null, //motherId
       queenOrigin.value,
-      null, //dateEmerged
+      $scope.queenEmergeDate, //dateEmerged
       null //hexColor
     )
     $ionicSideMenuDelegate.toggleRight();
