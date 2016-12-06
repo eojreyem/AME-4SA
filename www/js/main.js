@@ -6,13 +6,14 @@
 
 angular.module('ameApp')
 
-.controller('MainCtrl', function($scope, $location, $cordovaSQLite, YardHelper) {
-  // No need for testing data anymore
-
+.controller('MainCtrl', function($ionicPlatform, $scope, $location, $cordovaSQLite, YardHelper) {
   //loads a list of yards in 4SA
-  YardHelper.getAllYards().then(function(yards){
-    $scope.yards = yards;
-  });
+  $ionicPlatform.ready(function() {
+      YardHelper.getAllYards().then(function(yards){
+        $scope.yards = yards;
+      })
+    });
+
 
   //Create a new yard
   $scope.createYard = function() {

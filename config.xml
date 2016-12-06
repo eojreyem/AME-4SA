@@ -20,6 +20,7 @@
     <param name="ios-package" value="CDVStatusBar" onload="true"/>
   </feature>
   <platform name="android">
+    <allow-navigation href="http://*/*" />
     <icon src="www/img/splash-logo.png" />
         <splash src="www/img/splash-logo.png" density="mdpi"/>
         <splash src="www/img/splash-logo.png" density="hdpi"/>

@@ -60,19 +60,28 @@
 
   <!-- Right menu = Create a queen -->
   <ion-side-menu side="right">
-    <header class="bar bar-header bar-stable">
-      <h1 class="title">New Queen</h1>
-    </header>
-    <ion-content class="has-header">
-      <form ng-submit="createQueen()">
+
+    <ion-content>
+      <div class="item item-divider item-dark">
+        New Queen
+        <badge class="badge badge-light ion-female"> </badge>
+      </div>
+      <form>
         <div class="list">
-          <label class="item item-input">
-            <span class="input-label">Emerge Date</span>
+          <label class="item">
+            <button class="button button-outline button-dark">Change Mark Color</button>
+          </label>
+          <label class="item">
+            <span class="label">Emerge Date</span>
             <button class="button button-outline button-dark">{{queenEmergeDate | date:'MMM d, yyyy'}}</button>
           </label>
-          <label class="item item-input item-stacked-label">
+          <label class="item item-input">
             <span class="input-label">Queen Number</span>
             <input id = "newQueenNumber" type="text" placeholder="999">
+          </label>
+          <label class="item item-input">
+            <span class="input-label">Mother Number</span>
+            <input id = "newQueenMotherNumber" type="text" placeholder="508">
           </label>
           <label class="item item-input item-stacked-label">
             <span  class="input-label">Origin</span>
@@ -80,7 +89,7 @@
           </label>
         </div>
         <div class="padding">
-          <button type="submit" class="button button-positive button-block">Add Queen <i class="icon ion-female"></i></button>
+          <button ng-click="createQueen()" class="button button-positive button-block">Add Queen <i class="icon ion-female"></i></button>
         </div>
       </form>
     </ion-content>
@@ -101,7 +110,6 @@
 
       <div class="list">
         <button class="button col-80 col-offset-10 button-block button-outline button-dark">{{currentVisit.date_time | date:'EEE - MMM d, yyyy @ hh:mm a'}}</button>
-
         <div class="item item-divider item-dark">
           Observed
           <badge class="badge badge-light ion-female"> </badge>

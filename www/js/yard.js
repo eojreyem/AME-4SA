@@ -24,7 +24,9 @@ angular.module('ameApp')
     var newColonyOrigin = document.getElementById("newColonyOrigin").value;
 
     ColonyHelper.saveColony($scope.currentYard.id, newColonyNumber, newColonyActiveDate, newColonyOrigin);
-    $scope.loadColonies();
+    YardHelper.getColoniesInYard($scope.currentYard.id).then(function (colonies){
+      $scope.colonies = colonies;
+    });
     $ionicSideMenuDelegate.toggleRight();
   };
 

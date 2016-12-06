@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('ameApp')
 
-.controller('VisitCtrl', function($scope, $location, $stateParams, $ionicSideMenuDelegate, DateHelper, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
+.controller('VisitCtrl', function($scope, $location, $stateParams, $ionicSideMenuDelegate, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
   $scope.currentVisit =[null];
   var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
   queenEmergeDate = (new Date(Date.now() - tzoffset));
