@@ -47,10 +47,36 @@ angular.module('ameApp')
     });
   }
 
+  service.getColonyInactiveReasons = function() { //returns reasons a colony might be inactive
+    var deferred = $q.defer();
+    reasons = [];
+    var query = "SELECT * FROM Colony_Inactive_Reasons";
+    $cordovaSQLite.execute(db, query).then(function(res) {
+      if(res.rows.length > 0) {
+        for (i = 0; i < res.rows.length; i++) {
+          reasons.push(res.rows.item(i));
+        }
+        deferred.resolve(reasons);
+      } else {
+          console.log("No Colony Inactive Reasons found!");
+      }
+    });
+    return deferred.promise;
+  }
+
   service.updateColonyYard = function (colonyId, yardId) {
     var query = "UPDATE Colonies SET in_yard_id = ? WHERE id = ?";
     $cordovaSQLite.execute(db, query, [yardId, colonyId]).then(function(res) {
       console.log("Moved Colony");
+    }, function (err) {
+        console.error(err);
+    });
+  }
+
+  service.setColonyInactive = function (colonyId, reasonId) {
+    var query = "UPDATE Colonies SET date_inactive = ?, reason_inactive_id = ? WHERE id = ?";
+    $cordovaSQLite.execute(db, query, [new Date(), reasonId, colonyId]).then(function(res) {
+      console.log("Set colony as inactive. :(");
     }, function (err) {
         console.error(err);
     });

@@ -36,28 +36,26 @@ angular.module('ameApp')
     ionicDatePicker.openDatePicker(datePickerObj);
   };
 
-  $scope.changeTextBlack = function() {
+  $scope.changeTextBlack = function() { //changes tag number to black (incase it was red) when user clicks to edit
     document.getElementById("newColonyNumber").style.color = "black";
   }
 
   $scope.createColony = function() {
     var newColonyNumber = document.getElementById("newColonyNumber").value;
-    
-    ColonyHelper.getColonyByNumber(newColonyNumber).then(function (colony){
-      if (colony==null){
-        var newColonyOrigin = document.getElementById("newColonyOrigin").value;
+    var newColonyOrigin = document.getElementById("newColonyOrigin").value;
 
+    ColonyHelper.getColonyByNumber(newColonyNumber).then(function (colony){ //check if tag is assigned
+      if (colony==null){ //If no active colony is assigned the tag allow new colony create
         ColonyHelper.saveColony($scope.currentYard.id, newColonyNumber, $scope.newColonyActiveDate, newColonyOrigin);
+        //refresh list of colonies in yard
         YardHelper.getColoniesInYard($scope.currentYard.id).then(function (colonies){
           $scope.colonies = colonies;
         });
         $ionicSideMenuDelegate.toggleRight();
       }
-      console.log(colony);
+      console.log(colony); //TODO: tell user there is an active colony w/ that tag in yard X
       document.getElementById("newColonyNumber").style.color = "red";
     });
-
-
   };
 
   $scope.showMoveColonyPopup = function(colony) {

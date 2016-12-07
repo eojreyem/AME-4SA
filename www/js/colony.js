@@ -16,6 +16,43 @@ angular.module('ameApp')
 
   });
 
+  $scope.showColonyInactivePopup = function(colony) {
+    $scope.choice = {};
+    ColonyHelper.getColonyInactiveReasons().then(function(reasons){
+      $scope.reasons = reasons;
+      var colonyInactivePopup = $ionicPopup.show({
+        title: 'Choose the Reason',
+        subTitle: 'that colony ' +colony.number+ " is inactive.",
+        template: '<ion-list>                                '+
+                  '  <ion-radio ng-repeat="reason in reasons" ng-model="choice.reasonId" ng-value="{{reason.id}}">{{reason.reason}}</ion-radio>'+
+                  '</ion-list>  ',
+        scope: $scope,
+        buttons: [
+          { text: 'Cancel'},
+          { text: 'Remove',
+            type: 'button-assertive',
+            onTap: function(e) {
+            if ($scope.choice.reasonId>0) {
+              console.log("selected "+reasons[$scope.choice.reasonId-1].reason+", store to colony");
+              ColonyHelper.setColonyInactive(colony.id, $scope.choice.reasonId);
+            } else {
+              console.log("UPDATE THIS WHEN YOU KNOW MORE.");
+              e.preventDefault();
+              }
+            }
+          }
+        ]
+      })
+    });
+
+  };
+
+  $scope.colonyInactive = function(){
+
+
+    ColonyHelper.setColonyInactive($scope.currentColony.id);
+  }
+
   $scope.showMoveQueenPopup = function(queen) {
     $scope.destination = {};
     var moveQueenPopup = $ionicPopup.show({
