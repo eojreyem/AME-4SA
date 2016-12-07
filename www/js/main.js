@@ -31,7 +31,8 @@ angular.module('ameApp')
 
   $scope.deleteYard = function (yard){
     YardHelper.deleteYard(yard)
-    //TODO: refresh list of yards after deletion
+    //TODO: refresh list of yards after deletion.
+    //TODO: archive yards instead of deleting.
   }
 
 

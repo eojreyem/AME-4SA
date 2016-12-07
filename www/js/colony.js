@@ -65,10 +65,10 @@ angular.module('ameApp')
         { text: 'Move',
           type: 'button-positive',
           onTap: function(e) {
-          //TODO: determine if colony number is valid.
           if ($scope.destination.colonyNum>0) {
             console.log($scope.destination.colonyNum);
             ColonyHelper.getColonyByNumber($scope.destination.colonyNum).then(function (destinationColony){
+              //TODO: if destinationColony is not null.
               console.log("move queen " +queen.name+ " to " +destinationColony.number);
               QueenHelper.updateQueenColony(queen.id, destinationColony.id)
               QueenHelper.getQueensInColony($scope.currentColony.id).then(function(queens){

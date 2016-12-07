@@ -35,13 +35,6 @@ angular.module('ameApp')
   }
 
   service.saveYard = function(name) { //save new yard to the database
-    /* TODO: test for yard name duplicates
-    yards = [];
-    yards = service.getAllYards();
-    for (i=0; i < yards.length; i++){
-      console.log("COUNT:" + i);
-    }
-    */
     var query = "INSERT INTO Yards (name) VALUES (?)";
     $cordovaSQLite.execute(db, query, [name]).then(function(res) {
       console.log("INSERT ID -> " + res.insertId);
