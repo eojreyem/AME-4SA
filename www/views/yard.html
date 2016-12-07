@@ -7,17 +7,17 @@
     <ion-content class="has-header">
       <form ng-submit="createColony()">
         <div class="list">
-          <label class="item item-input">
-            <span class="input-label">Date</span>
-            <input type="date">
+          <label class="item item-input item-stacked-label">
+            <span class="input-label">Date Active</span>
+            <input type="text" ng-click="openDatePicker()" value = "{{newColonyActiveDate | date:'MMM d, yyyy'}}">
           </label>
           <label class="item item-input item-stacked-label">
             <span class="input-label">Colony Number</span>
-            <input id = "newColonyNumber" type="text" placeholder="200" ng-model="colony.number">
+            <input id = "newColonyNumber" type="text" placeholder="200">
           </label>
           <label class="item item-input item-stacked-label">
             <span  class="input-label">Origin</span>
-            <input id = "newColonyOrigin" type="text" placeholder="Note about start of this colony" ng-model="colony.origin">
+            <input id = "newColonyOrigin" type="text" placeholder="Note about start of this colony">
           </label>
         </div>
         <div class="padding">

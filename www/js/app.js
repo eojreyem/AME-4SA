@@ -5,7 +5,8 @@ var db;
 angular
 .module('ameApp', [
   'ionic',
-  'ngCordova'
+  'ngCordova',
+  'ionic-datepicker'
 ])
 
 .run(function($ionicPlatform, $cordovaSQLite){

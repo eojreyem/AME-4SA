@@ -5,9 +5,11 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('ameApp')
 
-.controller('YardCtrl', function($scope, $ionicPopup, $stateParams, $location, $cordovaSQLite, $ionicSideMenuDelegate, ColonyHelper, YardHelper) {
+.controller('YardCtrl', function($scope, $ionicPopup, $stateParams, $location, $cordovaSQLite, $ionicSideMenuDelegate, ColonyHelper, YardHelper, ionicDatePicker) {
 
   var moveColonyPopup = $ionicPopup;
+
+  $scope.newColonyActiveDate = new Date();
 
   //Load current yard into currentYard
   YardHelper.getYardById($stateParams.yardId).then(function (yard){
@@ -18,12 +20,29 @@ angular.module('ameApp')
   });
 
 
+  datePickerObj = {
+      callback: function (val) {  //Mandatory
+        console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+        $scope.newColonyActiveDate = (new Date(val).toISOString().slice(0,-1));
+      },
+      from: new Date(2014, 1, 1), //Optional
+      to: new Date(), //Optional
+      inputDate: new Date(),      //Optional
+      closeOnSelect: false,       //Optional
+      templateType: 'modal'       //Optional
+    };
+
+
+    $scope.openDatePicker = function(){
+      ionicDatePicker.openDatePicker(datePickerObj);
+    };
+
+
   $scope.createColony = function() {
-    var newColonyActiveDate = "Apr 10"
     var newColonyNumber = document.getElementById("newColonyNumber").value;
     var newColonyOrigin = document.getElementById("newColonyOrigin").value;
 
-    ColonyHelper.saveColony($scope.currentYard.id, newColonyNumber, newColonyActiveDate, newColonyOrigin);
+    ColonyHelper.saveColony($scope.currentYard.id, newColonyNumber, $scope.newColonyActiveDate, newColonyOrigin);
     YardHelper.getColoniesInYard($scope.currentYard.id).then(function (colonies){
       $scope.colonies = colonies;
     });
