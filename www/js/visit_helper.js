@@ -40,16 +40,33 @@ angular.module('ameApp')
 
   service.getHiveTypes = function() { //returns hive types
     var deferred = $q.defer();
-    types = [];
+    htypes = [];
     var query = "SELECT * FROM Hive_Types";
     $cordovaSQLite.execute(db, query).then(function(res) {
       if(res.rows.length > 0) {
         for (i = 0; i < res.rows.length; i++) {
-          types.push(res.rows.item(i));
+          htypes.push(res.rows.item(i));
         }
-        deferred.resolve(types);
+        deferred.resolve(htypes);
       } else {
           console.log("No hive types found!");
+      }
+    });
+    return deferred.promise;
+  }
+
+  service.getDataTypes = function() { //returns data collection types
+    var deferred = $q.defer();
+    dtypes = [];
+    var query = "SELECT * FROM Data_Types";
+    $cordovaSQLite.execute(db, query).then(function(res) {
+      if(res.rows.length > 0) {
+        for (i = 0; i < res.rows.length; i++) {
+          dtypes.push(res.rows.item(i));
+        }
+        deferred.resolve(dtypes);
+      } else {
+          console.log("No data types found!");
       }
     });
     return deferred.promise;
@@ -73,7 +90,6 @@ angular.module('ameApp')
   }
 
   service.getVisitsForColony = function(id) { //returns visits for a given colony
-
       visits = [];
       var query = "SELECT * FROM Visits WHERE colony_id = ?";
       $cordovaSQLite.execute(db, query, [id]).then(function(res) {
@@ -92,14 +108,22 @@ angular.module('ameApp')
       return visits;
     };
 
+    service.saveQueen = function (name, colonyId, motherId, origin, dateEmerged, hexColor) {
+      var query = "INSERT INTO Queens (name, in_colony_id, mother_queen_id, origin, date_emerged, mark_color_hex) VALUES (?,?,?,?,?,?)";
+      $cordovaSQLite.execute(db, query, [name, colonyId, motherId, origin, dateEmerged, hexColor]).then(function(res) {
+          console.log("INSERT QUEEN ID -> " + res.insertId);
+      }, function (err) {
+          console.error(err);
+      });
+    }
 
-  service.saveVisit = function (dateTime, yardId, colonyId, queenId, numberBoxes, queenStatusStartId, queenStatusEndId, FObeesStart, FObeesEnd, FObroodStart, FObroodEnd, temper, feeding, deseaseId) {
-    var query = "INSERT INTO Visits (date_time, yard_id, colony_id, queen_id, qty_boxes, queen_status_start_id, queen_status_end_id, frames_of_bees_start, frames_of_bees_end, frames_of_brood_start, frames_of_brood_end, has_temper, is_feeding, disease_id) "+
-    "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-    $cordovaSQLite.execute(db, query, [dateTime, yardId, colonyId, queenId, numberBoxes, queenStatusStartId, queenStatusEndId, FObeesStart, FObeesEnd, FObroodStart, FObroodEnd, (temper?1:0), (feeding?1:0), deseaseId]).then(function(res) {
+
+  service.saveVisit = function (dateTime, yardId, colonyId, queenId, numberBoxes, queenStatusStartId, queenStatusEndId, FObeesStart, FObeesEnd, FObroodStart, FObroodEnd, temper, feeding, diseaseId) {
+    var query = "INSERT INTO Visits (date_time, yard_id, colony_id, queen_id, qty_boxes, queen_status_start_id, queen_status_end_id, frames_of_bees_start, frames_of_bees_end, frames_of_brood_start, frames_of_brood_end, has_temper, is_feeding, disease_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    $cordovaSQLite.execute(db, query, [dateTime, yardId, colonyId, queenId, numberBoxes, queenStatusStartId, queenStatusEndId, FObeesStart, FObeesEnd, FObroodStart, FObroodEnd, (temper?1:0), (feeding?1:0), diseaseId]).then(function(res) {
         console.log("INSERT VISIT ID -> " + res.insertId);
     }, function (err) {
-        console.error(err);
+        console.error(err.text);
     });
   }
 

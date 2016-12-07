@@ -33,14 +33,11 @@
         <div class="list">
           <label class="item item-input item-select">
             <div class="input-label">
-              Test Type
+              Data Type
             </div>
             <select class="item item-input item-select">
-              <option>Varroa/300</option>
-              <option>Hive Weight (lbs)</option>
-              <option selected>Honey Harvest (lbs)</option>
-              <option>Hygienic Empty</option>
-              <option>Hygienic Unclean</option>
+            <!--TODO: replace with table-->
+              <option ng-repeat="dataTypes in dataTypes">{{dataTypes.type}}</option>
             </select>
           </label>
           <label class="item item-input">
@@ -49,8 +46,12 @@
           <item class="col col-50 col-offset-50 padding">
             <button type="submit" class="button button-block button-positive">Save Data</button>
           </item>
-
-
+          <div class="item item-divider item-dark">
+            Notes and Data
+          </div>
+            <!--TODO:Display list of notes and data-->
+          <p>  -> Honey Harvested (lbs) 50           </p>
+          <p>-> Removed some drone comb</p>
         </div>
       </form>
 
@@ -99,7 +100,7 @@
   <ion-side-menu-content>
     <ion-nav-bar class="bar-dark">
       <ion-nav-buttons side="left">
-        <button menu-toggle="left" class="button button-icon ion-compose">+</button>
+        <button menu-toggle="left" class="button button-icon ion-compose"></button>
         <h1 class="title ion-clipboard">{{visitTitle}}</h1>
         <button menu-toggle="right" class="button button-icon ion-female">+</button>
       </ion-nav-buttons>
@@ -112,7 +113,6 @@
         <button class="button col-80 col-offset-10 button-block button-outline button-dark">{{currentVisit.date_time | date:'EEE - MMM d, yyyy @ hh:mm a'}}</button>
         <div class="item item-divider item-dark">
           Observed
-          <badge class="badge badge-light ion-female"> </badge>
         </div>
         <label class="item item-input item-select">
 
@@ -151,14 +151,13 @@
         </label>
         <div class="item item-divider item-dark">
           Changes from Visit
-          <badge class="badge badge-light ion-female"> </badge>
         </div>
         <label class="item item-input item-select">
           <div class="input-label">
             Hive Type
           </div>
           <select>
-            <option ng-repeat="type in hiveTypes">{{type.type}}</option>
+            <option ng-repeat="hiveTypes in hiveTypes">{{hiveTypes.type}}</option>
           </select>
         </label>
         <label class="item item-input">

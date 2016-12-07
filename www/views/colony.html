@@ -44,22 +44,42 @@
     </ion-header-bar>
     <ion-content class="has-header">
       <div class="list list-inset">
-        <div class="divider">
-          10 Frame
-        </div>
         <div class="list">
           <div class="item">
-            10 Frame  (+1) 5 hive bodies
+            <!--TODO fill with actual db info-->
+            Nuc, 2 boxes tall
+            <span class="item-note">40</span>
+            <badge class="badge badge-calm ion-female"> </badge>
           </div>
+          <div class="item item-icon-left">
+            <i class="icon ion-android-alert"></i>
+            If note(s) with reminder, display!
+          </div>
+
         </div>
 
         <div class="row">
           <button class="button button-block button-positive" ng-click="newVisit()">New Visit</button>
         </div>
-        <div class="row">
-          Create Date: {{currentColony.date_created}} <button class="button button-small button-outline button-dark" ng-click="colonyInactive(colony)">Inactive</button>
+
+        <div class="divider">
+          About
         </div>
-        <p>Origin: {{currentColony.origin}}</p>
+        <div class="list">
+          <div class="item">
+            Create Date: {{currentColony.date_created}}
+          </div>
+          <div class="item">
+            Origin: {{currentColony.origin}}
+            <!--TODO create last visit display-->
+          </div>
+          <div class="item">
+            <button class="button button-small button-outline button-dark" ng-click="colonyInactive(colony)">Inactive</button>
+            <!--TODO create last visit display-->
+          </div>
+        </div>
+
+
 
       </div>
 

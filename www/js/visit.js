@@ -16,11 +16,15 @@ angular.module('ameApp')
   VisitHelper.getQueenStatuses().then(function (statuses){
     $scope.queenStatuses = statuses;
   });
-  VisitHelper.getHiveTypes().then(function (types){
-    $scope.hiveTypes = types;
+  VisitHelper.getHiveTypes().then(function (hiveTypes){
+    console.log(hiveTypes);
+    $scope.hiveTypes = hiveTypes;
   });
   VisitHelper.getDiseases().then(function (diseases){
     $scope.diseases = diseases;
+  });
+  VisitHelper.getDataTypes().then(function (dataTypes){
+    $scope.dataTypes = dataTypes;
   });
 
   if (visitId == "new"){ //pre-populate fields for new visit.
@@ -105,7 +109,7 @@ angular.module('ameApp')
         $scope.currentVisit.frames_of_brood_end,
         ($scope.currentVisit.has_temper), // true or false
         ($scope.currentVisit.is_feeding), // true or false
-        null); //deseaseId
+        null); //diseaseId
     }
     else { //update existing visit with any edits in the fields
       VisitHelper.updateVisit(
@@ -121,7 +125,7 @@ angular.module('ameApp')
         $scope.currentVisit.frames_of_brood_end,
         $scope.currentVisit.has_temper, // true or false
         $scope.currentVisit.is_feeding, // true or false
-        null); //deseaseId
+        null); //diseaseId
 
     }
 
