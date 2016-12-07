@@ -29,9 +29,12 @@ angular.module('ameApp')
     $location.url('/yard/' + yard.id);
   }
 
-  $scope.dropYards = function (){
-    $cordovaSQLite.execute(db, "DROP TABLE Yards"); //Use to remove a table
+  $scope.deleteYard = function (yard){
+    YardHelper.deleteYard(yard)
+    //TODO: refresh list of yards after deletion
   }
+
+
   $scope.dropColonies = function (){
     $cordovaSQLite.execute(db, "DROP TABLE Colonies"); //Use to remove a table
   }

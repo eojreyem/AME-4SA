@@ -51,6 +51,23 @@ angular.module('ameApp')
 
   }
 
+  service.deleteYard = function(yard) { //deletes yard if null
+    service.getColoniesInYard(yard.id).then(function (colonies){
+      if (colonies == null){
+        var query = "DELETE FROM Yards WHERE id = ?";
+        $cordovaSQLite.execute(db, query, [yard.id]).then(function(res) {
+          console.log("DELETED YARD");
+        }, function (err) {
+          console.error(err);
+        })
+      }
+      else {
+        console.log("Yard must contain no colonies to delete");
+      }
+    });
+  }
+
+
   service.getColoniesInYard = function(yardId) { //return all colonies in a yardId
     var deferred = $q.defer();
     colonies = [];

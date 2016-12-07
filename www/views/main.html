@@ -6,7 +6,7 @@
   <!-- List of Yards -->
   <div class="card padding" ng-repeat="yard in yards" >
     <a class="item item-icon-left"  ng-click="goToYard(yard)">
-      <i class="icon ion-location"> {{yard.name}} {{yard.numberOfColonies}}</i>
+      <i class="icon ion-location" on-hold="deleteYard(yard)"> {{yard.name}} {{yard.numberOfColonies}}</i>
     </a>
   </div>
 
@@ -23,7 +23,6 @@
 
 </ion-content>
 <ion-footer-bar>
-  <button type="submit" class="button button-icon ion-location" on-hold="dropYards()">X</button>
   <button type="submit" class="button button-icon ion-ios-box" on-hold="dropColonies()">X</button>
   <button type="submit" class="button button-icon ion-female" on-hold="dropQueens()">X</button>
   <button type="submit" class="button button-icon ion-clipboard" on-hold="dropVisits()">X</button>
