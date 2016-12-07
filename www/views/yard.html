@@ -12,8 +12,8 @@
             <input type="text" ng-click="openDatePicker()" value = "{{newColonyActiveDate | date:'MMM d, yyyy'}}">
           </label>
           <label class="item item-input item-stacked-label">
-            <span class="input-label">Colony Number</span>
-            <input id = "newColonyNumber" type="text" placeholder="200">
+            <span class="input-label">Tag Number</span>
+            <input id = "newColonyNumber" min="1" max="999" type="number" placeholder="200" ng-click="changeTextBlack()">
           </label>
           <label class="item item-input item-stacked-label">
             <span  class="input-label">Origin</span>

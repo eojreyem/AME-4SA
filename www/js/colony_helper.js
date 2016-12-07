@@ -18,14 +18,20 @@ angular.module('ameApp')
     return deferred.promise;
   }
 
-  service.getColonyByNumber = function(number) { //returns a colony object when given a valid ID
-    var deferred = $q.defer();
 
-    var query = "SELECT * FROM Colonies WHERE number = " + number;
+  service.getColonyByNumber = function(number) { //returns a colony object by Tag number if active
+    var deferred = $q.defer();
+    var query = "SELECT * FROM Colonies WHERE number = " + number + " AND date_inactive IS NULL";
     $cordovaSQLite.execute(db, query).then(function(res) {
-      colony = res.rows.item(0);
-      deferred.resolve(colony);
-      console.log("Selected colony");
+      if (res.rows.length == 0){
+        deferred.resolve(null);
+        console.log("Tag Number not assigned to active colony");
+      }
+      else {
+        colony = res.rows.item(0);
+        deferred.resolve(colony);
+        console.log("Selected colony");
+      }
     });
 
     return deferred.promise;

@@ -21,32 +21,43 @@ angular.module('ameApp')
 
 
   datePickerObj = {
-      callback: function (val) {  //Mandatory
-        console.log('Return value from the datepicker popup is : ' + val, new Date(val));
-        $scope.newColonyActiveDate = (new Date(val).toISOString().slice(0,-1));
-      },
-      from: new Date(2014, 1, 1), //Optional
-      to: new Date(), //Optional
-      inputDate: new Date(),      //Optional
-      closeOnSelect: false,       //Optional
-      templateType: 'modal'       //Optional
-    };
+    callback: function (val) {  //Mandatory
+      console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+      $scope.newColonyActiveDate = (new Date(val).toISOString().slice(0,-1));
+    },
+    from: new Date(2014, 1, 1), //Optional
+    to: new Date(), //Optional
+    inputDate: new Date(),      //Optional
+    closeOnSelect: false,       //Optional
+    templateType: 'modal'       //Optional
+  };
 
+  $scope.openDatePicker = function(){
+    ionicDatePicker.openDatePicker(datePickerObj);
+  };
 
-    $scope.openDatePicker = function(){
-      ionicDatePicker.openDatePicker(datePickerObj);
-    };
-
+  $scope.changeTextBlack = function() {
+    document.getElementById("newColonyNumber").style.color = "black";
+  }
 
   $scope.createColony = function() {
     var newColonyNumber = document.getElementById("newColonyNumber").value;
-    var newColonyOrigin = document.getElementById("newColonyOrigin").value;
+    
+    ColonyHelper.getColonyByNumber(newColonyNumber).then(function (colony){
+      if (colony==null){
+        var newColonyOrigin = document.getElementById("newColonyOrigin").value;
 
-    ColonyHelper.saveColony($scope.currentYard.id, newColonyNumber, $scope.newColonyActiveDate, newColonyOrigin);
-    YardHelper.getColoniesInYard($scope.currentYard.id).then(function (colonies){
-      $scope.colonies = colonies;
+        ColonyHelper.saveColony($scope.currentYard.id, newColonyNumber, $scope.newColonyActiveDate, newColonyOrigin);
+        YardHelper.getColoniesInYard($scope.currentYard.id).then(function (colonies){
+          $scope.colonies = colonies;
+        });
+        $ionicSideMenuDelegate.toggleRight();
+      }
+      console.log(colony);
+      document.getElementById("newColonyNumber").style.color = "red";
     });
-    $ionicSideMenuDelegate.toggleRight();
+
+
   };
 
   $scope.showMoveColonyPopup = function(colony) {
