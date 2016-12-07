@@ -30,13 +30,14 @@ angular.module('ameApp')
   if (visitId == "new"){ //pre-populate fields for new visit.
     $scope.visitTitle=" New";
     $scope.currentVisit.date_time = (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1);
-    $scope.currentVisit.qty_boxes = null; // I could load the previous visit's # of boxes? Probably no.
+    $scope.currentVisit.qty_boxes = null; // TODO: I could load the previous visit's # of boxes?
     $scope.currentVisit.frames_of_bees_start = null;
     $scope.currentVisit.frames_of_bees_end = null;
     $scope.currentVisit.frames_of_brood_start = null;
     $scope.currentVisit.frames_of_brood_end = null;
     $scope.currentVisit.has_temper = false; // true or false
     $scope.currentVisit.is_feeding = false; // true or false
+    //TODO: figure out logic of if there was a tracked queen in the hive or not.
 
 
     //Load current colony into currentColony
@@ -51,7 +52,6 @@ angular.module('ameApp')
       });
 
     });
-
 
   }
   else if (visitId >= 0){  //if a visitId was passed, load old visit for editing/viewing
@@ -79,6 +79,7 @@ angular.module('ameApp')
     //TODO: check if queen name is unique
 
     var queenNumber = document.getElementById("newQueenNumber");
+    //TODO: check that queen number is unique?
     var queenOrigin = document.getElementById("newQueenOrigin");
     QueenHelper.saveQueen(
       queenNumber.value,

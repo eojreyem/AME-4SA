@@ -32,6 +32,7 @@ angular.module('ameApp')
   }
 
   service.saveColony = function (yardId, colonyNumber, colonyActiveDate, colonyOrigin) {
+    //TODO: check for unique colonyNumber currently active
     var query = "INSERT INTO Colonies (in_yard_id, number, date_active, origin) VALUES (?,?,?,?)";
     $cordovaSQLite.execute(db, query, [yardId, colonyNumber, colonyActiveDate, colonyOrigin]).then(function(res) {
         console.log("INSERT COLONY ID -> " + res.insertId);
