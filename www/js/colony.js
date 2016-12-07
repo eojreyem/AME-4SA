@@ -44,14 +44,9 @@ angular.module('ameApp')
         ]
       })
     });
-
+    //TODO: What happens to the queens in that colony?
   };
 
-  $scope.colonyInactive = function(){
-
-
-    ColonyHelper.setColonyInactive($scope.currentColony.id);
-  }
 
   $scope.showMoveQueenPopup = function(queen) {
     $scope.destination = {};

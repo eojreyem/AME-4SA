@@ -75,7 +75,8 @@ angular.module('ameApp')
 
   service.setColonyInactive = function (colonyId, reasonId) {
     var query = "UPDATE Colonies SET date_inactive = ?, reason_inactive_id = ? WHERE id = ?";
-    $cordovaSQLite.execute(db, query, [new Date(), reasonId, colonyId]).then(function(res) {
+    dateInactive = (new Date(Date.now())).toISOString().slice(0,-1);
+    $cordovaSQLite.execute(db, query, [dateInactive, reasonId, colonyId]).then(function(res) {
       console.log("Set colony as inactive. :(");
     }, function (err) {
         console.error(err);

@@ -9,10 +9,16 @@ angular.module('ameApp')
 .controller('MainCtrl', function($ionicPlatform, $scope, $location, $cordovaSQLite, YardHelper) {
   //loads a list of yards in 4SA
   $ionicPlatform.ready(function() {
-      YardHelper.getAllYards().then(function(yards){
-        $scope.yards = yards;
-      })
+    YardHelper.getAllYards().then(function(yards){
+
+      YardHelper.getColoniesInYard(yards[0].id).then(function(colonies){
+        //TODO: expand so this works for all yards.
+        yards[0].numColoniesInYard = colonies.length;
+      });
+
+      $scope.yards = yards;
     });
+  });
 
 
   //Create a new yard
@@ -30,15 +36,19 @@ angular.module('ameApp')
   }
 
   $scope.deleteYard = function (yard){
+    //TODO: if ($scope.numColoniesInYard == 0){    Remove redundant check in yard_helper.js
     YardHelper.deleteYard(yard)
+    $scope.yards = $scope.yards.filter(function(el){
+      return el.name !== yard.name;
+    });
+
     //TODO: refresh list of yards after deletion.
     //TODO: archive yards instead of deleting.
   }
 
-
-  $scope.dropColonies = function (){
+/*  $scope.dropColonies = function (){
     $cordovaSQLite.execute(db, "DROP TABLE Colonies"); //Use to remove a table
-  }
+  } */
   $scope.dropQueens = function (){
     $cordovaSQLite.execute(db, "DROP TABLE Queens"); //Use to remove a table
   }

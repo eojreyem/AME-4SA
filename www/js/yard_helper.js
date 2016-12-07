@@ -46,6 +46,7 @@ angular.module('ameApp')
 
   service.deleteYard = function(yard) { //deletes yard if null
     service.getColoniesInYard(yard.id).then(function (colonies){
+      //TODO: remove empty yard check once that is done before calling function.
       if (colonies == null){
         var query = "DELETE FROM Yards WHERE id = ?";
         $cordovaSQLite.execute(db, query, [yard.id]).then(function(res) {

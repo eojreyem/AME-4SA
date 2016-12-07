@@ -67,15 +67,14 @@
           About
         </div>
         <div class="list">
-          <div class="item">
-            Create Date: {{currentColony.date_active| date:'MMM d, yyyy'}}
-          </div>
+          <div class="item item-button-right">
+              Created {{currentColony.date_active| date:'MMM d, yyyy'}}
+              <button class="button button-small button-outline button-dark" ng-click="showColonyInactivePopup(currentColony)">Inactive</button>
+            </div>
           <div class="item">
             Origin: {{currentColony.origin}}
           </div>
-          <div class="item">
-            <button class="button button-small button-outline button-dark" ng-click="showColonyInactivePopup(currentColony)">Inactive</button>
-          </div>
+
         </div>
 
 

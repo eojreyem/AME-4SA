@@ -9,7 +9,7 @@ angular.module('ameApp')
 
   var moveColonyPopup = $ionicPopup;
 
-  $scope.newColonyActiveDate = new Date();
+  $scope.newColonyActiveDate = (new Date(Date.now())).toISOString().slice(0,-1);
 
   //Load current yard into currentYard
   YardHelper.getYardById($stateParams.yardId).then(function (yard){

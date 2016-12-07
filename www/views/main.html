@@ -4,11 +4,19 @@
 
 <ion-content class="has-header">
   <!-- List of Yards -->
-  <div class="card padding" ng-repeat="yard in yards" >
-    <a class="item item-icon-left"  ng-click="goToYard(yard)">
-      <i class="icon ion-location" on-hold="deleteYard(yard)"> {{yard.name}} {{yard.numberOfColonies}}</i>
+  <div class="list">
+    <a class="item item-icon-left" ng-repeat="yard in yards" on-hold="deleteYard(yard)" ng-click="goToYard(yard)">
+      <i class="icon ion-location"></i>
+      {{yard.name}} - {{yard.numColoniesInYard}} <i class="ion-ios-box"></i>
+      <span class="item-note">
+        visited {{yard.lastVisit| date:'MMM d, yyyy'}}
+      </span>
     </a>
+
+
   </div>
+
+
 
   <form ng-submit="createYard()">
     <div class="item item-input">
@@ -23,7 +31,6 @@
 
 </ion-content>
 <ion-footer-bar>
-  <button type="submit" class="button button-icon ion-ios-box" on-hold="dropColonies()">X</button>
   <button type="submit" class="button button-icon ion-female" on-hold="dropQueens()">X</button>
   <button type="submit" class="button button-icon ion-clipboard" on-hold="dropVisits()">X</button>
   <div class="col">
