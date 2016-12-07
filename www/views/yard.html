@@ -5,11 +5,10 @@
       <h1 class="title">New Colony</h1>
     </header>
     <ion-content class="has-header">
-      <form ng-submit="createColony()">
         <div class="list">
           <label class="item item-input item-stacked-label">
             <span class="input-label">Date Active</span>
-            <input type="text" ng-click="openDatePicker()" value = "{{newColonyActiveDate | date:'MMM d, yyyy'}}">
+            <button class="button button-outline button-dark" ng-click="openDatePicker()">{{newColonyActiveDate | date:'MMM d, yyyy'}} </button>
           </label>
           <label class="item item-input item-stacked-label">
             <span class="input-label">Tag Number</span>
@@ -21,9 +20,8 @@
           </label>
         </div>
         <div class="padding">
-          <button type="submit" class="button button-positive button-block">Add Colony  <i class="icon ion-ios-box"></i></button>
+          <button ng-click="createColony()" class="button button-positive button-block">Add Colony  <i class="icon ion-ios-box"></i></button>
         </div>
-      </form>
     </ion-content>
   </ion-side-menu>
 
