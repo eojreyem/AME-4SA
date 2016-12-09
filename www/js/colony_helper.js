@@ -43,6 +43,7 @@ angular.module('ameApp')
         var query = "INSERT INTO Colonies (in_yard_id, number, date_active, origin) VALUES (?,?,?,?)";
         $cordovaSQLite.execute(db, query, [colony.in_yard_id, colony.number, colony.date_active, colony.origin]).then(function(res) {
             console.log("INSERT COLONY ID -> " + res.insertId);
+            console.log(res);
         }, function (err) {
             console.error(err);
         });

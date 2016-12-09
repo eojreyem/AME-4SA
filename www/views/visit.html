@@ -9,19 +9,19 @@
       <form ng-submit="createNote(note)">
         <div class="list">
           <label class="item item-input item-stacked-label">
-            <textarea rows="4" placeholder="Type Note Text"></textarea>
+            <textarea rows="4" placeholder="Type Note Text" ng-model="note.note"></textarea>
           </label>
           <li class="item item-toggle">
             Reminder
             <label class="toggle toggle-assertive">
-              <input type="checkbox">
+              <input type="checkbox" ng-model="note.is_reminder">
               <div class="track">
                 <div class="handle"></div>
               </div>
             </label>
           </li>
           <item class="col col-50 col-offset-50 padding">
-            <button type="submit" class="button button-block button-positive">Save Note</button>
+            <button type="submit" class="button button-block button-positive" ng-click="createNote(note)">Save Note</button>
           </item>
         </div>
         </div>
@@ -68,8 +68,8 @@
     <ion-content class="has-header">
       <div class="list padding ">
         <div class="row">
-          <button class="button col-50 button-block button-outline button-dark" ng-click="openDatePicker()">{{visit.date_time | date:'EEE - MMM d, yyyy'}}</button>
-          <button class="button col-50 button-block button-outline button-dark">{{visit.date_time | date:'hh:mm a'}}</button>
+          <button class="button col-60 button-block button-outline button-dark" ng-click="openDatePicker()">{{visit.date_time | date:'EEE - MMM d, yyyy'}}</button>
+          <button class="button col-40 button-block button-outline button-dark">{{visit.date_time | date:'hh:mm a'}}</button>
         </div>
         <label class="item item-input">
           <span class="input-label">Yard</span>

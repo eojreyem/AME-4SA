@@ -6,10 +6,10 @@ angular.module('ameApp')
 
   var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
 
-  var newVisit = {
+  var newVisit = {  // template for a new visit
     id:"new",
     date_time: (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1),
-    yard_id: null,
+    yard_id: $stateParams.yardId,
     colony_id: $stateParams.colonyId,
     queen_id: null, //pull from last visit
     qty_boxes: null, //pull from last visit
@@ -20,6 +20,12 @@ angular.module('ameApp')
     is_feeding: false, //pull from last visit
     disease_id: null
   }
+
+  var note = {  // blank template for note
+    note: null,
+    is_reminder: false
+  };
+  $scope.note = note;
 
   datePickerObj = {
     callback: function (val) {  //Mandatory
@@ -48,58 +54,58 @@ angular.module('ameApp')
     $scope.dataTypes = dataTypes;
   });
 
-  //Load current colony into currentColony
-  ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
-    $scope.currentColony = colony;
-    //Load current yard into currentYard
-    YardHelper.getYardById(colony.in_yard_id).then(function (yard){
-      $scope.currentYard = yard;
-      if ($stateParams.visitId == "new"){ //TODO pre-populate fields for new visit.
-        newVisit.yardName = yard.name;
-        newVisit.yard_id = yard.id;
-        $scope.visit = newVisit;
-        console.log($scope.visit);
-        /*TODO update fields for new visit.
-        queen_id: null, //pull from past visit(s)
-        qty_boxes: null, //pull from past visit(s)
-        is_feeding: false, //pull from past visit(s)
-        */
-      }
-      else if ($stateParams.visitId >= 0){  //if a visitId was passed, load old visit for editing/viewing
-        $scope.visitTitle=" Visit ID:" + $stateParams.visitId;
-        VisitHelper.getVisitById($stateParams.visitId).then(function(visit){
-          //TODO handle exception where visit where visit isn't returned.
-          //Load yard into visit.yard
-          YardHelper.getYardById(visit.yard_id).then(function (yard){
-            visit.yard_id = yard.id;
-            visit.yardName = yard.name;
-          });
-          $scope.visit = visit;
-        });
-      }
-      else {  // console log error
-        console.log("Visit does not exist.");
-        $location.url('/')
-      }
-    });
-    QueenHelper.getQueensInColony(colony.id).then(function (){
-      $scope.queens = queens;
-    });
 
+  //load visit, yard, and colony
+  VisitHelper.getVisitById($stateParams.visitId).then(function(existingVisit){
+    if (existingVisit == null){
+      $scope.visit = newVisit;
+      /*TODO update fields for new visit.
+      queen_id: null, //pull from past visit(s)
+      qty_boxes: null, //pull from past visit(s)
+      is_feeding: false, //pull from past visit(s)
+      */
+    }
+    else {
+      $scope.visit = existingVisit;  //load visit if it already exists
+    }
+    //Load visit colony, note - this is different than the current Yard used for nav at the bottom.
+    YardHelper.getYardById($scope.visit.yard_id).then(function (yard){
+      $scope.visit.yardName = yard.name;
+    });
+    //Load visit colony into currentColony
+    if ($stateParams.colonyId != $scope.visit.colony_id){
+      console.error("Visit is assigned to a different colony!");
+    }
+    ColonyHelper.getColonyById($scope.visit.colony_id).then(function (colony){
+      $scope.currentColony = colony;
+      QueenHelper.getQueensInColony(colony.id).then(function (){
+        $scope.queens = queens;
+      });
+    })
   });
+
+  //Load current yard into currentYard for nav at the bottom.
+  YardHelper.getYardById($stateParams.yardId).then(function (yard){
+    $scope.currentYard = yard;
+  })
 
   $scope.openDatePicker = function(){
     ionicDatePicker.openDatePicker(datePickerObj);
   };
 
+  $scope.createNote = function(note) {
+    $scope.saveVisit($scope.visit).then(function (visitId){
+      $scope.visit.id = visitId;
+      VisitHelper.saveNote(note);
+      console.log("save Note");
+    });
+  }
+
   $scope.saveVisit = function(visit) {
-    if ($stateParams.visitId == "new"){  //create visit if new.
-      VisitHelper.saveVisit(visit); //diseaseId
-    }
-    else { //update existing visit with any edits in the fields
-      VisitHelper.updateVisit(visit);
-    }
-    $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id);
+    VisitHelper.saveVisit(visit).then(function (visitId){
+      console.log(visitId);
+      //$location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id);
+    });
   };
 
   // Navigational functions

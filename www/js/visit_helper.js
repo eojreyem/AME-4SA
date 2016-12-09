@@ -9,12 +9,20 @@ angular.module('ameApp')
 
   service.getVisitById = function(id) { //returns a visit object when given a valid ID
     var deferred = $q.defer();
-    var query = "SELECT * FROM Visits WHERE id = " + id;
-    $cordovaSQLite.execute(db, query).then(function(res) {
-      visit = res.rows.item(0);
-      visit.has_temper = Boolean(visit.has_temper)
-      visit.is_feeding = Boolean(visit.is_feeding)
-      deferred.resolve(visit);
+    var query = "SELECT * FROM Visits WHERE id = ?";
+    console.log(query);
+    $cordovaSQLite.execute(db, query, [id]).then(function(res) {
+      if (res.rows.length == 0){
+        deferred.resolve(null);
+        console.log("Failed to retreive visit "+ id);
+      }
+      else {
+        visit = res.rows.item(0);
+        visit.has_temper = Boolean(visit.has_temper)
+        visit.is_feeding = Boolean(visit.is_feeding)
+        deferred.resolve(visit);
+      }
+
     }, function (err) {
         console.error(err);
     });
@@ -119,26 +127,27 @@ angular.module('ameApp')
 
 
   service.saveVisit = function (visit) {
-    console.log(visit);
-    var query = "INSERT INTO Visits (date_time, yard_id, colony_id, queen_id, qty_boxes, queen_status_id, frames_of_bees, frames_of_brood, has_temper, is_feeding, disease_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-    $cordovaSQLite.execute(db, query, [visit.date_time, visit.yard_id, visit.colony_id, visit.queen_id, visit.qty_boxes, visit.queen_status_id, visit.frames_of_bees, visit.frames_of_brood, (visit.has_temper ?1:0), (visit.is_feeding ?1:0), visit.disease_id]).then(function(res) {
-        console.log("INSERT VISIT ID -> " + res.insertId);
-    }, function (err) {
-        console.error(err);
-    });
-  }
+    var deferred = $q.defer();
+    console.log("checking if visit exists");
+    service.getVisitById(visit.id).then(function(existingVisit){
+      if (existingVisit == null){
+        var query = "INSERT INTO Visits (date_time, yard_id, colony_id, queen_id, qty_boxes, queen_status_id, frames_of_bees, frames_of_brood, has_temper, is_feeding, disease_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        console.log(query);
+      }
+      else{
+        var query = "UPDATE Visits SET date_time = ?, yard_id = ?, colony_id = ?, queen_id = ?, qty_boxes = ?, queen_status_id = ?, frames_of_bees = ?, frames_of_brood = ?, has_temper = ?, is_feeding = ?, disease_id = ? WHERE id = " + visit.id;
+        console.log(query);
+      }
+      $cordovaSQLite.execute(db, query, [visit.date_time, visit.yard_id, visit.colony_id, visit.queen_id, visit.qty_boxes, visit.queen_status_id, visit.frames_of_bees, visit.frames_of_brood, (visit.has_temper ?1:0), (visit.is_feeding ?1:0), visit.disease_id]).then(function(res) {
+          deferred.resolve(res);
+      }, function (err) {
+          console.error(err);
+      });
 
-  service.updateVisit = function (visit) {
-    console.log(visit);
-    var query = "UPDATE Visits SET"+
-    " date_time = ?, queen_id = ?, qty_boxes = ?, queen_status_id = ?, frames_of_bees = ?, frames_of_brood = ?, has_temper = ?, is_feeding = ?, disease_id = ? WHERE id = ?";
-    console.log(query);
-    $cordovaSQLite.execute(db, query, [visit.date_time, visit.queen_id, visit.qty_boxes, visit.queen_status_id, visit.frames_of_bees, visit.frames_of_brood, (visit.has_temper?1:0), (visit.is_feeding?1:0), visit.disease_id,  visit.id]).then(function(res) {
-        console.log("Visit on " +visit.date_time+ " has been Updated ");
-    }, function (err) {
-        console.error(err);
     });
-  }
+    return deferred.promise;
+  };
+
 
   return service;
 });
