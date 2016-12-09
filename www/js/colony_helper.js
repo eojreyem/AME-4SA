@@ -38,7 +38,6 @@ angular.module('ameApp')
   }
 
   service.saveColony = function (colony) {
-    //TODO: check for unique colonyNumber currently active
     service.getColonyByNumber(colony.number).then(function (activeColony){ //check if tag is assigned
       if (activeColony==null){ //If no active colony is assigned the tag allow new colony create
         var query = "INSERT INTO Colonies (in_yard_id, number, date_active, origin) VALUES (?,?,?,?)";
@@ -52,8 +51,6 @@ angular.module('ameApp')
         document.getElementById("newColonyNumber").style.color = "red";
       }
     });
-
-
 
   }
 

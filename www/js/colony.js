@@ -1,10 +1,19 @@
 angular.module('ameApp')
 
-.controller('ColonyCtrl', function($scope, $location, $ionicPopup, $stateParams, ionicDatePicker, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
+.controller('ColonyCtrl', function($scope, $location, $ionicPopup, $stateParams, ionicDatePicker, $ionicSideMenuDelegate, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
 
   var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
 
-  $scope.queenEmergeDate = (new Date(Date.now()-tzoffset)).toISOString().slice(0,-1);
+  var newQueen = {
+    name: null,
+    in_colony_id: $stateParams.colonyId,
+    mother_queen_id: null, //motherId
+    origin: null,
+    date_emerged: (new Date(Date.now()-tzoffset)).toISOString().slice(0,-1), //dateEmerged
+    mark_color_hex:null, //hexColor
+  };
+  $scope.newQueen = newQueen;
+
   //Load current colony into currentColony
   ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
     $scope.currentColony = colony;
@@ -50,28 +59,16 @@ angular.module('ameApp')
     //TODO: What happens to the queens in that colony?
   };
 
-  $scope.createQueen = function() {
-    //TODO: check if queen name is unique
-
-    var queenNumber = document.getElementById("newQueenNumber");
-    //TODO: check that queen number is unique?
-    var queenOrigin = document.getElementById("newQueenOrigin");
-    QueenHelper.saveQueen(
-      queenNumber.value,
-      $scope.currentColony.id,
-      null, //motherId
-      queenOrigin.value,
-      $scope.queenEmergeDate, //dateEmerged
-      null //hexColor
-    )
-    queenNumber.value = null;
-    queenOrigin.value = null;
+  $scope.createQueen = function(newQueen) {
+    QueenHelper.saveQueen(newQueen);
+    //TODO saveQueen must return promise, then refresh queen list
+    $ionicSideMenuDelegate.toggleRight();
   };
 
   datePickerObj = {
     callback: function (val) {  //Mandatory
       console.log('Return value from the datepicker popup is : ' + val, new Date(val));
-      $scope.queenEmergeDate = (new Date(val).toISOString().slice(0,-1));
+      $scope.newQueen.date_emerged = (new Date(val).toISOString().slice(0,-1));
     },
     from: new Date(2014, 1, 1), //Optional
     to: new Date(), //Optional

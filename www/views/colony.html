@@ -26,7 +26,7 @@
     <ion-content class="has-header">
             <div class="list">
         <item class="item" ng-repeat="queen in queens" ng-click='goToQueen(queen)' on-hold="showMoveQueenPopup(queen)">
-          <label>{{queen.name}} - {{queen.origin}}</label>
+          <label>{{queen.id}} - {{queen.name}}</label>
           <badge class="badge badge-calm ion-female"> </badge>
         </item>
         <item class="item item-divider">
@@ -42,22 +42,22 @@
             </label>
             <label class="item">
               <span class="label">Emerge Date</span>
-              <button class="button button-outline button-dark" ng-click="openDatePicker()">{{queenEmergeDate | date:'MMM d, yyyy'}}</button>
+              <button class="button button-outline button-dark" ng-click="openDatePicker()">{{newQueen.date_emerged | date:'MMM d, yyyy'}}</button>
             </label>
             <label class="item item-input">
-              <span class="input-label">Queen Number</span>
-              <input id = "newQueenNumber" type="text" placeholder="999">
+              <span class="input-label">Queen Name</span>
+              <input ng-model="newQueen.name" type="text" placeholder="optional">
             </label>
             <label class="item item-input">
-              <span class="input-label">Mother Number</span>
-              <input id = "newQueenMotherNumber" type="text" placeholder="508">
+              <span class="input-label">Mother ID#</span>
+              <input ng-model="newQueen.mother_queen_id" type="text" placeholder="508">
             </label>
             <label class="item item-input item-stacked-label">
               <span  class="input-label">Origin</span>
-              <input id = "newQueenOrigin" type="text" placeholder="Note about queen's origin">
+              <input ng-model="newQueen.origin" type="text" placeholder="Note about queen's origin">
             </label>
             <item class="col padding">
-              <button class="button button-positive button-block" type="submit" ng-click="createQueen(currentColony)">Create Queen</button>
+              <button class="button button-positive button-block" type="submit" ng-click="createQueen(newQueen)">Create Queen</button>
             </item>
           </div>
         </form>

@@ -47,9 +47,10 @@ angular.module('ameApp')
   $scope.createColony = function(newColony) {
     ColonyHelper.saveColony(newColony);
     //TODO save colony must return a promise, then refresh colonies list.
+    /*
     YardHelper.getColoniesInYard($scope.currentYard.id).then(function (colonies){
       $scope.colonies = colonies;
-    });
+    }); */
     $ionicSideMenuDelegate.toggleRight();
   };
 
