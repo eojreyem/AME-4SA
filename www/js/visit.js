@@ -3,10 +3,37 @@
 angular.module('ameApp')
 
 .controller('VisitCtrl', function($scope, $location, $stateParams, $ionicSideMenuDelegate, $ionicPopup, ionicDatePicker, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
-  $scope.currentVisit =[null];
+
   var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
 
-  visitId = $stateParams.visitId;
+  var newVisit = {
+    id:"new",
+    date_time: (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1),
+    yard_id: null,
+    colony_id: $stateParams.colonyId,
+    queen_id: null, //pull from last visit
+    qty_boxes: null, //pull from last visit
+    queen_status_id: null,
+    frames_of_bees: null,
+    frames_of_brood: null,
+    has_temper: false,
+    is_feeding: false, //pull from last visit
+    disease_id: null
+  }
+
+  datePickerObj = {
+    callback: function (val) {  //Mandatory
+      console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+      $scope.visit.date_time = (new Date(val).toISOString().slice(0,-1));
+    },
+    from: new Date(2014, 1, 1), //Optional
+    to: new Date(), //Optional
+    inputDate: new Date(),      //Optional
+    closeOnSelect: false,       //Optional
+    templateType: 'modal'       //Optional
+  };
+
+  //get drop down choices
   VisitHelper.getQueenStatuses().then(function (statuses){
     $scope.queenStatuses = statuses;
   });
@@ -21,94 +48,57 @@ angular.module('ameApp')
     $scope.dataTypes = dataTypes;
   });
 
-  if (visitId == "new"){ //pre-populate fields for new visit.
-    $scope.visitTitle=" New";
-    $scope.currentVisit.date_time = (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1);
-    $scope.currentVisit.qty_boxes = null; // TODO: I could load the previous visit's # of boxes?
-    $scope.currentVisit.frames_of_bees = null;
-    $scope.currentVisit.frames_of_brood = null;
-    $scope.currentVisit.has_temper = false; // true or false
-    $scope.currentVisit.is_feeding = false; // true or false
-    //TODO: figure out logic of if there was a tracked queen in the hive or not.
-
-
-    //Load current colony into currentColony
-    ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
-      $scope.currentColony = colony;
-      //Load current yard into currentYard
-      YardHelper.getYardById(colony.in_yard_id).then(function (yard){
-        $scope.currentYard = yard;
-      });
-      QueenHelper.getQueensInColony(colony.id).then(function (){
-        $scope.queens = queens;
-      });
-
-    });
-
-  }
-  else if (visitId >= 0){  //if a visitId was passed, load old visit for editing/viewing
-    $scope.visitTitle=" Visit ID:" + visitId;
-    VisitHelper.getVisitById($stateParams.visitId).then(function(visit){
-      $scope.currentVisit = visit
-      //Load that visit's colony into currentColony
-      ColonyHelper.getColonyById(visit.colony_id).then(function (colony){
-        $scope.currentColony = colony;
-        //Load colony's yard into currentYard
-        YardHelper.getYardById(colony.in_yard_id).then(function (yard){
-          $scope.currentYard = yard;
+  //Load current colony into currentColony
+  ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
+    $scope.currentColony = colony;
+    //Load current yard into currentYard
+    YardHelper.getYardById(colony.in_yard_id).then(function (yard){
+      $scope.currentYard = yard;
+      if ($stateParams.visitId == "new"){ //TODO pre-populate fields for new visit.
+        newVisit.yardName = yard.name;
+        newVisit.yard_id = yard.id;
+        $scope.visit = newVisit;
+        console.log($scope.visit);
+        /*TODO update fields for new visit.
+        queen_id: null, //pull from past visit(s)
+        qty_boxes: null, //pull from past visit(s)
+        is_feeding: false, //pull from past visit(s)
+        */
+      }
+      else if ($stateParams.visitId >= 0){  //if a visitId was passed, load old visit for editing/viewing
+        $scope.visitTitle=" Visit ID:" + $stateParams.visitId;
+        VisitHelper.getVisitById($stateParams.visitId).then(function(visit){
+          //TODO handle exception where visit where visit isn't returned.
+          //Load yard into visit.yard
+          YardHelper.getYardById(visit.yard_id).then(function (yard){
+            visit.yard_id = yard.id;
+            visit.yardName = yard.name;
+          });
+          $scope.visit = visit;
         });
-      });
+      }
+      else {  // console log error
+        console.log("Visit does not exist.");
+        $location.url('/')
+      }
     });
-  }
-  else {  // console log error
-    console.log("Visit does not exist.");
-  }
+    QueenHelper.getQueensInColony(colony.id).then(function (){
+      $scope.queens = queens;
+    });
 
-  datePickerObj = {
-    callback: function (val) {  //Mandatory
-      console.log('Return value from the datepicker popup is : ' + val, new Date(val));
-      $scope.currentVisit.date_time = (new Date(val).toISOString().slice(0,-1));
-    },
-    from: new Date(2014, 1, 1), //Optional
-    to: new Date(), //Optional
-    inputDate: new Date(),      //Optional
-    closeOnSelect: false,       //Optional
-    templateType: 'modal'       //Optional
-  };
+  });
 
   $scope.openDatePicker = function(){
     ionicDatePicker.openDatePicker(datePickerObj);
   };
 
-  $scope.saveVisit = function() {
-    if (visitId == "new"){  //create visit if new.
-      VisitHelper.saveVisit(
-        $scope.currentVisit.date_time,
-        $scope.currentYard.id,
-        $scope.currentColony.id,
-        null, //queenId
-        $scope.currentVisit.qty_boxes,
-        null, //queenStatusId
-        $scope.currentVisit.frames_of_bees,
-        $scope.currentVisit.frames_of_brood,
-        ($scope.currentVisit.has_temper), // true or false
-        ($scope.currentVisit.is_feeding), // true or false
-        null); //diseaseId
+  $scope.saveVisit = function(visit) {
+    if ($stateParams.visitId == "new"){  //create visit if new.
+      VisitHelper.saveVisit(visit); //diseaseId
     }
     else { //update existing visit with any edits in the fields
-      VisitHelper.updateVisit(
-        visitId,
-        null, //dateTime
-        null, //queenId
-        $scope.currentVisit.qty_boxes,
-        null, //queenStatusId
-        $scope.currentVisit.frames_of_bees,
-        $scope.currentVisit.frames_of_brood,
-        $scope.currentVisit.has_temper, // true or false
-        $scope.currentVisit.is_feeding, // true or false
-        null); //diseaseId
+      VisitHelper.updateVisit(visit);
     }
-
     $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id);
   };
 

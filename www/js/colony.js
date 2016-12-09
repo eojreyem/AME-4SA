@@ -4,6 +4,18 @@ angular.module('ameApp')
 
   var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
 
+  datePickerObj = {
+    callback: function (val) {  //Mandatory
+      console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+      $scope.newQueen.date_emerged = (new Date(val).toISOString().slice(0,-1));
+    },
+    from: new Date(2014, 1, 1), //Optional
+    to: new Date(), //Optional
+    inputDate: new Date(),      //Optional
+    closeOnSelect: false,       //Optional
+    templateType: 'modal'       //Optional
+  };
+
   var newQueen = {
     name: null,
     in_colony_id: $stateParams.colonyId,
@@ -65,17 +77,7 @@ angular.module('ameApp')
     $ionicSideMenuDelegate.toggleRight();
   };
 
-  datePickerObj = {
-    callback: function (val) {  //Mandatory
-      console.log('Return value from the datepicker popup is : ' + val, new Date(val));
-      $scope.newQueen.date_emerged = (new Date(val).toISOString().slice(0,-1));
-    },
-    from: new Date(2014, 1, 1), //Optional
-    to: new Date(), //Optional
-    inputDate: new Date(),      //Optional
-    closeOnSelect: false,       //Optional
-    templateType: 'modal'       //Optional
-  };
+
 
   $scope.openDatePicker = function(){
     ionicDatePicker.openDatePicker(datePickerObj);

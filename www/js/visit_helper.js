@@ -118,29 +118,23 @@ angular.module('ameApp')
     }
 
 
-  service.saveVisit = function (dateTime, yardId, colonyId, queenId, numberBoxes, queenStatusId, FObees, FObrood, temper, feeding, diseaseId) {
-    var query = "INSERT INTO Visits (date_time, yard_id, colony_id, queen_id, qty_boxes, queen_status_id, frames_of_bees, frames_of_brood, has_temper, is_feeding, disease_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-    $cordovaSQLite.execute(db, query, [dateTime, yardId, colonyId, queenId, numberBoxes, queenStatusId, FObees, FObrood, (temper?1:0), (feeding?1:0), diseaseId]).then(function(res) {
+  service.saveVisit = function (visit) {
+    console.log(visit);
+    var query = "INSERT INTO Visits (date_time, yard_id, colony_id, queen_id, qty_boxes, queen_status_id, frames_of_bees, frames_of_brood, has_temper, is_feeding, disease_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+    $cordovaSQLite.execute(db, query, [visit.date_time, visit.yard_id, visit.colony_id, visit.queen_id, visit.qty_boxes, visit.queen_status_id, visit.frames_of_bees, visit.frames_of_brood, (visit.has_temper ?1:0), (visit.is_feeding ?1:0), visit.disease_id]).then(function(res) {
         console.log("INSERT VISIT ID -> " + res.insertId);
     }, function (err) {
-        console.error(err.text);
+        console.error(err);
     });
   }
 
-  service.updateVisit = function (visitId, dateTime, queenId, numberBoxes, queenStatusId, FObees, FObrood, temper, feeding, diseaseId) {
+  service.updateVisit = function (visit) {
+    console.log(visit);
     var query = "UPDATE Visits SET"+
-    " date_time = " +dateTime+
-    ", queen_id = " +queenId+
-    ", qty_boxes = " +numberBoxes+
-    ", queen_status_id = " +queenStatusId+
-    ", frames_of_bees = " +FObees+
-    ", frames_of_brood = " +FObrood+
-    ", has_temper = " +(temper?1:0)+
-    ", is_feeding = " +(feeding?1:0)+
-    ", disease_id = " +diseaseId+
-    " WHERE id = " + visitId;
-    $cordovaSQLite.execute(db, query).then(function(res) {
-        console.log("Visit ID:" +visitId* " Updated ");
+    " date_time = ?, queen_id = ?, qty_boxes = ?, queen_status_id = ?, frames_of_bees = ?, frames_of_brood = ?, has_temper = ?, is_feeding = ?, disease_id = ? WHERE id = ?";
+    console.log(query);
+    $cordovaSQLite.execute(db, query, [visit.date_time, visit.queen_id, visit.qty_boxes, visit.queen_status_id, visit.frames_of_bees, visit.frames_of_brood, (visit.has_temper?1:0), (visit.is_feeding?1:0), visit.disease_id,  visit.id]).then(function(res) {
+        console.log("Visit on " +visit.date_time+ " has been Updated ");
     }, function (err) {
         console.error(err);
     });
