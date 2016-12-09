@@ -7,6 +7,9 @@
 angular.module('ameApp')
 
 .controller('MainCtrl', function($ionicPlatform, $scope, $location, $cordovaSQLite, YardHelper) {
+  var newYard = {name:null};
+  $scope.newYard = newYard;
+
   //loads a list of yards in 4SA
   $ionicPlatform.ready(function() {
     YardHelper.getAllYards().then(function(yards){
@@ -20,12 +23,10 @@ angular.module('ameApp')
     });
   });
 
-
   //Create a new yard
   $scope.createYard = function() {
-    var name = document.getElementById("newyardname");
-    YardHelper.saveYard(name.value);
-    name.value = ""
+    YardHelper.saveYard($scope.newYard);
+    $scope.newYard = {};
     YardHelper.getAllYards().then(function(yards){
       $scope.yards = yards;
     });

@@ -34,14 +34,18 @@ angular.module('ameApp')
     return deferred.promise;
   }
 
-  service.saveYard = function(name) { //save new yard to the database
-    var query = "INSERT INTO Yards (name) VALUES (?)";
-    $cordovaSQLite.execute(db, query, [name]).then(function(res) {
-      console.log("INSERT ID -> " + res.insertId);
-    }, function (err) {
-      console.error(err);
-    })
-
+  service.saveYard = function(yard) { //save new yard to the database
+    if (yard.name !=null){
+      var query = "INSERT INTO Yards (name) VALUES (?)";
+      $cordovaSQLite.execute(db, query, [yard.name]).then(function(res) {
+        console.log("INSERT ID -> " + res.insertId);
+      }, function (err) {
+        console.error(err);
+      })
+    }
+    else{
+      console.log("Yard needs a name!"); //Toast?
+    }
   }
 
   service.deleteYard = function(yard) { //deletes yard if null

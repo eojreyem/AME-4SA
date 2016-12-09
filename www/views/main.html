@@ -12,16 +12,12 @@
         visited {{yard.lastVisit| date:'MMM d, yyyy'}}
       </span>
     </a>
-
-
   </div>
-
-
 
   <form ng-submit="createYard()">
     <div class="item item-input">
       <label class="item item-input">
-        <input id="newyardname" type="text" placeholder="New Yard Name">
+        <input ng-model=newYard.name type="text" placeholder="New Yard Name">
       </label>
       <div class="col">
         <button type="submit" class="button button-positive">Add Yard <i class="icon ion-location"></i></button>
