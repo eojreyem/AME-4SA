@@ -113,6 +113,7 @@ angular.module('ameApp')
   };
 
   // Navigational functions
+  //TODO Exit without saving?!
   $scope.goToColony = function() {
     $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id);
   }

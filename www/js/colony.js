@@ -101,11 +101,13 @@ angular.module('ameApp')
             console.log($scope.destination.colonyNum);
             ColonyHelper.getColonyByNumber($scope.destination.colonyNum).then(function (destinationColony){
               //TODO: if destinationColony is not null.
-              console.log("move queen " +queen.name+ " to " +destinationColony.number);
-              QueenHelper.updateQueenColony(queen.id, destinationColony.id)
-              QueenHelper.getQueensInColony($scope.currentColony.id).then(function(queens){
-                $scope.queens = queens;
-              });
+              if (destinationColony!= null){
+                console.log("move queen " +queen.name+ " to " +destinationColony.number);
+                QueenHelper.updateQueenColony(queen.id, destinationColony.id)
+                QueenHelper.getQueensInColony($scope.currentColony.id).then(function(queens){
+                  $scope.queens = queens;
+                });
+              }
             });
 
           } else {
