@@ -1,7 +1,8 @@
 angular.module('ameApp')
 
-.controller('ColonyCtrl', function($scope, $location, $ionicPopup, $stateParams, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
+.controller('ColonyCtrl', function($scope, $location, $ionicPopup, $stateParams, ionicDatePicker, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
 
+  $scope.queenEmergeDate = (new Date(Date.now())).toISOString().slice(0,-1);
   //Load current colony into currentColony
   ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
     $scope.currentColony = colony;
@@ -45,6 +46,40 @@ angular.module('ameApp')
       })
     });
     //TODO: What happens to the queens in that colony?
+  };
+
+  $scope.createQueen = function() {
+    //TODO: check if queen name is unique
+
+    var queenNumber = document.getElementById("newQueenNumber");
+    //TODO: check that queen number is unique?
+    var queenOrigin = document.getElementById("newQueenOrigin");
+    QueenHelper.saveQueen(
+      queenNumber.value,
+      $scope.currentColony.id,
+      null, //motherId
+      queenOrigin.value,
+      $scope.queenEmergeDate, //dateEmerged
+      null //hexColor
+    )
+    queenNumber.value = null;
+    queenOrigin.value = null;
+  };
+
+  datePickerObj = {
+    callback: function (val) {  //Mandatory
+      console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+      $scope.queenEmergeDate = (new Date(val).toISOString().slice(0,-1));
+    },
+    from: new Date(2014, 1, 1), //Optional
+    to: new Date(), //Optional
+    inputDate: new Date(),      //Optional
+    closeOnSelect: false,       //Optional
+    templateType: 'modal'       //Optional
+  };
+
+  $scope.openDatePicker = function(){
+    ionicDatePicker.openDatePicker(datePickerObj);
   };
 
 

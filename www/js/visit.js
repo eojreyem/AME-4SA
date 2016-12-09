@@ -5,12 +5,11 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('ameApp')
 
-.controller('VisitCtrl', function($scope, $location, $stateParams, $ionicSideMenuDelegate, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
+.controller('VisitCtrl', function($scope, $location, $stateParams, $ionicSideMenuDelegate, $ionicPopup, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
   $scope.currentVisit =[null];
-  var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
-  queenEmergeDate = (new Date(Date.now() - tzoffset));
-  queenEmergeDate.setMonth(queenEmergeDate.getMonth()-1);
-  $scope.queenEmergeDate = queenEmergeDate.toISOString().slice(0,-1);;
+
+
+  document.getElementById("queenButton").style.background = "grey"; //set actual queen parameters
 
   visitId = $stateParams.visitId;
   VisitHelper.getQueenStatuses().then(function (statuses){
@@ -29,7 +28,7 @@ angular.module('ameApp')
 
   if (visitId == "new"){ //pre-populate fields for new visit.
     $scope.visitTitle=" New";
-    $scope.currentVisit.date_time = (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1);
+    $scope.currentVisit.date_time = (new Date(Date.now())).toISOString().slice(0,-1);
     $scope.currentVisit.qty_boxes = null; // TODO: I could load the previous visit's # of boxes?
     $scope.currentVisit.frames_of_bees_start = null;
     $scope.currentVisit.frames_of_bees_end = null;
@@ -47,9 +46,6 @@ angular.module('ameApp')
       YardHelper.getYardById(colony.in_yard_id).then(function (yard){
         $scope.currentYard = yard;
       });
-      QueenHelper.getQueensInColony(colony.id).then(function (queens){
-        $scope.colonysQueens = queens;
-      });
 
     });
 
@@ -65,34 +61,60 @@ angular.module('ameApp')
         YardHelper.getYardById(colony.in_yard_id).then(function (yard){
           $scope.currentYard = yard;
         });
-        QueenHelper.getQueensInColony($stateParams.colonyId).then(function (queens){
-          $scope.colonysQueens = queens;
-        });
       });
     });
   }
   else {  // console log error
     console.log("Visit does not exist.");
   }
-
-  $scope.createQueen = function() {
-    //TODO: check if queen name is unique
-
-    var queenNumber = document.getElementById("newQueenNumber");
-    //TODO: check that queen number is unique?
-    var queenOrigin = document.getElementById("newQueenOrigin");
-    QueenHelper.saveQueen(
-      queenNumber.value,
-      $scope.currentColony.id,
-      null, //motherId
-      queenOrigin.value,
-      $scope.queenEmergeDate, //dateEmerged
-      null //hexColor
-    )
-    $ionicSideMenuDelegate.toggleRight();
-    queenNumber.value = null;
-    queenOrigin.value = null;
+  var QueenPopup=null;
+  $scope.showQueenPopup = function(colony) {
+    QueenHelper.getQueensInColony(colony.id).then(function (){
+      $scope.queens = queens;
+    });
+    $scope.choice = {};
+    QueenPopup = $ionicPopup.show({
+      template: '<ion-list>   '+
+                '  <ion-radio ng-repeat="queen in queens" on-hold=goToQueen(queen) ng-model="choice.queenId" ng-value="{{queen}}">{{queen.name}}</ion-radio>'+
+                '</ion-list>  ',
+      title: 'Select a Queen',
+      subTitle: 'long press for queen page',
+      scope: $scope,
+      buttons: [
+      { text: 'No Q',
+        onTap: function (){
+          console.log("queenless")
+        }
+      },
+      { text: 'New',
+        onTap: function (){
+          console.log("new")
+        }
+      },
+      {
+        text: 'Select',
+        type: 'button-positive',
+        onTap: function(e) {
+          if (!$scope.choice.queenId) {
+            console.log("nothing selected?");
+            //don't allow "move" button to do anything if no yard is selected.
+            e.preventDefault();
+          } else {
+            console.log(queens);
+            console.log($scope.choice.queenId);
+            $scope.reigningQueen = $scope.choice.queenId;
+            //ColonyHelper.updateColonyYard(colony.id, $scope.choice.yardId);
+            //YardHelper.getColoniesInYard($scope.currentYard.id).then(function (colonies){
+            //  $scope.colonies = colonies;
+            //});
+            console.log("do the thing");
+            }
+        }
+      }
+      ]
+    });
   };
+
 
   $scope.saveVisit = function() {
     if (visitId == "new"){  //create visit if new.
@@ -136,6 +158,10 @@ angular.module('ameApp')
   };
 
   // Navigational functions
+  $scope.goToQueen = function(queen) {
+    QueenPopup.close();
+    $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id + '/queen/'+ queen.id);
+  }
   $scope.goToColony = function() {
     $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id);
   }

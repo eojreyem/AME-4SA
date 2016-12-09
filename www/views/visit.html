@@ -59,56 +59,39 @@
     </ion-content>
   </ion-side-menu>
 
-  <!-- Right menu = Create a queen -->
-  <ion-side-menu side="right">
-
-    <ion-content>
-      <div class="item item-divider item-dark">
-        New Queen
-        <badge class="badge badge-light ion-female"> </badge>
-      </div>
-      <form>
-        <div class="list">
-          <label class="item">
-            <button class="button button-outline button-dark">Change Mark Color</button>
-          </label>
-          <label class="item">
-            <span class="label">Emerge Date</span>
-            <button class="button button-outline button-dark">{{queenEmergeDate | date:'MMM d, yyyy'}}</button>
-          </label>
-          <label class="item item-input">
-            <span class="input-label">Queen Number</span>
-            <input id = "newQueenNumber" type="text" placeholder="999">
-          </label>
-          <label class="item item-input">
-            <span class="input-label">Mother Number</span>
-            <input id = "newQueenMotherNumber" type="text" placeholder="508">
-          </label>
-          <label class="item item-input item-stacked-label">
-            <span  class="input-label">Origin</span>
-            <input id = "newQueenOrigin" type="text" placeholder="Note about queen's origin">
-          </label>
-        </div>
-        <div class="padding">
-          <button ng-click="createQueen()" class="button button-positive button-block">Add Queen <i class="icon ion-female"></i></button>
-        </div>
-      </form>
-    </ion-content>
-  </ion-side-menu>
 
   <!-- Main = Observations -->
+
+
+
+
   <ion-side-menu-content>
     <ion-nav-bar class="bar-dark">
       <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon ion-compose"></button>
         <h1 class="title ion-clipboard">{{visitTitle}}</h1>
-        <button menu-toggle="right" class="button button-icon ion-female">+</button>
       </ion-nav-buttons>
     </ion-nav-bar>
 
 
     <ion-content class="has-header">
 
+      <div class="row">
+        <div class="col">
+          Queen
+          <button id = "queenButton" class="button button-outline button-dark" style = "background:red" ng-click="showQueenPopup(currentColony)"><b>{{reigningQueen.name}}</b></button>
+        </div>
+        <div class="col">
+          Hive Type
+            <select>
+              <option ng-repeat="hiveTypes in hiveTypes">{{hiveTypes.type}}</option>
+            </select>
+        </div>
+        <div class="col">
+          Boxes
+          <input type="number" ng-model="currentVisit.qty_boxes">
+        </div>
+      </div>
       <div class="list">
         <button class="button col-80 col-offset-10 button-block button-outline button-dark">{{currentVisit.date_time | date:'EEE - MMM d, yyyy @ hh:mm a'}}</button>
         <div class="item item-divider item-dark">
@@ -164,15 +147,7 @@
           <span class="input-label">Hive Bodies</span>
           <input type="number" ng-model="currentVisit.qty_boxes">
         </label>
-        <label class="item item-input item-select">
-          <div class="input-label">
-            Queen
-          </div>
-          <select>
-            <option ng-repeat="queen in colonysQueens">{{queen.name}}</option>
-            <option>none</option>
-          </select>
-        </label>
+<!--
         <label class="item item-input item-select">
           <div class="input-label">
             Queen Status
@@ -188,7 +163,7 @@
         <label class="item item-input">
           <span class="input-label">F.O.Brood</span>
           <input type="number" ng-model="currentVisit.frames_of_brood_end">
-        </label>
+        </label>-->
         <li class="item item-toggle">
           Feeding
           <label class="toggle toggle-energized">
