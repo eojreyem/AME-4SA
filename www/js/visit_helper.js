@@ -118,26 +118,23 @@ angular.module('ameApp')
     }
 
 
-  service.saveVisit = function (dateTime, yardId, colonyId, queenId, numberBoxes, queenStatusStartId, queenStatusEndId, FObeesStart, FObeesEnd, FObroodStart, FObroodEnd, temper, feeding, diseaseId) {
-    var query = "INSERT INTO Visits (date_time, yard_id, colony_id, queen_id, qty_boxes, queen_status_start_id, queen_status_end_id, frames_of_bees_start, frames_of_bees_end, frames_of_brood_start, frames_of_brood_end, has_temper, is_feeding, disease_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-    $cordovaSQLite.execute(db, query, [dateTime, yardId, colonyId, queenId, numberBoxes, queenStatusStartId, queenStatusEndId, FObeesStart, FObeesEnd, FObroodStart, FObroodEnd, (temper?1:0), (feeding?1:0), diseaseId]).then(function(res) {
+  service.saveVisit = function (dateTime, yardId, colonyId, queenId, numberBoxes, queenStatusId, FObees, FObrood, temper, feeding, diseaseId) {
+    var query = "INSERT INTO Visits (date_time, yard_id, colony_id, queen_id, qty_boxes, queen_status_id, frames_of_bees, frames_of_brood, has_temper, is_feeding, disease_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    $cordovaSQLite.execute(db, query, [dateTime, yardId, colonyId, queenId, numberBoxes, queenStatusId, FObees, FObrood, (temper?1:0), (feeding?1:0), diseaseId]).then(function(res) {
         console.log("INSERT VISIT ID -> " + res.insertId);
     }, function (err) {
         console.error(err.text);
     });
   }
 
-  service.updateVisit = function (visitId, dateTime, queenId, numberBoxes, queenStatusStartId, queenStatusEndId, FObeesStart, FObeesEnd, FObroodStart, FObroodEnd, temper, feeding, diseaseId) {
+  service.updateVisit = function (visitId, dateTime, queenId, numberBoxes, queenStatusId, FObees, FObrood, temper, feeding, diseaseId) {
     var query = "UPDATE Visits SET"+
     " date_time = " +dateTime+
     ", queen_id = " +queenId+
     ", qty_boxes = " +numberBoxes+
-    ", queen_status_start_id = " +queenStatusStartId+
-    ", queen_status_end_id = " +queenStatusEndId+
-    ", frames_of_bees_start = " +FObeesStart+
-    ", frames_of_bees_end = " +FObeesEnd+
-    ", frames_of_brood_start = " +FObroodStart+
-    ", frames_of_brood_end = " +FObroodEnd+
+    ", queen_status_id = " +queenStatusId+
+    ", frames_of_bees = " +FObees+
+    ", frames_of_brood = " +FObrood+
     ", has_temper = " +(temper?1:0)+
     ", is_feeding = " +(feeding?1:0)+
     ", disease_id = " +diseaseId+

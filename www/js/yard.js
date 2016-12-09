@@ -1,15 +1,12 @@
-// Ionic Starter App
 
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
 angular.module('ameApp')
 
 .controller('YardCtrl', function($scope, $ionicPopup, $stateParams, $location, $cordovaSQLite, $ionicSideMenuDelegate, ColonyHelper, YardHelper, ionicDatePicker) {
 
   var moveColonyPopup = $ionicPopup;
+  var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
 
-  $scope.newColonyActiveDate = (new Date(Date.now())).toISOString().slice(0,-1);
+  $scope.newColonyActiveDate = (new Date(Date.now()-tzoffset)).toISOString().slice(0,-1);
 
   //Load current yard into currentYard
   YardHelper.getYardById($stateParams.yardId).then(function (yard){

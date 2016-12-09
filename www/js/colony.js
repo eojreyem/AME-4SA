@@ -2,7 +2,9 @@ angular.module('ameApp')
 
 .controller('ColonyCtrl', function($scope, $location, $ionicPopup, $stateParams, ionicDatePicker, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
 
-  $scope.queenEmergeDate = (new Date(Date.now())).toISOString().slice(0,-1);
+  var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
+
+  $scope.queenEmergeDate = (new Date(Date.now()-tzoffset)).toISOString().slice(0,-1);
   //Load current colony into currentColony
   ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
     $scope.currentColony = colony;

@@ -1,15 +1,10 @@
-// Ionic Starter App
 
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
+
 angular.module('ameApp')
 
-.controller('VisitCtrl', function($scope, $location, $stateParams, $ionicSideMenuDelegate, $ionicPopup, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
+.controller('VisitCtrl', function($scope, $location, $stateParams, $ionicSideMenuDelegate, $ionicPopup, ionicDatePicker, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
   $scope.currentVisit =[null];
-
-
-  document.getElementById("queenButton").style.background = "grey"; //set actual queen parameters
+  var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
 
   visitId = $stateParams.visitId;
   VisitHelper.getQueenStatuses().then(function (statuses){
@@ -28,12 +23,10 @@ angular.module('ameApp')
 
   if (visitId == "new"){ //pre-populate fields for new visit.
     $scope.visitTitle=" New";
-    $scope.currentVisit.date_time = (new Date(Date.now())).toISOString().slice(0,-1);
+    $scope.currentVisit.date_time = (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1);
     $scope.currentVisit.qty_boxes = null; // TODO: I could load the previous visit's # of boxes?
-    $scope.currentVisit.frames_of_bees_start = null;
-    $scope.currentVisit.frames_of_bees_end = null;
-    $scope.currentVisit.frames_of_brood_start = null;
-    $scope.currentVisit.frames_of_brood_end = null;
+    $scope.currentVisit.frames_of_bees = null;
+    $scope.currentVisit.frames_of_brood = null;
     $scope.currentVisit.has_temper = false; // true or false
     $scope.currentVisit.is_feeding = false; // true or false
     //TODO: figure out logic of if there was a tracked queen in the hive or not.
@@ -45,6 +38,9 @@ angular.module('ameApp')
       //Load current yard into currentYard
       YardHelper.getYardById(colony.in_yard_id).then(function (yard){
         $scope.currentYard = yard;
+      });
+      QueenHelper.getQueensInColony(colony.id).then(function (){
+        $scope.queens = queens;
       });
 
     });
@@ -67,54 +63,22 @@ angular.module('ameApp')
   else {  // console log error
     console.log("Visit does not exist.");
   }
-  var QueenPopup=null;
-  $scope.showQueenPopup = function(colony) {
-    QueenHelper.getQueensInColony(colony.id).then(function (){
-      $scope.queens = queens;
-    });
-    $scope.choice = {};
-    QueenPopup = $ionicPopup.show({
-      template: '<ion-list>   '+
-                '  <ion-radio ng-repeat="queen in queens" on-hold=goToQueen(queen) ng-model="choice.queenId" ng-value="{{queen}}">{{queen.name}}</ion-radio>'+
-                '</ion-list>  ',
-      title: 'Select a Queen',
-      subTitle: 'long press for queen page',
-      scope: $scope,
-      buttons: [
-      { text: 'No Q',
-        onTap: function (){
-          console.log("queenless")
-        }
-      },
-      { text: 'New',
-        onTap: function (){
-          console.log("new")
-        }
-      },
-      {
-        text: 'Select',
-        type: 'button-positive',
-        onTap: function(e) {
-          if (!$scope.choice.queenId) {
-            console.log("nothing selected?");
-            //don't allow "move" button to do anything if no yard is selected.
-            e.preventDefault();
-          } else {
-            console.log(queens);
-            console.log($scope.choice.queenId);
-            $scope.reigningQueen = $scope.choice.queenId;
-            //ColonyHelper.updateColonyYard(colony.id, $scope.choice.yardId);
-            //YardHelper.getColoniesInYard($scope.currentYard.id).then(function (colonies){
-            //  $scope.colonies = colonies;
-            //});
-            console.log("do the thing");
-            }
-        }
-      }
-      ]
-    });
+
+  datePickerObj = {
+    callback: function (val) {  //Mandatory
+      console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+      $scope.currentVisit.date_time = (new Date(val).toISOString().slice(0,-1));
+    },
+    from: new Date(2014, 1, 1), //Optional
+    to: new Date(), //Optional
+    inputDate: new Date(),      //Optional
+    closeOnSelect: false,       //Optional
+    templateType: 'modal'       //Optional
   };
 
+  $scope.openDatePicker = function(){
+    ionicDatePicker.openDatePicker(datePickerObj);
+  };
 
   $scope.saveVisit = function() {
     if (visitId == "new"){  //create visit if new.
@@ -124,12 +88,9 @@ angular.module('ameApp')
         $scope.currentColony.id,
         null, //queenId
         $scope.currentVisit.qty_boxes,
-        null, //queenStatusStartId
-        null,  //queenStatusEndId
-        $scope.currentVisit.frames_of_bees_start,
-        $scope.currentVisit.frames_of_bees_end,
-        $scope.currentVisit.frames_of_brood_start,
-        $scope.currentVisit.frames_of_brood_end,
+        null, //queenStatusId
+        $scope.currentVisit.frames_of_bees,
+        $scope.currentVisit.frames_of_brood,
         ($scope.currentVisit.has_temper), // true or false
         ($scope.currentVisit.is_feeding), // true or false
         null); //diseaseId
@@ -140,28 +101,18 @@ angular.module('ameApp')
         null, //dateTime
         null, //queenId
         $scope.currentVisit.qty_boxes,
-        null, //queenStatusStartId
-        null, //queenStatusEndId
-        $scope.currentVisit.frames_of_bees_start,
-        $scope.currentVisit.frames_of_bees_end,
-        $scope.currentVisit.frames_of_brood_start,
-        $scope.currentVisit.frames_of_brood_end,
+        null, //queenStatusId
+        $scope.currentVisit.frames_of_bees,
+        $scope.currentVisit.frames_of_brood,
         $scope.currentVisit.has_temper, // true or false
         $scope.currentVisit.is_feeding, // true or false
         null); //diseaseId
-
     }
-
-
 
     $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id);
   };
 
   // Navigational functions
-  $scope.goToQueen = function(queen) {
-    QueenPopup.close();
-    $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id + '/queen/'+ queen.id);
-  }
   $scope.goToColony = function() {
     $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id);
   }

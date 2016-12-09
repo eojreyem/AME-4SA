@@ -1,7 +1,7 @@
 <ion-side-menus>
 
   //Enter a note or data
-  <ion-side-menu side="left">
+  <ion-side-menu side="right">
     <ion-content>
       <div class="item item-divider item-dark">
         Enter a Note
@@ -59,46 +59,48 @@
     </ion-content>
   </ion-side-menu>
 
-
-  <!-- Main = Observations -->
-
-
-
-
   <ion-side-menu-content>
-    <ion-nav-bar class="bar-dark">
-      <ion-nav-buttons side="left">
-        <button menu-toggle="left" class="button button-icon ion-compose"></button>
-        <h1 class="title ion-clipboard">{{visitTitle}}</h1>
-      </ion-nav-buttons>
-    </ion-nav-bar>
-
+    <ion-header-bar class="bar-dark">
+      <h1 class="title ion-clipboard">{{visitTitle}}</h1>
+      <button menu-toggle="right" class="button button-icon ion-compose"></button>
+    </ion-header-bar>
 
     <ion-content class="has-header">
-
-      <div class="row">
-        <div class="col">
-          Queen
-          <button id = "queenButton" class="button button-outline button-dark" style = "background:red" ng-click="showQueenPopup(currentColony)"><b>{{reigningQueen.name}}</b></button>
-        </div>
-        <div class="col">
-          Hive Type
-            <select>
-              <option ng-repeat="hiveTypes in hiveTypes">{{hiveTypes.type}}</option>
-            </select>
-        </div>
-        <div class="col">
-          Boxes
-          <input type="number" ng-model="currentVisit.qty_boxes">
-        </div>
-      </div>
-      <div class="list">
-        <button class="button col-80 col-offset-10 button-block button-outline button-dark">{{currentVisit.date_time | date:'EEE - MMM d, yyyy @ hh:mm a'}}</button>
-        <div class="item item-divider item-dark">
-          Observed
+      <div class="list padding ">
+        <div class="row">
+          <button class="button col-50 button-block button-outline button-dark" ng-click="openDatePicker()">{{currentVisit.date_time | date:'EEE - MMM d, yyyy'}}</button>
+          <button class="button col-50 button-block button-outline button-dark">{{currentVisit.date_time | date:'hh:mm a'}}</button>
         </div>
         <label class="item item-input item-select">
-
+          <div class="input-label">
+            Hive Type
+          </div>
+          <select>
+            <option ng-repeat="hiveTypes in hiveTypes">{{hiveTypes.type}}</option>
+          </select>
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Hive Bodies</span>
+          <input type="number" ng-model="currentVisit.qty_boxes">
+        </label>
+        <li class="item item-toggle">
+          Feeding
+          <label class="toggle toggle-energized">
+            <input type="checkbox" ng-model="currentVisit.is_feeding">
+            <div class="track">
+              <div class="handle"></div>
+            </div>
+          </label>
+        </li>
+        <label class="item item-input item-select">
+          <select>
+            <option ng-repeat="queen in queens">{{queen.name}}</option>
+          </select>
+          <div class="input-label">
+            Queen
+          </div>
+        </label>
+        <label class="item item-input item-select">
           <select>
             <option ng-repeat="status in queenStatuses">{{status.status}}</option>
           </select>
@@ -108,11 +110,11 @@
         </label>
         <label class="item item-input">
           <span class="input-label">F.O.Bees</span>
-          <input type="number" ng-model="currentVisit.frames_of_bees_start">
+          <input type="number" ng-model="currentVisit.frames_of_bees">
         </label>
         <label class="item item-input">
           <span class="input-label">F.O.Brood</span>
-          <input type="number" ng-model="currentVisit.frames_of_brood_start">
+          <input type="number" ng-model="currentVisit.frames_of_brood">
         </label>
         <li class="item item-toggle">
           Bad Temper
@@ -132,47 +134,6 @@
             <option ng-repeat="disease in diseases">{{disease.disease}}</option>
           </select>
         </label>
-        <div class="item item-divider item-dark">
-          Changes from Visit
-        </div>
-        <label class="item item-input item-select">
-          <div class="input-label">
-            Hive Type
-          </div>
-          <select>
-            <option ng-repeat="hiveTypes in hiveTypes">{{hiveTypes.type}}</option>
-          </select>
-        </label>
-        <label class="item item-input">
-          <span class="input-label">Hive Bodies</span>
-          <input type="number" ng-model="currentVisit.qty_boxes">
-        </label>
-<!--
-        <label class="item item-input item-select">
-          <div class="input-label">
-            Queen Status
-          </div>
-          <select>
-            <option ng-repeat="status in queenStatuses">{{status.status}}</option>
-          </select>
-        </label>
-        <label class="item item-input">
-          <span class="input-label">F.O.Bees</span>
-          <input type="number" ng-model="currentVisit.frames_of_bees_end">
-        </label>
-        <label class="item item-input">
-          <span class="input-label">F.O.Brood</span>
-          <input type="number" ng-model="currentVisit.frames_of_brood_end">
-        </label>-->
-        <li class="item item-toggle">
-          Feeding
-          <label class="toggle toggle-energized">
-            <input type="checkbox" ng-model="currentVisit.is_feeding">
-            <div class="track">
-              <div class="handle"></div>
-            </div>
-          </label>
-        </li>
 
         <item class="col col-offset-20 col-60 padding">
           <button class="button button-block button-positive" ng-click='saveVisit()'>Save Visit</button>
