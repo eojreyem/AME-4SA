@@ -94,16 +94,15 @@ angular.module('ameApp')
   };
 
   $scope.createNote = function(note) {
-    $scope.saveVisit($scope.visit).then(function (visitId){
-      $scope.visit.id = visitId;
-      VisitHelper.saveNote(note);
-      console.log("save Note");
-    });
+    note.visit_id = $scope.visit.id;
+    VisitHelper.saveNote(note);
   }
 
   $scope.saveVisit = function(visit) {
     VisitHelper.saveVisit(visit).then(function (visitId){
-      console.log(visitId);
+      if (visitId != null){
+        $scope.visit.id = visitId;
+      }
       //$location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id);
     });
   };

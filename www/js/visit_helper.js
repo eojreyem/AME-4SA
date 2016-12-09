@@ -10,7 +10,6 @@ angular.module('ameApp')
   service.getVisitById = function(id) { //returns a visit object when given a valid ID
     var deferred = $q.defer();
     var query = "SELECT * FROM Visits WHERE id = ?";
-    console.log(query);
     $cordovaSQLite.execute(db, query, [id]).then(function(res) {
       if (res.rows.length == 0){
         deferred.resolve(null);
@@ -125,6 +124,12 @@ angular.module('ameApp')
       });
     }
 
+  service.saveNote = function(note) {
+    var query = "INSERT INTO Visit_Notes (visit_id, note, is_reminder) VALUES (?,?,?)";
+    $cordovaSQLite.execute(db, query, [note.visit_id, note.note, note.is_reminder]).then(function(res){
+      console.log(res.insertId);
+    })
+  }
 
   service.saveVisit = function (visit) {
     var deferred = $q.defer();
@@ -132,17 +137,20 @@ angular.module('ameApp')
     service.getVisitById(visit.id).then(function(existingVisit){
       if (existingVisit == null){
         var query = "INSERT INTO Visits (date_time, yard_id, colony_id, queen_id, qty_boxes, queen_status_id, frames_of_bees, frames_of_brood, has_temper, is_feeding, disease_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-        console.log(query);
+        $cordovaSQLite.execute(db, query, [visit.date_time, visit.yard_id, visit.colony_id, visit.queen_id, visit.qty_boxes, visit.queen_status_id, visit.frames_of_bees, visit.frames_of_brood, (visit.has_temper ?1:0), (visit.is_feeding ?1:0), visit.disease_id]).then(function(res) {
+          deferred.resolve(res.insertId);
+        }, function (err) {
+            console.error(err);
+        });
       }
       else{
         var query = "UPDATE Visits SET date_time = ?, yard_id = ?, colony_id = ?, queen_id = ?, qty_boxes = ?, queen_status_id = ?, frames_of_bees = ?, frames_of_brood = ?, has_temper = ?, is_feeding = ?, disease_id = ? WHERE id = " + visit.id;
-        console.log(query);
+        $cordovaSQLite.execute(db, query, [visit.date_time, visit.yard_id, visit.colony_id, visit.queen_id, visit.qty_boxes, visit.queen_status_id, visit.frames_of_bees, visit.frames_of_brood, (visit.has_temper ?1:0), (visit.is_feeding ?1:0), visit.disease_id]).then(function(res) {
+          deferred.resolve(null);
+        }, function (err) {
+            console.error(err);
+        });
       }
-      $cordovaSQLite.execute(db, query, [visit.date_time, visit.yard_id, visit.colony_id, visit.queen_id, visit.qty_boxes, visit.queen_status_id, visit.frames_of_bees, visit.frames_of_brood, (visit.has_temper ?1:0), (visit.is_feeding ?1:0), visit.disease_id]).then(function(res) {
-          deferred.resolve(res);
-      }, function (err) {
-          console.error(err);
-      });
 
     });
     return deferred.promise;

@@ -21,7 +21,7 @@
             </label>
           </li>
           <item class="col col-50 col-offset-50 padding">
-            <button type="submit" class="button button-block button-positive" ng-click="createNote(note)">Save Note</button>
+            <button type="submit" class="button button-block button-positive">Save Note</button>
           </item>
         </div>
         </div>
@@ -62,7 +62,7 @@
   <ion-side-menu-content>
     <ion-header-bar class="bar-dark">
       <h1 class="title ion-clipboard">{{visit.id}}</h1>
-      <button menu-toggle="right" class="button button-icon ion-compose"></button>
+      <button menu-toggle="right" class="button button-icon ion-compose" ng-disabled="visit.id=='new'"></button>
     </ion-header-bar>
 
     <ion-content class="has-header">
