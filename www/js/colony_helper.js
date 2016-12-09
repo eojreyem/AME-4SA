@@ -37,14 +37,24 @@ angular.module('ameApp')
     return deferred.promise;
   }
 
-  service.saveColony = function (yardId, colonyNumber, colonyActiveDate, colonyOrigin) {
+  service.saveColony = function (colony) {
     //TODO: check for unique colonyNumber currently active
-    var query = "INSERT INTO Colonies (in_yard_id, number, date_active, origin) VALUES (?,?,?,?)";
-    $cordovaSQLite.execute(db, query, [yardId, colonyNumber, colonyActiveDate, colonyOrigin]).then(function(res) {
-        console.log("INSERT COLONY ID -> " + res.insertId);
-    }, function (err) {
-        console.error(err);
+    service.getColonyByNumber(colony.number).then(function (activeColony){ //check if tag is assigned
+      if (activeColony==null){ //If no active colony is assigned the tag allow new colony create
+        var query = "INSERT INTO Colonies (in_yard_id, number, date_active, origin) VALUES (?,?,?,?)";
+        $cordovaSQLite.execute(db, query, [colony.in_yard_id, colony.number, colony.date_active, colony.origin]).then(function(res) {
+            console.log("INSERT COLONY ID -> " + res.insertId);
+        }, function (err) {
+            console.error(err);
+        });
+      }else{
+        console.log(activeColony); //TODO: tell user there is an active colony w/ that tag in yard X
+        document.getElementById("newColonyNumber").style.color = "red";
+      }
     });
+
+
+
   }
 
   service.getColonyInactiveReasons = function() { //returns reasons a colony might be inactive

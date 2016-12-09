@@ -8,19 +8,19 @@
         <div class="list">
           <label class="item item-input item-stacked-label">
             <span class="input-label">Date Active</span>
-            <button class="button button-outline button-dark" ng-click="openDatePicker()">{{newColonyActiveDate | date:'MMM d, yyyy'}} </button>
+            <button class="button button-outline button-dark" ng-click="openDatePicker()">{{newColony.date_active | date:'MMM d, yyyy'}} </button>
           </label>
           <label class="item item-input item-stacked-label">
             <span class="input-label">Tag Number</span>
-            <input id = "newColonyNumber" min="1" max="999" type="number" placeholder="200" ng-click="changeTextBlack()">
+            <input id="newColonyNumber" ng-model="newColony.number" min="1" max="999" type="number" placeholder="200" ng-click="changeTextBlack()">
           </label>
           <label class="item item-input item-stacked-label">
             <span  class="input-label">Origin</span>
-            <input id = "newColonyOrigin" type="text" placeholder="Note about start of this colony">
+            <input ng-model="newColony.origin" type="text" placeholder="Note about start of this colony">
           </label>
         </div>
         <div class="padding">
-          <button ng-click="createColony()" class="button button-positive button-block">Add Colony  <i class="icon ion-ios-box"></i></button>
+          <button ng-click="createColony(newColony)" class="button button-positive button-block">Add Colony  <i class="icon ion-ios-box"></i></button>
         </div>
     </ion-content>
   </ion-side-menu>

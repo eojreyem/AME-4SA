@@ -6,7 +6,15 @@ angular.module('ameApp')
   var moveColonyPopup = $ionicPopup;
   var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
 
-  $scope.newColonyActiveDate = (new Date(Date.now()-tzoffset)).toISOString().slice(0,-1);
+  var newColony = {
+    in_yard_id: $stateParams.yardId,
+    number: null,
+    date_active: (new Date(Date.now()-tzoffset)).toISOString().slice(0,-1),
+    origin: null,
+    date_inactive: null,
+    reason_inactive_id: null,
+  };
+  $scope.newColony = newColony;
 
   //Load current yard into currentYard
   YardHelper.getYardById($stateParams.yardId).then(function (yard){
@@ -16,11 +24,10 @@ angular.module('ameApp')
     });
   });
 
-
   datePickerObj = {
     callback: function (val) {  //Mandatory
       console.log('Return value from the datepicker popup is : ' + val, new Date(val));
-      $scope.newColonyActiveDate = (new Date(val).toISOString().slice(0,-1));
+      $scope.newColony.date_active = (new Date(val).toISOString().slice(0,-1));
     },
     from: new Date(2014, 1, 1), //Optional
     to: new Date(), //Optional
@@ -37,22 +44,13 @@ angular.module('ameApp')
     document.getElementById("newColonyNumber").style.color = "black";
   }
 
-  $scope.createColony = function() {
-    var newColonyNumber = document.getElementById("newColonyNumber").value;
-    var newColonyOrigin = document.getElementById("newColonyOrigin").value;
-
-    ColonyHelper.getColonyByNumber(newColonyNumber).then(function (colony){ //check if tag is assigned
-      if (colony==null){ //If no active colony is assigned the tag allow new colony create
-        ColonyHelper.saveColony($scope.currentYard.id, newColonyNumber, $scope.newColonyActiveDate, newColonyOrigin);
-        //refresh list of colonies in yard
-        YardHelper.getColoniesInYard($scope.currentYard.id).then(function (colonies){
-          $scope.colonies = colonies;
-        });
-        $ionicSideMenuDelegate.toggleRight();
-      }
-      console.log(colony); //TODO: tell user there is an active colony w/ that tag in yard X
-      document.getElementById("newColonyNumber").style.color = "red";
+  $scope.createColony = function(newColony) {
+    ColonyHelper.saveColony(newColony);
+    //TODO save colony must return a promise, then refresh colonies list.
+    YardHelper.getColoniesInYard($scope.currentYard.id).then(function (colonies){
+      $scope.colonies = colonies;
     });
+    $ionicSideMenuDelegate.toggleRight();
   };
 
   $scope.showMoveColonyPopup = function(colony) {
