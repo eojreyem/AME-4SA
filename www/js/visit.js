@@ -12,6 +12,7 @@ angular.module('ameApp')
     yard_id: $stateParams.yardId,
     colony_id: $stateParams.colonyId,
     queen_id: null, //pull from last visit
+    hive_type_id: null, //pull from last visit
     qty_boxes: null, //pull from last visit
     queen_status_id: null,
     frames_of_bees: null,
@@ -58,7 +59,16 @@ angular.module('ameApp')
   //load visit, yard, and colony
   VisitHelper.getVisitById($stateParams.visitId).then(function(existingVisit){
     if (existingVisit == null){
+      VisitHelper.getLastVisitByColonyId(newVisit.colony_id).then(function(lastVisit){
+        if (lastVisit!=null){
+          newVisit.hive_type_id = lastVisit.hive_type_id;
+          newVisit.queen_id=lastVisit.queen_id;
+          newVisit.qty_boxes=lastVisit.qty_boxes;
+          newVisit.is_feeding=lastVisit.is_feeding;
+        }
+      });
       $scope.visit = newVisit;
+
       /*TODO update fields for new visit.
       queen_id: null, //pull from past visit(s)
       qty_boxes: null, //pull from past visit(s)
