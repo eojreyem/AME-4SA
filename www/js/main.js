@@ -6,13 +6,22 @@
 
 angular.module('ameApp')
 
-.controller('MainCtrl', function($ionicPlatform, $scope, $location, $cordovaSQLite, YardHelper) {
+.controller('MainCtrl', function($ionicPlatform, $scope, $location, $cordovaSQLite, YardHelper, VisitHelper) {
   var newYard = {name:null};
   $scope.newYard = newYard;
 
   //loads a list of yards in 4SA
   $ionicPlatform.ready(function() {
     YardHelper.getAllYards().then(function(yards){
+
+      //DO THIS FOR OTHER YARDS
+      YardHelper.getColoniesInYard(yards[0].id).then(function(colonies){
+        yards[0].numColoniesInYard = colonies.length;
+      })
+      VisitHelper.getLastVisitByYardId(yards[0].id).then(function(lastVisit){
+        yards[0].lastVisit=lastVisit;
+      })
+
 
       $scope.yards = yards;
     });

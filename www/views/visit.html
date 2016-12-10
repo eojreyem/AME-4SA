@@ -71,31 +71,11 @@
           <button class="button col-60 button-block button-outline button-dark" ng-click="openDatePicker()">{{visit.date_time | date:'EEE - MMM d, yyyy'}}</button>
           <button class="button col-40 button-block button-outline button-dark">{{visit.date_time | date:'hh:mm a'}}</button>
         </div>
-        <label class="item item-input">
-          <span class="input-label">Yard</span>
-          <input type="text" disabled ng-model="visit.yardName">
-        </label>
-        <label class="item item-input item-select">
-          <div class="input-label">
-            Hive Type
-          </div>
-          <select>
-            <option ng-repeat="hiveTypes in hiveTypes">{{hiveTypes.type}}</option>
-          </select>
-        </label>
-        <label class="item item-input">
-          <span class="input-label">Hive Bodies</span>
-          <input type="number" ng-model="visit.qty_boxes">
-        </label>
-        <li class="item item-toggle">
-          Feeding
-          <label class="toggle toggle-energized">
-            <input type="checkbox" ng-model="visit.is_feeding">
-            <div class="track">
-              <div class="handle"></div>
-            </div>
-          </label>
-        </li>
+        <p ng-hide="visit.yardName==currentYard.name">Colony was in {{visit.yardName}}</p>
+
+
+
+
         <label class="item item-input item-select">
           <select>
             <option ng-repeat="queen in queens">{{queen.id}}-{{queen.name}}</option>
@@ -112,6 +92,7 @@
             Queen Status
           </div>
         </label>
+
         <label class="item item-input">
           <span class="input-label">F.O.Bees</span>
           <input type="number" ng-model="visit.frames_of_bees">
@@ -131,6 +112,18 @@
         </li>
         <label class="item item-input item-select">
           <div class="input-label">
+            Hive Type
+          </div>
+          <select>
+            <option ng-repeat="hiveTypes in hiveTypes">{{hiveTypes.type}}</option>
+          </select>
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Hive Bodies</span>
+          <input type="number" ng-model="visit.qty_boxes">
+        </label>
+        <label class="item item-input item-select">
+          <div class="input-label">
             Diseases
           </div>
           <select>
@@ -138,6 +131,15 @@
             <option ng-repeat="disease in diseases">{{disease.disease}}</option>
           </select>
         </label>
+        <li class="item item-toggle">
+          Feeding
+          <label class="toggle toggle-energized">
+            <input type="checkbox" ng-model="visit.is_feeding">
+            <div class="track">
+              <div class="handle"></div>
+            </div>
+          </label>
+        </li>
 
         <item class="col col-offset-20 col-60 padding">
           <button class="button button-block button-positive" ng-click='saveVisit(visit)'>Save Visit</button>

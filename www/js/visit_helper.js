@@ -49,6 +49,27 @@ angular.module('ameApp')
     return deferred.promise;
   }
 
+  service.getLastVisitByYardId = function(yardId) { //returns a visit object when given a valid colony ID
+    var deferred = $q.defer();
+    var query = "SELECT * FROM Visits WHERE yard_id = ? ORDER BY date_time DESC LIMIT 1";
+    $cordovaSQLite.execute(db, query, [yardId]).then(function(res) {
+      if (res.rows.length == 0){
+        deferred.resolve(null);
+        console.log("Failed to retreive last visit for yard ID:"+ colonyId);
+      }
+      else {
+        visit = res.rows.item(0);
+        visit.has_temper = Boolean(visit.has_temper)
+        visit.is_feeding = Boolean(visit.is_feeding)
+        deferred.resolve(visit);
+      }
+
+    }, function (err) {
+        console.error(err);
+    });
+    return deferred.promise;
+  }
+
 
   //TODO remove is_reminder on hold.
 
@@ -122,7 +143,7 @@ angular.module('ameApp')
 
   service.getVisitsForColony = function(id) { //returns visits for a given colony
     visits = [];
-    var query = "SELECT * FROM Visits WHERE colony_id = ?";
+    var query = "SELECT * FROM Visits WHERE colony_id = ? ORDER BY date_time DESC";
     $cordovaSQLite.execute(db, query, [id]).then(function(res) {
       if(res.rows.length > 0) {
         for (i = 0; i < res.rows.length; i++) {
@@ -144,7 +165,7 @@ angular.module('ameApp')
     console.log("checking if visit exists");
     service.getVisitById(visit.id).then(function(existingVisit){
       if (existingVisit == null){
-        var query = "INSERT INTO Visits (date_time, yard_id, colony_id, queen_id, hive_type_id, qty_boxes, queen_status_id, frames_of_bees, frames_of_brood, has_temper, is_feeding, disease_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        var query = "INSERT INTO Visits (date_time, yard_id, colony_id, queen_id, hive_type_id, qty_boxes, queen_status_id, frames_of_bees, frames_of_brood, has_temper, is_feeding, disease_id) VALUES (?,?,?,?,?,?,?,?,?,?,?, ?)";
         $cordovaSQLite.execute(db, query, [visit.date_time, visit.yard_id, visit.colony_id, visit.queen_id, visit.hive_type_id, visit.qty_boxes, visit.queen_status_id, visit.frames_of_bees, visit.frames_of_brood, (visit.has_temper ?1:0), (visit.is_feeding ?1:0), visit.disease_id]).then(function(res) {
           deferred.resolve(res.insertId);
         }, function (err) {
