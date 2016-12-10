@@ -49,26 +49,6 @@ angular.module('ameApp')
     return deferred.promise;
   }
 
-  service.getRemindersByColonyId = function(colonyId){ //returns all visit notes with reminders when given a valid colony ID
-    notesWithReminders = [];
-    var deferred = $q.defer();
-    var query = "SELECT * FROM Visit_Notes WHERE is_reminder =1"; //TODO cross reference visit table to get colony specific!
-    $cordovaSQLite.execute(db, query).then(function(res) {
-      if(res.rows.length > 0) {
-        for (i = 0; i < res.rows.length; i++) {
-          console.log("SELECTED -> " + res.rows.item(i));
-          notesWithReminders.push(res.rows.item(i));
-        }
-        deferred.resolve(notesWithReminders);
-
-      } else {
-          console.log("No reminders found for colony");
-      }
-    }, function (err) {
-        console.error(err);
-    });
-    return deferred.promise;
-  };
 
   //TODO remove is_reminder on hold.
 
@@ -158,22 +138,6 @@ angular.module('ameApp')
     });
     return visits;
   };
-
-  service.saveQueen = function (name, colonyId, motherId, origin, dateEmerged, hexColor) {
-    var query = "INSERT INTO Queens (name, in_colony_id, mother_queen_id, origin, date_emerged, mark_color_hex) VALUES (?,?,?,?,?,?)";
-    $cordovaSQLite.execute(db, query, [name, colonyId, motherId, origin, dateEmerged, hexColor]).then(function(res) {
-        console.log("INSERT QUEEN ID -> " + res.insertId);
-    }, function (err) {
-        console.error(err);
-    });
-  }
-
-  service.saveNote = function(note) {
-    var query = "INSERT INTO Visit_Notes (visit_id, note, is_reminder) VALUES (?,?,?)";
-    $cordovaSQLite.execute(db, query, [note.visit_id, note.note, (note.is_reminder ?1:0)]).then(function(res){
-      console.log(res.insertId);
-    })
-  }
 
   service.saveVisit = function (visit) {
     var deferred = $q.defer();

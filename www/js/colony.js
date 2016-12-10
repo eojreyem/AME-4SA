@@ -1,6 +1,6 @@
 angular.module('ameApp')
 
-.controller('ColonyCtrl', function($scope, $location, $ionicPopup, $stateParams, ionicDatePicker, $ionicSideMenuDelegate, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
+.controller('ColonyCtrl', function($scope, $location, $ionicPopup, $stateParams, ionicDatePicker, $ionicSideMenuDelegate, YardHelper, ColonyHelper, QueenHelper, VisitHelper, VisitNotesHelper) {
 
   var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
 
@@ -32,8 +32,9 @@ angular.module('ameApp')
     VisitHelper.getLastVisitByColonyId(colony.id).then(function(lastVisit){
       $scope.lastVisit = lastVisit;
     });
-    VisitHelper.getRemindersByColonyId(colony.id).then(function(reminders){
+    VisitNotesHelper.getRemindersByColonyId(colony.id).then(function(reminders){
       $scope.reminders = reminders;
+      console.log(reminders);
     });
 
     QueenHelper.getQueensInColony(colony.id).then(function(queens){
@@ -46,6 +47,11 @@ angular.module('ameApp')
     });
 
   });
+
+  $scope.dismissReminder = function(reminderNote){
+    console.log("dismissing?");
+    VisitNotesHelper.dismissReminder(reminderNote);
+  }
 
   $scope.showColonyInactivePopup = function(colony) {
     $scope.choice = {};

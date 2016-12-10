@@ -85,11 +85,11 @@
             {{lastVisit.qty_boxes}} boxes tall
           </div>
 
-          <item class="item item-icon-left" ng-repeat="reminder in reminders">
+          <a class="item item-icon-left item-text-wrap" ng-repeat="reminder in reminders" on-hold="dismissReminder(reminder)">
             <i class="icon ion-android-alert"></i>
             {{reminder.note}}
             <!--TODO:Long press to dismiss (remove reminder flag) -->
-          </item>
+          </a>
 
         </div>
 

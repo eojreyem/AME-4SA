@@ -2,7 +2,7 @@
 
 angular.module('ameApp')
 
-.controller('VisitCtrl', function($scope, $location, $stateParams, $ionicSideMenuDelegate, $ionicPopup, ionicDatePicker, YardHelper, ColonyHelper, QueenHelper, VisitHelper) {
+.controller('VisitCtrl', function($scope, $location, $stateParams, $ionicSideMenuDelegate, $ionicPopup, ionicDatePicker, YardHelper, ColonyHelper, QueenHelper, VisitHelper, VisitNotesHelper) {
 
   var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
 
@@ -95,7 +95,7 @@ angular.module('ameApp')
 
   $scope.createNote = function(note) {
     note.visit_id = $scope.visit.id;
-    VisitHelper.saveNote(note);
+    VisitNotesHelper.saveNote(note);
   }
 
   $scope.saveVisit = function(visit) {

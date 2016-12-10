@@ -7,7 +7,7 @@
   <div class="list">
     <a class="item item-icon-left" ng-repeat="yard in yards" on-hold="deleteYard(yard)" ng-click="goToYard(yard)">
       <i class="icon ion-location"></i>
-      {{yard.name}} - {{yard.numColoniesInYard}} <i class="ion-ios-box"></i>
+      {{yard.name}} -  <i class="ion-ios-box"></i>
       <span class="item-note">
         visited {{yard.lastVisit| date:'MMM d, yyyy'}}
       </span>

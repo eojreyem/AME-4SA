@@ -14,11 +14,6 @@ angular.module('ameApp')
   $ionicPlatform.ready(function() {
     YardHelper.getAllYards().then(function(yards){
 
-      YardHelper.getColoniesInYard(yards[0].id).then(function(colonies){
-        //TODO: expand so this works for all yards.
-        yards[0].numColoniesInYard = colonies.length;
-      });
-
       $scope.yards = yards;
     });
   });

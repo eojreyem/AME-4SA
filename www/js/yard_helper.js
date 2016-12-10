@@ -67,6 +67,7 @@ angular.module('ameApp')
 
   service.getColoniesInYard = function(yardId) { //return all active colonies in a yardId
     var deferred = $q.defer();
+    console.log("HEY!");
     colonies = [];
     var query = "SELECT * FROM Colonies WHERE in_yard_id = ? AND date_inactive IS NULL";
     $cordovaSQLite.execute(db, query, [yardId]).then(function(res) {
