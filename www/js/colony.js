@@ -29,6 +29,13 @@ angular.module('ameApp')
   //Load current colony into currentColony
   ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
     $scope.currentColony = colony;
+    VisitHelper.getLastVisitByColonyId(colony.id).then(function(lastVisit){
+      $scope.lastVisit = lastVisit;
+    });
+    VisitHelper.getRemindersByColonyId(colony.id).then(function(reminders){
+      $scope.reminders = reminders;
+    });
+
     QueenHelper.getQueensInColony(colony.id).then(function(queens){
       $scope.queens = queens;
     });

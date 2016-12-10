@@ -78,15 +78,18 @@
         <div class="list">
           <div class="item">
             <!--TODO fill with actual db info-->
-            Nuc, 2 boxes tall
-            <span class="item-note">40</span>
-            <badge class="badge badge-calm ion-female"> </badge>
+            last visit: {{lastVisit.date_time| date:'MMM d, yyyy'}}
           </div>
-          <div class="item item-icon-left">
+          <div class="item">
+            <!--TODO fill with actual db info-->
+            {{lastVisit.qty_boxes}} boxes tall
+          </div>
+
+          <item class="item item-icon-left" ng-repeat="reminder in reminders">
             <i class="icon ion-android-alert"></i>
-            If note(s) with reminder, display!
+            {{reminder.note}}
             <!--TODO:Long press to dismiss (remove reminder flag) -->
-          </div>
+          </item>
 
         </div>
 

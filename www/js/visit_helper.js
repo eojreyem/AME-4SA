@@ -28,6 +28,50 @@ angular.module('ameApp')
     return deferred.promise;
   }
 
+  service.getLastVisitByColonyId = function(colonyId) { //returns a visit object when given a valid colony ID
+    var deferred = $q.defer();
+    var query = "SELECT * FROM Visits WHERE colony_id = ? ORDER BY date_time DESC LIMIT 1";
+    $cordovaSQLite.execute(db, query, [colonyId]).then(function(res) {
+      if (res.rows.length == 0){
+        deferred.resolve(null);
+        console.log("Failed to retreive visit "+ colonyId);
+      }
+      else {
+        visit = res.rows.item(0);
+        visit.has_temper = Boolean(visit.has_temper)
+        visit.is_feeding = Boolean(visit.is_feeding)
+        deferred.resolve(visit);
+      }
+
+    }, function (err) {
+        console.error(err);
+    });
+    return deferred.promise;
+  }
+
+  service.getRemindersByColonyId = function(colonyId){ //returns all visit notes with reminders when given a valid colony ID
+    notesWithReminders = [];
+    var deferred = $q.defer();
+    var query = "SELECT * FROM Visit_Notes WHERE is_reminder =1"; //TODO cross reference visit table to get colony specific!
+    $cordovaSQLite.execute(db, query).then(function(res) {
+      if(res.rows.length > 0) {
+        for (i = 0; i < res.rows.length; i++) {
+          console.log("SELECTED -> " + res.rows.item(i));
+          notesWithReminders.push(res.rows.item(i));
+        }
+        deferred.resolve(notesWithReminders);
+
+      } else {
+          console.log("No reminders found for colony");
+      }
+    }, function (err) {
+        console.error(err);
+    });
+    return deferred.promise;
+  };
+
+  //TODO remove is_reminder on hold.
+
   service.getQueenStatuses = function() { //returns queen statuses
     var deferred = $q.defer();
     statuses = [];
@@ -97,36 +141,36 @@ angular.module('ameApp')
   }
 
   service.getVisitsForColony = function(id) { //returns visits for a given colony
-      visits = [];
-      var query = "SELECT * FROM Visits WHERE colony_id = ?";
-      $cordovaSQLite.execute(db, query, [id]).then(function(res) {
-        if(res.rows.length > 0) {
-          for (i = 0; i < res.rows.length; i++) {
-            console.log("SELECTED -> " + res.rows.item(i));
-            visits.push(res.rows.item(i));
-          }
-
-        } else {
-            console.log("No visits found for colony");
+    visits = [];
+    var query = "SELECT * FROM Visits WHERE colony_id = ?";
+    $cordovaSQLite.execute(db, query, [id]).then(function(res) {
+      if(res.rows.length > 0) {
+        for (i = 0; i < res.rows.length; i++) {
+          console.log("SELECTED -> " + res.rows.item(i));
+          visits.push(res.rows.item(i));
         }
-      }, function (err) {
-          console.error(err);
-      });
-      return visits;
-    };
 
-    service.saveQueen = function (name, colonyId, motherId, origin, dateEmerged, hexColor) {
-      var query = "INSERT INTO Queens (name, in_colony_id, mother_queen_id, origin, date_emerged, mark_color_hex) VALUES (?,?,?,?,?,?)";
-      $cordovaSQLite.execute(db, query, [name, colonyId, motherId, origin, dateEmerged, hexColor]).then(function(res) {
-          console.log("INSERT QUEEN ID -> " + res.insertId);
-      }, function (err) {
-          console.error(err);
-      });
-    }
+      } else {
+          console.log("No visits found for colony");
+      }
+    }, function (err) {
+        console.error(err);
+    });
+    return visits;
+  };
+
+  service.saveQueen = function (name, colonyId, motherId, origin, dateEmerged, hexColor) {
+    var query = "INSERT INTO Queens (name, in_colony_id, mother_queen_id, origin, date_emerged, mark_color_hex) VALUES (?,?,?,?,?,?)";
+    $cordovaSQLite.execute(db, query, [name, colonyId, motherId, origin, dateEmerged, hexColor]).then(function(res) {
+        console.log("INSERT QUEEN ID -> " + res.insertId);
+    }, function (err) {
+        console.error(err);
+    });
+  }
 
   service.saveNote = function(note) {
     var query = "INSERT INTO Visit_Notes (visit_id, note, is_reminder) VALUES (?,?,?)";
-    $cordovaSQLite.execute(db, query, [note.visit_id, note.note, note.is_reminder]).then(function(res){
+    $cordovaSQLite.execute(db, query, [note.visit_id, note.note, (note.is_reminder ?1:0)]).then(function(res){
       console.log(res.insertId);
     })
   }
