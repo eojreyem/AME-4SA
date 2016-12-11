@@ -88,6 +88,21 @@ angular.module('ameApp')
     return deferred.promise;
   };
 
+  service.getHiveType = function(id){
+    var deferred = $q.defer();
+    typei =[];
+    var query = "SELECT * FROM Hive_Types WHERE id = ?"
+    $cordovaSQLite.execute(db, query, [id]).then(function(res) {
+      if(res.rows.length == 1) {
+        typei = res.rows.item(0);
+        deferred.resolve(typei);
+      } else {
+          console.log("Hive Type failed to retreive!");
+      }
+    });
+    return deferred.promise;
+  };
+
   service.getQueenStatuses = function() { //returns queen statuses
     var deferred = $q.defer();
     statuses = [];

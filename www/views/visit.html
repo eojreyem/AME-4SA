@@ -79,15 +79,13 @@
         <label class="item item-input item-select" >
           <div class="input-label">Queen</div>
           <select ng-model="visit.queen_id">
-            <option value="">-- N/A --</option>
-            <option ng-repeat="queen in queens" value="{{queen.id}}">{{queen.id}}-{{queen.name}}</option>
+            <option ng-repeat="queen in queens" value="{{queen.id}}"><b>{{queen.id}}</b> {{queen.name}}</option>
           </select>
         </label>
 
         <label class="item item-input item-select" >
           <div class="input-label">Queen Status</div>
           <select ng-model="visit.queen_status_id">
-            <option value="">-- select --</option>
             <option ng-repeat="status in queenStatuses" value="{{status.id}}">{{status.status}}</option>
           </select>
         </label>
@@ -127,7 +125,6 @@
         <label class="item item-input item-select" >
           <div class="input-label">Diseases</div>
           <select ng-model="visit.disease_id">
-            <option value="">- none noticed -</option>
             <option ng-repeat="disease in diseases" value="{{disease.id}}">{{disease.disease}}</option>
           </select>
         </label>

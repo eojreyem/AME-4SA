@@ -33,6 +33,7 @@ angular.module('ameApp')
   ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
     $scope.currentColony = colony;
     VisitHelper.getLastVisitByColonyId(colony.id).then(function(lastVisit){
+      console.log(lastVisit);
       if (lastVisit!=null){
         $scope.lastVisit=lastVisit;
         console.log("last visit loaded");
@@ -42,14 +43,20 @@ angular.module('ameApp')
             console.log(queen.mark_color_hex);
             document.getElementById("reignQueenColorBtn").style.color = queen.mark_color_hex;
           });
+        }else{
+          $scope.reigningQueen.name = "blank";
         }
         if (lastVisit.queen_status_id!=null){
-          console.log(lastVisit.queen_status_id);
           VisitHelper.getQueenStatus(lastVisit.queen_status_id).then(function(status){
             $scope.lastVisit.queenStatus = status.status;
             if (status.id>2){
               document.getElementById("pastQueenStatus").style.color = 'red';
             }
+          });
+        };
+        if (lastVisit.hive_type_id!=null){
+          VisitHelper.getHiveType(lastVisit.hive_type_id).then(function(type){
+            $scope.lastVisit.hiveType = type.type;
           });
         };
       }

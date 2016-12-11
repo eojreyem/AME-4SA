@@ -73,60 +73,52 @@
       <button menu-toggle="right" class="button button-icon ion-female"></button>
     </ion-header-bar>
     <ion-content class="has-header">
-      <div class="list list-inset">
-        <div class="list">
-          <a class="item item-icon-left item-text-wrap" ng-repeat="reminder in reminders" on-hold="dismissReminder(reminder)">
-            <i class="icon ion-android-alert"></i>
-            {{reminder.note}}
-            <!--TODO:Long press to dismiss (remove reminder flag) -->
-          </a>
 
-          <p>Last visited {{lastVisit.date_time| date:'MMM d, yyyy'}} </p>
-          <div class="item item-icon-left">
-            <i class="icon ion-record" id="reignQueenColorBtn"></i>{{reigningQueen.id}}-{{reigningQueen.name}}
-            <span class="item-note" id="pastQueenStatus">
-              {{lastVisit.queenStatus}}
-            </span>
-          </div>
-          <div class="item">
-            <!--TODO fill with actual db info-->
-            10-frame x <b>{{lastVisit.qty_boxes}}</b> high,
-          </div>
-
-          <div class="row">
-            <div class="col col-50 padding">
-              <button class="button button-outline button-dark button-block" ng-click="goToVisit(lastVisit)">Edit Last Visit</button>
-            </div>
-            <div class="col col-50 padding">
-              <button class="button button-block button-positive" ng-click="newVisit()">New Visit</button>
-            </div>
-
-
-
-          </div>
-
-
-        </div>
-
-
-
-        <div class="divider">
-          About
-        </div>
-        <div class="list">
-          <div class="item item-button-right">
-              Created {{currentColony.date_active| date:'MMM d, yyyy'}}
-              <button class="button button-small button-outline button-dark" ng-click="showColonyInactivePopup(currentColony)">Inactive</button>
-            </div>
-          <div class="item">
-            Origin: {{currentColony.origin}}
-          </div>
-
-        </div>
-
-
-
+      <!--display reminder notes as a list at the top.-->
+      <div class="list">
+        <a class="item item-icon-left item-text-wrap" ng-repeat="reminder in reminders" on-hold="dismissReminder(reminder)">
+          <i class="icon ion-android-alert"></i>
+          {{reminder.note}}
+          <!--TODO:Long press to dismiss (remove reminder flag) -->
+        </a>
       </div>
+
+      <!--Card with a summary of the last visit.-->
+      <div class="card" ng-hide="lastVisit == null">
+        <div class="item item-divider item-icon-right">
+          Visited {{lastVisit.date_time| date:'MMM d, yyyy'}}
+          <i class="icon ion-edit" ng-click="goToVisit(lastVisit)"></i>
+        </div>
+        <div class="item item-icon-left">
+          <i class="icon ion-record" id="reignQueenColorBtn"></i><b>{{reigningQueen.id}}</b> {{reigningQueen.name}}
+          <span class="item-note" id="pastQueenStatus">
+            {{lastVisit.queenStatus}}
+          </span>
+        </div>
+        <div class="item">
+          <!--TODO fill with actual db info-->
+          <b>{{lastVisit.qty_boxes}}</b> boxes
+          <span class="item-note">
+            {{lastVisit.hiveType}}
+          </span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col col-offset-50 col-50 padding">
+          <button class="button button-block button-positive" ng-click="newVisit()">New Visit</button>
+        </div>
+      </div>
+
+      <div class="list">
+        <div class="item item-button-right item-text-wrap">
+            <h3>Created {{currentColony.date_active| date:'MMM d, yyyy'}}</h3>
+            <p>Origin: {{currentColony.origin}}</p>
+            <button class="button button-small button-outline button-dark" ng-click="showColonyInactivePopup(currentColony)">Inactive</button>
+          </div>
+        </div>
+      </div>
+
 
 
     </ion-content>
