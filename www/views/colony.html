@@ -50,7 +50,9 @@
 
   <ion-side-menu-content>
     <ion-header-bar class="bar-dark">
-      <h1 class="title"><i class="icon  ion-ios-box"></i> {{currentColony.number}}</h1>
+      <button class="button button-icon ion-home" ng-click="goHome()">></button>
+      <button class="button button-icon ion-location" ng-click="goToYard()">{{currentYard.name}} ></button>
+      <button class="button button-icon ion-ios-box" ng-click="goToColony()"> {{currentColony.number}}</button>
       <button menu-toggle="right" class="button button-icon ion-female"></button>
     </ion-header-bar>
     <ion-content class="has-header">
@@ -69,10 +71,13 @@
         <item class="item">No Visit History</item>
       </div>
       <div class="card" ng-hide="visits.length==0">
+        <div class="item item-divider item-dark">
+          Past Visits
+        </div>
 
         <div class="button-bar ">
           <a class="button col-20 button-positive" ng-click="changeVisitViewBy(1)" ng-disabled = "visitViewIndex>=visits.length-1"><i class="icon ion-chevron-left"></i> {{visits.length - visitViewIndex -1}}</a>
-          <a class="button button-outline button-dark ion-edit icon-right" ng-click="goToVisit(visits[visitViewIndex])"> Visited {{visits[visitViewIndex].date_time| date:'MMM d, yyyy'}}</a>
+          <a class="button button-outline button-dark ion-edit icon-right" ng-click="goToVisit(visits[visitViewIndex])"> {{visits[visitViewIndex].date_time| date:'MMM d, yyyy'}}</a>
           <a class="button col-20 button-positive" ng-click="changeVisitViewBy(-1)" ng-disabled = "visitViewIndex<=0"> {{visitViewIndex}} <i class="icon ion-chevron-right"></i></a>
         </div>
         <div class="item item-icon-left">
@@ -108,11 +113,7 @@
 
 
     </ion-content>
-    <ion-footer-bar class="bar bar-stable">
-      <button class="button button-icon ion-home" ng-click="goHome()">></button>
-      <button class="button button-icon ion-location" ng-click="goToYard()">{{currentYard.name}} ></button>
-      <div class="col"></div>
-    </ion-footer-bar>
+  
 
   </ion-side-menu-content>
 

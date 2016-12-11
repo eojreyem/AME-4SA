@@ -29,7 +29,8 @@
   <ion-side-menu-content>
 
     <ion-header-bar class="bar-dark">
-      <h1 class="title ion-location"> {{currentYard.name}}</h1>
+      <button class="button button-icon ion-home" ng-click="goHome()">></button>
+      <button class="button button-icon ion-location">{{currentYard.name}}</button>
       <button menu-toggle="right" class="button button-icon ion-ios-box">+</button>
     </ion-header-bar>
 
@@ -58,9 +59,5 @@
 
 
     </ion-content>
-    <ion-footer-bar class="bar bar-stable">
-      <button class="button button-icon ion-home" ng-click="goHome()">></button>
-    </ion-footer-bar>
-
   </ion-side-menu-content>
 </ion-side-menus>
