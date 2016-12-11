@@ -76,31 +76,32 @@
 
 
 
-        <label class="item item-input item-select">
-          <select>
-            <option ng-repeat="queen in queens">{{queen.id}}-{{queen.name}}</option>
+        <label class="item item-input item-select" >
+          <div class="input-label">Queen</div>
+          <select ng-model="visit.queen_id">
+            <option value="">-- N/A --</option>
+            <option ng-repeat="queen in queens" value="{{queen.id}}">{{queen.id}}-{{queen.name}}</option>
           </select>
-          <div class="input-label">
-            Queen
-          </div>
         </label>
-        <label class="item item-input item-select">
-          <select>
-            <option ng-repeat="status in queenStatuses">{{status.status}}</option>
+
+        <label class="item item-input item-select" >
+          <div class="input-label">Queen Status</div>
+          <select ng-model="visit.queen_status_id">
+            <option value="">-- select --</option>
+            <option ng-repeat="status in queenStatuses" value="{{status.id}}">{{status.status}}</option>
           </select>
-          <div class="input-label">
-            Queen Status
-          </div>
         </label>
 
         <label class="item item-input">
           <span class="input-label">F.O.Bees</span>
           <input type="number" ng-model="visit.frames_of_bees">
         </label>
+
         <label class="item item-input">
           <span class="input-label">F.O.Brood</span>
           <input type="number" ng-model="visit.frames_of_brood">
         </label>
+
         <li class="item item-toggle">
           Bad Temper
           <label class="toggle toggle-assertive">
@@ -110,27 +111,27 @@
             </div>
           </label>
         </li>
-        <label class="item item-input item-select">
-          <div class="input-label">
-            Hive Type
-          </div>
-          <select>
-            <option ng-repeat="hiveTypes in hiveTypes">{{hiveTypes.type}}</option>
+
+        <label class="item item-input item-select" >
+          <div class="input-label">Hive Type</div>
+          <select ng-model="visit.hive_type_id">
+            <option ng-repeat="hiveType in hiveTypes" value="{{hiveType.id}}">{{hiveType.type}}</option>
           </select>
         </label>
+
         <label class="item item-input">
           <span class="input-label">Hive Bodies</span>
           <input type="number" ng-model="visit.qty_boxes">
         </label>
-        <label class="item item-input item-select">
-          <div class="input-label">
-            Diseases
-          </div>
-          <select>
-            <option selected>None noticed</option>
-            <option ng-repeat="disease in diseases">{{disease.disease}}</option>
+
+        <label class="item item-input item-select" >
+          <div class="input-label">Diseases</div>
+          <select ng-model="visit.disease_id">
+            <option value="">- none noticed -</option>
+            <option ng-repeat="disease in diseases" value="{{disease.id}}">{{disease.disease}}</option>
           </select>
         </label>
+
         <li class="item item-toggle">
           Feeding
           <label class="toggle toggle-energized">

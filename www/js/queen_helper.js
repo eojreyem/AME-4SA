@@ -9,8 +9,9 @@ angular.module('ameApp')
 
   service.getQueenById = function(id) { //returns a queen object when given a valid ID
     var deferred = $q.defer();
-    var query = "SELECT * FROM Queens WHERE id = " + id;
-    $cordovaSQLite.execute(db, query).then(function(res) {
+    var query = "SELECT * FROM Queens WHERE id = ?";
+    console.log(query);
+    $cordovaSQLite.execute(db, query, [id]).then(function(res) {
       queen = res.rows.item(0);
       deferred.resolve(queen);
     }, function (err) {

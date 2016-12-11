@@ -73,6 +73,21 @@ angular.module('ameApp')
 
   //TODO remove is_reminder on hold.
 
+  service.getQueenStatus = function(id){
+    var deferred = $q.defer();
+    statusi =[];
+    var query = "SELECT * FROM Queen_Statuses WHERE id = ?"
+    $cordovaSQLite.execute(db, query, [id]).then(function(res) {
+      if(res.rows.length == 1) {
+        statusi = res.rows.item(0);
+        deferred.resolve(statusi);
+      } else {
+          console.log("Queen Status failed to retreive!");
+      }
+    });
+    return deferred.promise;
+  };
+
   service.getQueenStatuses = function() { //returns queen statuses
     var deferred = $q.defer();
     statuses = [];

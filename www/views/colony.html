@@ -37,7 +37,7 @@
         <form>
           <div class="list">
             <label class="item">
-              <button class="button item-icon-left button-block button-dark" ng-click="showQueenColorPopup(currentQueen)">Change Mark Color <i class="icon ion-record"  id="queenColorButton"></i></button>
+              <button class="button item-icon-left button-block button-dark" ng-click="showQueenColorPopup()">Change Mark Color <i class="icon ion-record"  id="queenColorButton"></i></button>
             </label>
             <label class="item">
               <span class="label">Emerge Date</span>
@@ -75,26 +75,40 @@
     <ion-content class="has-header">
       <div class="list list-inset">
         <div class="list">
-          <button class="button button-outline button-dark button-block" ng-click="goToVisit(lastVisit)">
-            <!--TODO fill with actual db info-->
-            last visit: {{lastVisit.date_time| date:'MMM d, yyyy'}}
-          </button>
-          <div class="item">
-            <!--TODO fill with actual db info-->
-            10-frame x <b>{{lastVisit.qty_boxes}}</b> high,
-          </div>
-
           <a class="item item-icon-left item-text-wrap" ng-repeat="reminder in reminders" on-hold="dismissReminder(reminder)">
             <i class="icon ion-android-alert"></i>
             {{reminder.note}}
             <!--TODO:Long press to dismiss (remove reminder flag) -->
           </a>
 
+          <p>Last visited {{lastVisit.date_time| date:'MMM d, yyyy'}} </p>
+          <div class="item item-icon-left">
+            <i class="icon ion-record" id="reignQueenColorBtn"></i>{{reigningQueen.id}}-{{reigningQueen.name}}
+            <span class="item-note" id="pastQueenStatus">
+              {{lastVisit.queenStatus}}
+            </span>
+          </div>
+          <div class="item">
+            <!--TODO fill with actual db info-->
+            10-frame x <b>{{lastVisit.qty_boxes}}</b> high,
+          </div>
+
+          <div class="row">
+            <div class="col col-50 padding">
+              <button class="button button-outline button-dark button-block" ng-click="goToVisit(lastVisit)">Edit Last Visit</button>
+            </div>
+            <div class="col col-50 padding">
+              <button class="button button-block button-positive" ng-click="newVisit()">New Visit</button>
+            </div>
+
+
+
+          </div>
+
+
         </div>
 
-        <div class="row">
-          <button class="button button-block button-positive" ng-click="newVisit()">New Visit</button>
-        </div>
+
 
         <div class="divider">
           About

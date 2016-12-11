@@ -40,6 +40,13 @@ angular.module('ameApp')
     templateType: 'modal'       //Optional
   };
 
+  ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
+    $scope.currentColony = colony;
+    QueenHelper.getQueensInColony(colony.id).then(function (){
+      $scope.queens = queens;
+    });
+  })
+
   //get drop down choices
   VisitHelper.getQueenStatuses().then(function (statuses){
     $scope.queenStatuses = statuses;
@@ -68,12 +75,6 @@ angular.module('ameApp')
         }
       });
       $scope.visit = newVisit;
-
-      /*TODO update fields for new visit.
-      queen_id: null, //pull from past visit(s)
-      qty_boxes: null, //pull from past visit(s)
-      is_feeding: false, //pull from past visit(s)
-      */
     }
     else {
       $scope.visit = existingVisit;  //load visit if it already exists
@@ -86,12 +87,7 @@ angular.module('ameApp')
     if ($stateParams.colonyId != $scope.visit.colony_id){
       console.error("Visit is assigned to a different colony!");
     }
-    ColonyHelper.getColonyById($scope.visit.colony_id).then(function (colony){
-      $scope.currentColony = colony;
-      QueenHelper.getQueensInColony(colony.id).then(function (){
-        $scope.queens = queens;
-      });
-    })
+
   });
 
   //Load current yard into currentYard for nav at the bottom.

@@ -33,7 +33,28 @@ angular.module('ameApp')
   ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
     $scope.currentColony = colony;
     VisitHelper.getLastVisitByColonyId(colony.id).then(function(lastVisit){
-      $scope.lastVisit = lastVisit;
+      if (lastVisit!=null){
+        $scope.lastVisit=lastVisit;
+        console.log("last visit loaded");
+        if (lastVisit.queen_id!=null){
+          QueenHelper.getQueenById(lastVisit.queen_id).then(function(queen){
+            $scope.reigningQueen = queen;
+            console.log(queen.mark_color_hex);
+            document.getElementById("reignQueenColorBtn").style.color = queen.mark_color_hex;
+          });
+        }
+        if (lastVisit.queen_status_id!=null){
+          console.log(lastVisit.queen_status_id);
+          VisitHelper.getQueenStatus(lastVisit.queen_status_id).then(function(status){
+            $scope.lastVisit.queenStatus = status.status;
+            if (status.id>2){
+              document.getElementById("pastQueenStatus").style.color = 'red';
+            }
+          });
+        };
+      }
+
+
     });
     VisitNotesHelper.getRemindersByColonyId(colony.id).then(function(reminders){
       $scope.reminders = reminders;
@@ -87,7 +108,7 @@ angular.module('ameApp')
     //TODO: What happens to the queens in that colony?
   };
 
-  $scope.showQueenColorPopup = function(queen) {
+  $scope.showQueenColorPopup = function() {
     var markColors = [
       {text:' (1 or 6) - White', hexcode:'#ffffff', ionicColor: 'light'},
       {text:'  (2 or 7) - Yellow', hexcode:'#ffff00', ionicColor: 'energized'},
@@ -145,7 +166,7 @@ angular.module('ameApp')
           type: 'button-positive',
           onTap: function(e) {
           if ($scope.destination.colonyNum>0) {
-            console.log($scope.destination.colonyNum);
+            e.preventDefault();
             ColonyHelper.getColonyByNumber($scope.destination.colonyNum).then(function (destinationColony){
               //TODO: if destinationColony is not null.
               if (destinationColony!= null){
@@ -154,6 +175,10 @@ angular.module('ameApp')
                 QueenHelper.getQueensInColony($scope.currentColony.id).then(function(queens){
                   $scope.queens = queens;
                 });
+                moveQueenPopup.close();
+              }
+              else{
+                console.log("Enter Valid Colony Number.");
               }
             });
 
