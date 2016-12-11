@@ -25,6 +25,10 @@ angular.module('ameApp')
     mark_color_hex:'#000000', //hexColor
   };
 
+  var visits = [];
+  $scope.visitViewIndex = 0;
+
+
   document.getElementById("queenColorButton").style.color = newQueen.mark_color_hex;
 
   $scope.newQueen = newQueen;
@@ -32,6 +36,13 @@ angular.module('ameApp')
   //Load current colony into currentColony
   ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
     $scope.currentColony = colony;
+    $scope.visits = VisitHelper.getVisitsForColony(colony.id);
+    VisitNotesHelper.getRemindersByColonyId(colony.id).then(function(reminders){
+      $scope.reminders = reminders;
+      console.log(reminders);
+    });
+
+    /*
     VisitHelper.getLastVisitByColonyId(colony.id).then(function(lastVisit){
       console.log(lastVisit);
       if (lastVisit!=null){
@@ -63,21 +74,31 @@ angular.module('ameApp')
 
 
     });
-    VisitNotesHelper.getRemindersByColonyId(colony.id).then(function(reminders){
-      $scope.reminders = reminders;
-      console.log(reminders);
-    });
+    */
 
     QueenHelper.getQueensInColony(colony.id).then(function(queens){
       $scope.queens = queens;
     });
-    $scope.visits = VisitHelper.getVisitsForColony(colony.id);
     //Load colony's yard into currentYard
     YardHelper.getYardById(colony.in_yard_id).then(function (yard){
       $scope.currentYard = yard;
     });
 
   });
+
+  $scope.incVisitView = function(){
+    if ($scope.visitViewIndex<$scope.visits.length-1){
+      $scope.visitViewIndex++;
+    }
+    console.log ("advanced:"+ $scope.visitViewIndex)
+  }
+
+  $scope.decVisitView = function(){
+    if ($scope.visitViewIndex>0){
+      $scope.visitViewIndex--;
+    }
+    console.log ("decreased:"+ $scope.visitViewIndex)
+  }
 
   $scope.dismissReminder = function(reminderNote){
     console.log("dismissing?");
@@ -208,6 +229,7 @@ angular.module('ameApp')
     $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id  + '/queen/' + queen.id);
   }
   $scope.goToVisit = function(visit) {
+    console.log("ID PASSED:" + visit);
     $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id  + '/visit/' + visit.id);
   }
   $scope.goToYard = function() {

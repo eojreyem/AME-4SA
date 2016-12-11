@@ -1,22 +1,4 @@
 <ion-side-menus >
-  <!-- Left menu = Past Visits -->
-  <ion-side-menu side="left">
-    <header class="bar bar-header">
-      <header class="bar bar-header bar-stable bar-dark">
-        <h1 class="title">Past Visits</h1>
-      </header>
-    </header>
-    <ion-content class="has-header">
-      <ion-list>
-
-        <ion-item ng-repeat="visit in visits" ng-click="goToVisit(visit)">
-          <item class="item item-icon-left ion-clipboard">
-            {{visit.date_time | date:'short'}}
-          </item>
-        </ion-item>
-      </ion-list>
-    </ion-content>
-  </ion-side-menu>
 
   <!-- Right menu = Queens -->
   <ion-side-menu side="right">
@@ -68,7 +50,6 @@
 
   <ion-side-menu-content>
     <ion-header-bar class="bar-dark">
-      <button menu-toggle="left" class="button button-icon ion-clipboard"> x{{visits.length}}</button>
       <h1 class="title"><i class="icon  ion-ios-box"></i> {{currentColony.number}}</h1>
       <button menu-toggle="right" class="button button-icon ion-female"></button>
     </ion-header-bar>
@@ -84,22 +65,27 @@
       </div>
 
       <!--Card with a summary of the last visit.-->
-      <div class="card" ng-hide="lastVisit == null">
-        <div class="item item-divider item-icon-right">
-          Visited {{lastVisit.date_time| date:'MMM d, yyyy'}}
-          <i class="icon ion-edit" ng-click="goToVisit(lastVisit)"></i>
+      <div class="card" ng-hide = "visits.length>0">
+        <item class="item">No Visit History</item>
+      </div>
+      <div class="card" ng-hide="visits.length==0">
+
+        <div class="button-bar ">
+          <a class="button col-20 button-dark button-outline" ng-click="incVisitView()" ng-disabled = "visitViewIndex>=visits.length-1"><i class="icon ion-chevron-left"></i> {{visits.length - visitViewIndex -1}}</a>
+          <a class="button button-outline button-dark ion-edit icon-right" ng-click="goToVisit(visits[visitViewIndex])"> Visited {{visits[visitViewIndex].date_time| date:'MMM d, yyyy'}}</a>
+          <a class="button col-20 button-dark button-outline" ng-click="decVisitView()" ng-disabled = "visitViewIndex<=0"> {{visitViewIndex}} <i class="icon ion-chevron-right"></i></a>
         </div>
         <div class="item item-icon-left">
           <i class="icon ion-record" id="reignQueenColorBtn"></i><b>{{reigningQueen.id}}</b> {{reigningQueen.name}}
           <span class="item-note" id="pastQueenStatus">
-            {{lastVisit.queenStatus}}
+            {{visits[visitViewIndex].queenStatus}}
           </span>
         </div>
         <div class="item">
           <!--TODO fill with actual db info-->
-          <b>{{lastVisit.qty_boxes}}</b> boxes
+          <b>{{visits[visitViewIndex].qty_boxes}}</b> boxes
           <span class="item-note">
-            {{lastVisit.hiveType}}
+            {{visits[visitViewIndex].hiveType}}
           </span>
         </div>
       </div>

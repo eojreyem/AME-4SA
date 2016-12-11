@@ -11,7 +11,7 @@
             <button class="button button-outline button-dark" ng-click="openDatePicker()">{{newColony.date_active | date:'MMM d, yyyy'}} </button>
           </label>
           <label class="item item-input item-stacked-label">
-            <span class="input-label ion-ios-pricetags-outline"> Number</span>
+            <span class="input-label ion-ios-pricetag-outline"> Number</span>
             <input id="newColonyNumber" ng-model="newColony.number" min="1" max="999" type="number" placeholder="200" ng-click="changeTextBlack()">
           </label>
           <label class="item item-input item-stacked-label">
@@ -27,21 +27,35 @@
 
   <!-- Main = List Yards & basic info then navigate to them -->
   <ion-side-menu-content>
+
     <ion-header-bar class="bar-dark">
       <h1 class="title ion-location"> {{currentYard.name}}</h1>
       <button menu-toggle="right" class="button button-icon ion-ios-box">+</button>
     </ion-header-bar>
+
     <ion-content class="has-header">
-      <!-- List of Colonies in this yard -->
-      <div class="card padding" ng-repeat="colony in colonies">
-        <a class="item item-icon-left" ng-click="goToColony(colony)" on-hold="showMoveColonyPopup(colony)">
-          <i class="icon ion-ios-box"> {{colony.number}}</i>
-          <span class="item-note">Nuc, 2 boxes</span>
-        </a>
-      </div>
+
       <div class="padding">
-        *long press to move colony
+        <span class = "item-note">*long press to move colony</span>
       </div>
+
+      <!-- List of Colonies in this yard -->
+      <div class="card padding" ng-repeat="colony in colonies" ng-click="goToColony(colony)" on-hold="showMoveColonyPopup(colony)">
+        <div class="item item-icon-left item-stable">
+          <i class="icon ion-ios-pricetag-outline"> {{colony.number}}</i>
+          <div class="row">
+
+            <div class="col-40 col-offset-20">
+              <h2><b>3</b> x 10FR boxes </h2>
+              <p>visited 23 days ago</p>
+            </div>
+            <div class="col-40 col-offset-10">
+              <h2>Queen Seen</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
     </ion-content>
     <ion-footer-bar class="bar bar-stable">
