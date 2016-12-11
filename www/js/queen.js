@@ -7,9 +7,11 @@ angular.module('ameApp')
 
 .controller('QueenCtrl', function($scope, $location, $stateParams, $ionicPopup, ColonyHelper, YardHelper, QueenHelper) {
 
+
   //Load current queen into currentQueen
   QueenHelper.getQueenById($stateParams.queenId).then(function (queen){
     $scope.currentQueen = queen;
+    document.getElementById("queenColorButton").style.color = queen.mark_color_hex;
     //Load her colony into currentColony
     ColonyHelper.getColonyById(queen.in_colony_id).then(function (colony){
       $scope.currentColony = colony;
@@ -19,6 +21,40 @@ angular.module('ameApp')
       });
     });
   });
+
+  $scope.showQueenColorPopup = function(queen) {
+    var markColors = [
+      {text:' (1 or 6) - White', hexcode:'#ffffff', ionicColor: 'light'},
+      {text:'  (2 or 7) - Yellow', hexcode:'#ffff00', ionicColor: 'energized'},
+      {text:' (3 or 7) - Red', hexcode:'#ff3333', ionicColor: 'assertive'},
+      {text:' (4 or 8) - Green', hexcode:'#55cc55', ionicColor: 'balanced'},
+      {text:' (5 or 0) - Blue', hexcode:'#3366ff', ionicColor: 'calm'},
+      {text:' Unmarked ', hexcode:'#000000', ionicColor: 'dark'}]
+
+    $scope.markColors = markColors;
+
+    $scope.hexColor = {};
+      var queenColorPopup = $ionicPopup.show({
+        title: 'Queen Mark Color',
+        template: '<div class="list">                                '+
+                  '  <ion-radio ng-repeat="color in markColors" ng-model="hexColor.hex" ng-value=color.hexcode > <i class="icon ion-record {{color.ionicColor}}"></i>{{color.text}}</ion-radio>'+
+                  '</div>  ',
+        scope: $scope,
+        buttons: [
+          { text: 'Cancel' },
+          { text: 'Select',
+            type: 'button-positive',
+            onTap: function(e) {
+              document.getElementById("queenColorButton").style.color = $scope.hexColor.hex;
+              QueenHelper.updateQueenMark(queen.id, $scope.hexColor.hex)
+
+            }
+          }
+        ]
+      })
+
+  };
+
 
   $scope.showQueenInactivePopup = function(queen) {
     $scope.choice = {};

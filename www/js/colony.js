@@ -22,8 +22,11 @@ angular.module('ameApp')
     mother_queen_id: null, //motherId
     origin: null,
     date_emerged: (new Date(Date.now()-tzoffset)).toISOString().slice(0,-1), //dateEmerged
-    mark_color_hex:null, //hexColor
+    mark_color_hex:'#000000', //hexColor
   };
+
+  document.getElementById("queenColorButton").style.color = newQueen.mark_color_hex;
+
   $scope.newQueen = newQueen;
 
   //Load current colony into currentColony
@@ -82,6 +85,38 @@ angular.module('ameApp')
       })
     });
     //TODO: What happens to the queens in that colony?
+  };
+
+  $scope.showQueenColorPopup = function(queen) {
+    var markColors = [
+      {text:' (1 or 6) - White', hexcode:'#ffffff', ionicColor: 'light'},
+      {text:'  (2 or 7) - Yellow', hexcode:'#ffff00', ionicColor: 'energized'},
+      {text:' (3 or 7) - Red', hexcode:'#ff3333', ionicColor: 'assertive'},
+      {text:' (4 or 8) - Green', hexcode:'#55cc55', ionicColor: 'balanced'},
+      {text:' (5 or 0) - Blue', hexcode:'#3366ff', ionicColor: 'calm'},
+      {text:' Unmarked ', hexcode:'#000000', ionicColor: 'dark'}]
+
+    $scope.markColors = markColors;
+
+    $scope.hexColor = {};
+      var queenColorPopup = $ionicPopup.show({
+        title: 'Queen Mark Color',
+        template: '<div class="list">                                '+
+                  '  <ion-radio ng-repeat="color in markColors" ng-model="hexColor.hex" ng-value=color.hexcode > <i class="icon ion-record {{color.ionicColor}}"></i>{{color.text}}</ion-radio>'+
+                  '</div>  ',
+        scope: $scope,
+        buttons: [
+          { text: 'Cancel' },
+          { text: 'Select',
+            type: 'button-positive',
+            onTap: function(e) {
+              document.getElementById("queenColorButton").style.color = $scope.hexColor.hex;
+              newQueen.mark_color_hex = $scope.hexColor.hex;
+            }
+          }
+        ]
+      })
+
   };
 
   $scope.createQueen = function(newQueen) {

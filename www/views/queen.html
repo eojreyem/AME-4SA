@@ -53,7 +53,7 @@
     <ion-content class="has-header">
 
       <div class="list list-inset">
-        <button class="button button-block button-calm">Change Mark Color</button>
+        <button class="button item-icon-left button-block button-dark" ng-click="showQueenColorPopup(currentQueen)">Change Mark Color <i class="icon ion-record"  id="queenColorButton"></i></button>
         <div class="item">
           <b>Date Emerged:</b> {{currentQueen.date_emerged | date:'MMMM d, yyyy'}}
         </div>

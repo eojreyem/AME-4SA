@@ -27,7 +27,6 @@
             <div class="list">
         <item class="item" ng-repeat="queen in queens" ng-click='goToQueen(queen)' on-hold="showMoveQueenPopup(queen)">
           <label>{{queen.id}} - {{queen.name}}</label>
-          <badge class="badge badge-calm ion-female"> </badge>
         </item>
         <item class="item item-divider">
           <label class="item-note">*long press to move queen</label>
@@ -38,7 +37,7 @@
         <form>
           <div class="list">
             <label class="item">
-              <button class="button button-outline button-dark">Mark Color</button>
+              <button class="button item-icon-left button-block button-dark" ng-click="showQueenColorPopup(currentQueen)">Change Mark Color <i class="icon ion-record"  id="queenColorButton"></i></button>
             </label>
             <label class="item">
               <span class="label">Emerge Date</span>
@@ -82,7 +81,7 @@
           </button>
           <div class="item">
             <!--TODO fill with actual db info-->
-            10-frame x <b>{{lastVisit.qty_boxes}}</b> high, 
+            10-frame x <b>{{lastVisit.qty_boxes}}</b> high,
           </div>
 
           <a class="item item-icon-left item-text-wrap" ng-repeat="reminder in reminders" on-hold="dismissReminder(reminder)">

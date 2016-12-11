@@ -55,6 +55,15 @@ angular.module('ameApp')
     });
   }
 
+  service.updateQueenMark = function (queenId, markColor) {
+    var query = "UPDATE Queens SET mark_color_hex = ? WHERE id = ?";
+    $cordovaSQLite.execute(db, query, [markColor, queenId]).then(function(res) {
+      console.log("changed queen " + queenId+ " color to "+ markColor);
+    }, function (err) {
+        console.error(err);
+    });
+  }
+
   service.updateQueenInactive = function (queenId, reasonId) {
     var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
     date = (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1);
