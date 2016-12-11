@@ -71,12 +71,12 @@
       <div class="card" ng-hide="visits.length==0">
 
         <div class="button-bar ">
-          <a class="button col-20 button-dark button-outline" ng-click="incVisitView()" ng-disabled = "visitViewIndex>=visits.length-1"><i class="icon ion-chevron-left"></i> {{visits.length - visitViewIndex -1}}</a>
+          <a class="button col-20 button-positive" ng-click="changeVisitViewBy(1)" ng-disabled = "visitViewIndex>=visits.length-1"><i class="icon ion-chevron-left"></i> {{visits.length - visitViewIndex -1}}</a>
           <a class="button button-outline button-dark ion-edit icon-right" ng-click="goToVisit(visits[visitViewIndex])"> Visited {{visits[visitViewIndex].date_time| date:'MMM d, yyyy'}}</a>
-          <a class="button col-20 button-dark button-outline" ng-click="decVisitView()" ng-disabled = "visitViewIndex<=0"> {{visitViewIndex}} <i class="icon ion-chevron-right"></i></a>
+          <a class="button col-20 button-positive" ng-click="changeVisitViewBy(-1)" ng-disabled = "visitViewIndex<=0"> {{visitViewIndex}} <i class="icon ion-chevron-right"></i></a>
         </div>
         <div class="item item-icon-left">
-          <i class="icon ion-record" id="reignQueenColorBtn"></i><b>{{reigningQueen.id}}</b> {{reigningQueen.name}}
+          <i class="icon ion-record" id="visitQueenColorBtn"></i><b>{{visitQueen.id}}</b> {{visitQueen.name}}
           <span class="item-note" id="pastQueenStatus">
             {{visits[visitViewIndex].queenStatus}}
           </span>

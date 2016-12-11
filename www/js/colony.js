@@ -25,7 +25,6 @@ angular.module('ameApp')
     mark_color_hex:'#000000', //hexColor
   };
 
-  var visits = [];
   $scope.visitViewIndex = 0;
 
 
@@ -42,40 +41,6 @@ angular.module('ameApp')
       console.log(reminders);
     });
 
-    /*
-    VisitHelper.getLastVisitByColonyId(colony.id).then(function(lastVisit){
-      console.log(lastVisit);
-      if (lastVisit!=null){
-        $scope.lastVisit=lastVisit;
-        console.log("last visit loaded");
-        if (lastVisit.queen_id!=null){
-          QueenHelper.getQueenById(lastVisit.queen_id).then(function(queen){
-            $scope.reigningQueen = queen;
-            console.log(queen.mark_color_hex);
-            document.getElementById("reignQueenColorBtn").style.color = queen.mark_color_hex;
-          });
-        }else{
-          $scope.reigningQueen.name = "blank";
-        }
-        if (lastVisit.queen_status_id!=null){
-          VisitHelper.getQueenStatus(lastVisit.queen_status_id).then(function(status){
-            $scope.lastVisit.queenStatus = status.status;
-            if (status.id>2){
-              document.getElementById("pastQueenStatus").style.color = 'red';
-            }
-          });
-        };
-        if (lastVisit.hive_type_id!=null){
-          VisitHelper.getHiveType(lastVisit.hive_type_id).then(function(type){
-            $scope.lastVisit.hiveType = type.type;
-          });
-        };
-      }
-
-
-    });
-    */
-
     QueenHelper.getQueensInColony(colony.id).then(function(queens){
       $scope.queens = queens;
     });
@@ -86,18 +51,55 @@ angular.module('ameApp')
 
   });
 
-  $scope.incVisitView = function(){
-    if ($scope.visitViewIndex<$scope.visits.length-1){
-      $scope.visitViewIndex++;
-    }
-    console.log ("advanced:"+ $scope.visitViewIndex)
+  $scope.changeVisitViewBy = function(num){
+    console.log("change by " + num);
+      visitIndex = $scope.visitViewIndex;
+      visits = $scope.visits;
+      visitIndex=visitIndex+num;
+      if (visitIndex<0){
+        visitIndex = 0;
+      }
+      if (visitIndex>visits.length-1){
+        visitIndex = visits.length-1;
+      }
+
+      //TODO add names to visit properties
+      if (visits.length>0){
+        if (visits[visitIndex].queen_id!=null){
+          QueenHelper.getQueenById(visits[visitIndex].queen_id).then(function(queen){
+            $scope.visitQueen = queen;
+            document.getElementById("visitQueenColorBtn").style.color = queen.mark_color_hex;
+          });
+        }else{
+          $scope.visitQueen = null;
+        }
+        if (visits[visitIndex].queen_status_id!=null){
+          VisitHelper.getQueenStatus(visits[visitIndex].queen_status_id).then(function(status){
+            visits[visitIndex].queenStatus = status.status;
+            if (status.id>2){
+              document.getElementById("pastQueenStatus").style.color = 'red';
+            }else {
+              document.getElementById("pastQueenStatus").style.color = 'black';
+            }
+          });
+        };
+        if (visits[visitIndex].hive_type_id!=null){
+          VisitHelper.getHiveType(visits[visitIndex].hive_type_id).then(function(type){
+            visits[visitIndex].hiveType = type.type;
+          });
+        };
+      }
+
+
+      $scope.visits = visits;
+      $scope.visitViewIndex = visitIndex;
+
   }
 
   $scope.decVisitView = function(){
     if ($scope.visitViewIndex>0){
       $scope.visitViewIndex--;
     }
-    console.log ("decreased:"+ $scope.visitViewIndex)
   }
 
   $scope.dismissReminder = function(reminderNote){
