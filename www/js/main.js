@@ -13,15 +13,15 @@ angular.module('ameApp')
   //loads a list of yards in 4SA
   $ionicPlatform.ready(function() {
     YardHelper.getAllYards().then(function(yards){
-
-      //DO THIS FOR OTHER YARDS
-      YardHelper.getColoniesInYard(yards[0].id).then(function(colonies){
-        yards[0].numColoniesInYard = colonies.length;
-      })
-      VisitHelper.getLastVisitByYardId(yards[0].id).then(function(lastVisit){
-        yards[0].lastVisit=lastVisit;
-      })
-
+      yards.reduce(function(doesntMatter, yard){
+        //Does the following for each yard in yards
+        YardHelper.getColoniesInYard(yard.id).then(function(Colonies){
+          yard.numColoniesInYard = Colonies.length;
+        })
+        VisitHelper.getLastVisitByYardId(yard.id).then(function(lastVisit){
+          yard.lastVisit=lastVisit;
+        })
+      },0);
 
       $scope.yards = yards;
     });

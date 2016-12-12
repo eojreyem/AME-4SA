@@ -55,7 +55,8 @@ angular.module('ameApp')
     $cordovaSQLite.execute(db, query, [yardId]).then(function(res) {
       if (res.rows.length == 0){
         deferred.resolve(null);
-        console.log("Failed to retreive last visit for yard ID:"+ colonyId);
+        console.log("Failed to retreive last visit for yard ID:"+ yardId);
+        console.log(res);
       }
       else {
         visit = res.rows.item(0);

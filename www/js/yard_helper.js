@@ -20,7 +20,7 @@ angular.module('ameApp')
   }
 
   service.getAllYards = function() { //returns all yards
-    yards =[];
+    var yards =[];
     var deferred = $q.defer();
     var query = "SELECT * FROM Yards";
     $cordovaSQLite.execute(db, query).then(function(res) {
@@ -64,36 +64,10 @@ angular.module('ameApp')
       }
     });
   }
-
-  service.getColoniesAndRecentVisitForYard = function(yardId) {
-    var deferred = $q.defer();
-    coloniesAndVisit = [];
-    var query = "SELECT * FROM "+
-    "(SELECT * FROM Colonies LEFT JOIN Visits ON Visits.colony_id = Colonies.id WHERE Colonies.in_yard_id = ? ORDER BY Visits.date_time ASC)"+
-    " GROUP BY colony_id ORDER BY date_time ASC "
-    console.log(query);
-    $cordovaSQLite.execute(db, query, [yardId]).then(function(res) {
-
-      if(res.rows.length > 0) {
-        for (i = 0; i < res.rows.length; i++) {
-          coloniesAndVisit.push(res.rows.item(i));
-        }
-
-        deferred.resolve(coloniesAndVisit);
-      }else{
-        deferred.resolve(null);
-      }
-      console.log(res);
-    }, function (err) {
-      console.error(err);
-    });
-    return deferred.promise;
-  }
-
-
+  
   service.getColoniesInYard = function(yardId) { //return all active colonies in a yardId
     var deferred = $q.defer();
-    colonies = [];
+    var colonies = [];
     var query = "SELECT * FROM Colonies WHERE in_yard_id = ? AND date_inactive IS NULL";
     $cordovaSQLite.execute(db, query, [yardId]).then(function(res) {
       if(res.rows.length > 0) {

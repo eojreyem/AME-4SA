@@ -1,7 +1,7 @@
 
 angular.module('ameApp')
 
-.controller('YardCtrl', function($scope, $ionicPopup, $stateParams, $location, $cordovaSQLite, $ionicSideMenuDelegate, ColonyHelper, YardHelper, ionicDatePicker) {
+.controller('YardCtrl', function($scope, $ionicPopup, $stateParams, $location, $cordovaSQLite, $ionicSideMenuDelegate, ColonyHelper, YardHelper, VisitHelper, ionicDatePicker) {
 
   var moveColonyPopup = $ionicPopup;
   var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
@@ -20,9 +20,15 @@ angular.module('ameApp')
   YardHelper.getYardById($stateParams.yardId).then(function (yard){
     $scope.currentYard = yard;
 
-    YardHelper.getColoniesAndRecentVisitForYard(yard.id).then(function (coloniesWVisit){
-      $scope.colonies = coloniesWVisit
-      console.log(coloniesWVisit);
+    YardHelper.getColoniesInYard(yard.id).then(function (colonies){
+      colonies.reduce(function(doesntMatter, colony){
+        VisitHelper.getLastVisitByColonyId(colony.id).then(function(lastVisit){
+          colony.qty_boxes = lastVisit.qty_boxes;
+          colony.last_visit_date_time= lastVisit.date_time;
+        })
+      })
+
+      $scope.colonies = colonies
     });
 
   });
