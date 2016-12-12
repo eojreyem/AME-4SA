@@ -71,14 +71,18 @@
         <item class="item">No Visit History</item>
       </div>
       <div class="card" ng-hide="visits.length==0">
-        <div class="item item-divider item-dark">
-          Past Visits
+        <div class="item item-divider item-dark text-center">
+          <b>{{visits.length}} Visits</b>
         </div>
 
         <div class="button-bar ">
-          <a class="button col-20 button-positive" ng-click="changeVisitViewBy(1)" ng-disabled = "visitViewIndex>=visits.length-1"><i class="icon ion-chevron-left"></i> {{visits.length - visitViewIndex -1}}</a>
-          <a class="button button-outline button-dark ion-edit icon-right" ng-click="goToVisit(visits[visitViewIndex])"> {{visits[visitViewIndex].date_time| date:'MMM d, yyyy'}}</a>
-          <a class="button col-20 button-positive" ng-click="changeVisitViewBy(-1)" ng-disabled = "visitViewIndex<=0"> {{visitViewIndex}} <i class="icon ion-chevron-right"></i></a>
+          <a class="button col-33 button-positive icon-left ion-chevron-left" ng-click="changeVisitViewBy(1)" ng-disabled = "visitViewIndex>=visits.length-1"> Older</a>
+          <a class="button button-outline button-dark ion-edit icon-right" ng-click="goToVisit(visits[visitViewIndex])"> Edit </a>
+          <a class="button col-33 button-positive icon-right ion-chevron-right" ng-click="changeVisitViewBy(-1)" ng-disabled = "visitViewIndex<=0"> Newer </a>
+        </div>
+        <div class="item">
+          {{visits[visitViewIndex].date_time| date:'MMM d, yyyy @ hh:mm a'}}
+          <span class="item-note"> days ago </span>
         </div>
         <div class="item item-icon-left">
           <i class="icon ion-record" id="visitQueenColorBtn"></i><b>{{visitQueen.id}}</b> {{visitQueen.name}}
@@ -102,18 +106,19 @@
       </div>
 
       <div class="list">
+
         <div class="item item-button-right item-text-wrap">
+          <button class="button button-small button-outline button-dark" ng-click="showColonyInactivePopup(currentColony)">Inactive</button>
             <h3>Created {{currentColony.date_active| date:'MMM d, yyyy'}}</h3>
             <p>Origin: {{currentColony.origin}}</p>
-            <button class="button button-small button-outline button-dark" ng-click="showColonyInactivePopup(currentColony)">Inactive</button>
+
           </div>
         </div>
       </div>
 
-
-
     </ion-content>
-  
+
+
 
   </ion-side-menu-content>
 

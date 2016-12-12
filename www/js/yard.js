@@ -19,9 +19,12 @@ angular.module('ameApp')
   //Load current yard into currentYard
   YardHelper.getYardById($stateParams.yardId).then(function (yard){
     $scope.currentYard = yard;
-    YardHelper.getColoniesInYard(yard.id).then(function (colonies){
-      $scope.colonies = colonies;
+
+    YardHelper.getColoniesAndRecentVisitForYard(yard.id).then(function (coloniesWVisit){
+      $scope.colonies = coloniesWVisit
+      console.log(coloniesWVisit);
     });
+
   });
 
   datePickerObj = {
