@@ -27,10 +27,10 @@ angular.module('ameApp')
             if (lastVisit != null){
               colony.qty_boxes = lastVisit.qty_boxes;
               colony.last_visit_date_time= lastVisit.date_time;
-            }
-          })
-        })
-        $scope.colonies = colonies
+            };
+          });
+        },0);
+        $scope.colonies = colonies;
       }
     });
 
@@ -59,10 +59,21 @@ angular.module('ameApp')
   $scope.createColony = function(newColony) {
     ColonyHelper.saveColony(newColony).then(function(insertId){
       if (insertId!=null){
+        newColony.id = insertId;
         $scope.colonies.push(newColony);
         $ionicSideMenuDelegate.toggleRight();
       }
     });
+  };
+
+  //custom sort function for ng-repeat to put nulls on top, then sort by date.
+  $scope.nullsOnTop = function (A){
+    if (A.last_visit_date_time == null){
+      return -1;
+    }
+    else {
+      return A.last_visit_date_time;
+    }
   };
 
   $scope.showMoveColonyPopup = function(colony) {

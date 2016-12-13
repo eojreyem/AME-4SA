@@ -15,7 +15,8 @@ angular.module('ameApp')
     closeOnSelect: false,       //Optional
     templateType: 'modal'       //Optional
   };
-
+  var qqq = [];
+  $scope.queens = qqq;
   var newQueen = {
     name: null,
     in_colony_id: $stateParams.colonyId,
@@ -96,12 +97,6 @@ angular.module('ameApp')
 
   }
 
-  $scope.decVisitView = function(){
-    if ($scope.visitViewIndex>0){
-      $scope.visitViewIndex--;
-    }
-  }
-
   $scope.dismissReminder = function(reminderNote){
     console.log("dismissing?");
     VisitNotesHelper.dismissReminder(reminderNote);
@@ -171,9 +166,14 @@ angular.module('ameApp')
   };
 
   $scope.createQueen = function(newQueen) {
-    QueenHelper.saveQueen(newQueen);
+    QueenHelper.saveQueen(newQueen).then(function(insertId){
+      if (insertId !=null){
+        newQueen.id = insertId;
+        $scope.queens.push(newQueen);
+      }
+    });
     //TODO saveQueen must return promise, then refresh queen list
-    $ionicSideMenuDelegate.toggleRight();
+
   };
 
 

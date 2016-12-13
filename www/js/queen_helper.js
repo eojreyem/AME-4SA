@@ -39,13 +39,16 @@ angular.module('ameApp')
   }
 
   service.saveQueen = function (queen) {
+    var deferred = $q.defer();
     // TODO: test for queen name duplicates
     var query = "INSERT INTO Queens (name, in_colony_id, mother_queen_id, origin, date_emerged, mark_color_hex) VALUES (?,?,?,?,?,?)";
     $cordovaSQLite.execute(db, query, [queen.name, queen.in_colony_id, queen.mother_queen_id, queen.origin, queen.date_emerged, queen.mark_color_hex]).then(function(res) {
         console.log("INSERT QUEEN ID -> " + res.insertId);
+        deferred.resolve(res.insertId);
     }, function (err) {
         console.error(err);
     });
+    return deferred.promise;
   }
 
   service.updateQueenColony = function (queenId, colonyId) {
