@@ -10,7 +10,6 @@ angular
 ])
 
 .run(function($ionicPlatform, $cordovaSQLite){
-  console.log('not ready')
   $ionicPlatform.ready(function() {
     if (window.cordova) {
       db = $cordovaSQLite.openDB({name: 'AME_4SA.db', location: 'default'}); //device
@@ -18,7 +17,6 @@ angular
       db = window.openDatabase("AME_4SA.db", '1', 'my', 1024 * 1024 * 100); // browser
     }
 
-    console.log(db.toString( ));
     //TODO: remove these drop statements and do an Insert if not exist.
     $cordovaSQLite.execute(db, "DROP TABLE Queen_Statuses");
     $cordovaSQLite.execute(db, "DROP TABLE Hive_Types");

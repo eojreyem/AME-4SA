@@ -194,7 +194,6 @@ angular.module('ameApp')
 
   service.saveVisit = function (visit) {
     var deferred = $q.defer();
-    console.log("checking if visit exists");
     service.getVisitById(visit.id).then(function(existingVisit){
       if (existingVisit == null){
         var query = "INSERT INTO Visits (date_time, yard_id, colony_id, queen_id, hive_type_id, qty_boxes, queen_status_id, frames_of_bees, frames_of_brood, has_temper, is_feeding, disease_id) VALUES (?,?,?,?,?,?,?,?,?,?,?, ?)";

@@ -38,12 +38,13 @@ angular.module('ameApp')
   }
 
   service.saveColony = function (colony) {
+    var deferred = $q.defer();
     service.getColonyByNumber(colony.number).then(function (activeColony){ //check if tag is assigned
       if (activeColony==null){ //If no active colony is assigned the tag allow new colony create
         var query = "INSERT INTO Colonies (in_yard_id, number, date_active, origin) VALUES (?,?,?,?)";
         $cordovaSQLite.execute(db, query, [colony.in_yard_id, colony.number, colony.date_active, colony.origin]).then(function(res) {
             console.log("INSERT COLONY ID -> " + res.insertId);
-            console.log(res);
+            deferred.resolve(res.insertId);
         }, function (err) {
             console.error(err);
         });
@@ -52,7 +53,7 @@ angular.module('ameApp')
         document.getElementById("newColonyNumber").style.color = "red";
       }
     });
-
+    return deferred.promise;
   }
 
   service.getColonyInactiveReasons = function() { //returns reasons a colony might be inactive

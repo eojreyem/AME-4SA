@@ -23,7 +23,6 @@ angular.module('ameApp')
     YardHelper.getColoniesInYard(yard.id).then(function (colonies){
       if (colonies!=null){
         colonies.reduce(function(doesntMatter, colony){
-          console.log(colony);
           VisitHelper.getLastVisitByColonyId(colony.id).then(function(lastVisit){
             if (lastVisit != null){
               colony.qty_boxes = lastVisit.qty_boxes;
@@ -58,13 +57,12 @@ angular.module('ameApp')
   }
 
   $scope.createColony = function(newColony) {
-    ColonyHelper.saveColony(newColony);
-    //TODO save colony must return a promise, then refresh colonies list.
-    /*
-    YardHelper.getColoniesInYard($scope.currentYard.id).then(function (colonies){
-      $scope.colonies = colonies;
-    }); */
-    $ionicSideMenuDelegate.toggleRight();
+    ColonyHelper.saveColony(newColony).then(function(insertId){
+      if (insertId!=null){
+        $scope.colonies.push(newColony);
+        $ionicSideMenuDelegate.toggleRight();
+      }
+    });
   };
 
   $scope.showMoveColonyPopup = function(colony) {
