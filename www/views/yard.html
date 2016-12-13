@@ -51,12 +51,15 @@
           <div class="row" >
 
             <div class="col-40 col-offset-20">
-              <h2 ><b>{{colony.qty_boxes}}</b> x 10FR boxes </h2>
-              <p>visited {{colony.last_visit_date_time | date:'MMM d, yy'}}</p>
+              <h2 ng-hide="colony.qty_boxes == null"><b>{{colony.qty_boxes}}</b> x {{colony.last_hive_type}} boxes </h2>
+              <p ng-show="colony.last_visit_date_time == null">Never </p><p>Visited {{colony.last_visit_date_time | date:'MMM d, yy'}}</p>
             </div>
-            <div class="col-40 col-offset-10">
-              <h2git >Queen Seen</h2>
+
+            <div class="col-40 col-offset-20">
+              <h2><b>{{colony.last_queen_status}}</b></h2>
+              <p>{{colony.last_disease}}</p>
             </div>
+
           </div>
         </div>
       </div>

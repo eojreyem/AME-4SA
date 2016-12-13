@@ -25,8 +25,14 @@ angular.module('ameApp')
         colonies.reduce(function(doesntMatter, colony){
           VisitHelper.getLastVisitByColonyId(colony.id).then(function(lastVisit){
             if (lastVisit != null){
+
               colony.qty_boxes = lastVisit.qty_boxes;
               colony.last_visit_date_time= lastVisit.date_time;
+              colony.last_queen_status = lastVisit.queen_status;
+              colony.last_hive_type = lastVisit.hive_type;
+              colony.last_disease = lastVisit.disease;
+              console.log(colony);
+
             };
           });
         },0);

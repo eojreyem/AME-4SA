@@ -31,7 +31,13 @@ angular.module('ameApp')
 
   service.getLastVisitByColonyId = function(colonyId) { //returns a visit object when given a valid colony ID
     var deferred = $q.defer();
-    var query = "SELECT * FROM Visits WHERE colony_id = ? ORDER BY date_time DESC LIMIT 1";
+    console.log(colonyId);
+    var query = "SELECT Visits.*, Hive_Types.type AS hive_type, Queen_Statuses.status AS queen_status, Diseases.disease AS disease FROM Visits "+
+                "LEFT JOIN Hive_Types ON Visits.hive_type_id = Hive_Types.id "+
+                "LEFT JOIN Queen_Statuses ON Visits.queen_status_id = queen_status_id "+
+                "LEFT JOIN Diseases ON Visits.disease_id = Diseases.id "+
+                "WHERE colony_id = ? ORDER BY date_time DESC LIMIT 1";
+                console.log(query);
     $cordovaSQLite.execute(db, query, [colonyId]).then(function(res) {
       if (res.rows.length == 0){
         deferred.resolve(null);
@@ -53,7 +59,8 @@ angular.module('ameApp')
   service.getLastVisitByYardId = function(yardId) { //returns a visit object when given a valid colony ID
     var visit = [];
     var deferred = $q.defer();
-    var query = "SELECT * FROM Visits WHERE yard_id = ? ORDER BY date_time DESC LIMIT 1";
+    var query = "SELECT date_time FROM Visits "+
+                "WHERE yard_id = ? ORDER BY date_time DESC LIMIT 1";
     $cordovaSQLite.execute(db, query, [yardId]).then(function(res) {
       if (res.rows.length == 0){
         deferred.resolve(null);
