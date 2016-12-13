@@ -27,9 +27,6 @@ angular
     $cordovaSQLite.execute(db, "DROP TABLE Diseases");
     $cordovaSQLite.execute(db, "DROP TABLE Data_Types");
 
-
-
-
     //Tables of data
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Yards (id INTEGER PRIMARY KEY, name TEXT)");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Visit_Notes (id INTEGER PRIMARY KEY, visit_id INTEGER, note TEXT, is_reminder INTEGER)");

@@ -21,14 +21,18 @@ angular.module('ameApp')
     $scope.currentYard = yard;
 
     YardHelper.getColoniesInYard(yard.id).then(function (colonies){
-      colonies.reduce(function(doesntMatter, colony){
-        VisitHelper.getLastVisitByColonyId(colony.id).then(function(lastVisit){
-          colony.qty_boxes = lastVisit.qty_boxes;
-          colony.last_visit_date_time= lastVisit.date_time;
+      if (colonies!=null){
+        colonies.reduce(function(doesntMatter, colony){
+          console.log(colony);
+          VisitHelper.getLastVisitByColonyId(colony.id).then(function(lastVisit){
+            if (lastVisit != null){
+              colony.qty_boxes = lastVisit.qty_boxes;
+              colony.last_visit_date_time= lastVisit.date_time;
+            }
+          })
         })
-      })
-
-      $scope.colonies = colonies
+        $scope.colonies = colonies
+      }
     });
 
   });

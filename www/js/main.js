@@ -16,7 +16,9 @@ angular.module('ameApp')
       yards.reduce(function(doesntMatter, yard){
         //Does the following for each yard in yards
         YardHelper.getColoniesInYard(yard.id).then(function(Colonies){
-          yard.numColoniesInYard = Colonies.length;
+          if (Colonies!=null){            
+            yard.numColoniesInYard = Colonies.length;
+          }
         })
         VisitHelper.getLastVisitByYardId(yard.id).then(function(lastVisit){
           yard.lastVisit=lastVisit;
@@ -51,9 +53,9 @@ angular.module('ameApp')
     //TODO: archive yards instead of deleting.
   }
 
-/*  $scope.dropColonies = function (){
+  $scope.dropColonies = function (){
     $cordovaSQLite.execute(db, "DROP TABLE Colonies"); //Use to remove a table
-  } */
+  }
   $scope.dropQueens = function (){
     $cordovaSQLite.execute(db, "DROP TABLE Queens"); //Use to remove a table
   }

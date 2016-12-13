@@ -14,6 +14,7 @@ angular.module('ameApp')
       if (res.rows.length == 0){
         deferred.resolve(null);
         console.log("Failed to retreive visit "+ id);
+        console.log(res);
       }
       else {
         visit = res.rows.item(0);
@@ -34,7 +35,7 @@ angular.module('ameApp')
     $cordovaSQLite.execute(db, query, [colonyId]).then(function(res) {
       if (res.rows.length == 0){
         deferred.resolve(null);
-        console.log("Failed to retreive visit "+ colonyId);
+        console.log("No visits from colony "+ colonyId);
       }
       else {
         visit = res.rows.item(0);
@@ -50,13 +51,13 @@ angular.module('ameApp')
   }
 
   service.getLastVisitByYardId = function(yardId) { //returns a visit object when given a valid colony ID
+    var visit = [];
     var deferred = $q.defer();
     var query = "SELECT * FROM Visits WHERE yard_id = ? ORDER BY date_time DESC LIMIT 1";
     $cordovaSQLite.execute(db, query, [yardId]).then(function(res) {
       if (res.rows.length == 0){
         deferred.resolve(null);
-        console.log("Failed to retreive last visit for yard ID:"+ yardId);
-        console.log(res);
+        console.log("No last visit for yard ID:"+ yardId);
       }
       else {
         visit = res.rows.item(0);
@@ -76,7 +77,7 @@ angular.module('ameApp')
 
   service.getQueenStatus = function(id){
     var deferred = $q.defer();
-    statusi =[];
+    var statusi =[];
     var query = "SELECT * FROM Queen_Statuses WHERE id = ?"
     $cordovaSQLite.execute(db, query, [id]).then(function(res) {
       if(res.rows.length == 1) {
@@ -91,7 +92,7 @@ angular.module('ameApp')
 
   service.getHiveType = function(id){
     var deferred = $q.defer();
-    typei =[];
+    var typei =[];
     var query = "SELECT * FROM Hive_Types WHERE id = ?"
     $cordovaSQLite.execute(db, query, [id]).then(function(res) {
       if(res.rows.length == 1) {
@@ -106,7 +107,7 @@ angular.module('ameApp')
 
   service.getQueenStatuses = function() { //returns queen statuses
     var deferred = $q.defer();
-    statuses = [];
+    var statuses = [];
     var query = "SELECT * FROM Queen_Statuses";
     $cordovaSQLite.execute(db, query).then(function(res) {
       if(res.rows.length > 0) {
@@ -123,7 +124,7 @@ angular.module('ameApp')
 
   service.getHiveTypes = function() { //returns hive types
     var deferred = $q.defer();
-    htypes = [];
+    var htypes = [];
     var query = "SELECT * FROM Hive_Types";
     $cordovaSQLite.execute(db, query).then(function(res) {
       if(res.rows.length > 0) {
@@ -140,7 +141,7 @@ angular.module('ameApp')
 
   service.getDataTypes = function() { //returns data collection types
     var deferred = $q.defer();
-    dtypes = [];
+    var dtypes = [];
     var query = "SELECT * FROM Data_Types";
     $cordovaSQLite.execute(db, query).then(function(res) {
       if(res.rows.length > 0) {
@@ -157,7 +158,7 @@ angular.module('ameApp')
 
   service.getDiseases = function() { //returns diseases
     var deferred = $q.defer();
-    diseases = [];
+    var diseases = [];
     var query = "SELECT * FROM Diseases";
     $cordovaSQLite.execute(db, query).then(function(res) {
       if(res.rows.length > 0) {
@@ -173,7 +174,7 @@ angular.module('ameApp')
   }
 
   service.getVisitsForColony = function(id) { //returns visits for a given colony
-    visits = [];
+    var visits = [];
     var query = "SELECT * FROM Visits WHERE colony_id = ? ORDER BY date_time DESC";
     $cordovaSQLite.execute(db, query, [id]).then(function(res) {
       if(res.rows.length > 0) {
