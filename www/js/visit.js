@@ -80,6 +80,7 @@ angular.module('ameApp')
       });
     }
     else {
+      console.log(existingVisit);
       $scope.visit = existingVisit;  //load visit if it already exists
     }
     //Load visit colony, note - this is different than the current Yard used for nav at the bottom.

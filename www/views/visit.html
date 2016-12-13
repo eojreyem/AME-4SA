@@ -88,9 +88,7 @@
 
         <label class="item item-input item-select" >
           <div class="input-label">Queen Status</div>
-          <select ng-model="visit.queen_status_id">
-            <option ng-repeat="status in queenStatuses" value="{{status.id}}">{{status.status}}</option>
-          </select>
+          <select ng-model="visit.queen_status_id" ng-options="status.id as status.status for status in queenStatuses">{{status.status}}</select>
         </label>
 
         <label class="item item-input">
@@ -115,9 +113,7 @@
 
         <label class="item item-input item-select" >
           <div class="input-label">Hive Type</div>
-          <select ng-model="visit.hive_type_id">
-            <option ng-repeat="hiveType in hiveTypes" value="{{hiveType.id}}">{{hiveType.type}}</option>
-          </select>
+          <select ng-model="visit.hive_type_id" ng-options="hiveType.id as hiveType.type for hiveType in hiveTypes">          </select>
         </label>
 
         <label class="item item-input">
@@ -127,9 +123,7 @@
 
         <label class="item item-input item-select" >
           <div class="input-label">Diseases</div>
-          <select ng-model="visit.disease_id">
-            <option ng-repeat="disease in diseases" value="{{disease.id}}">{{disease.disease}}</option>
-          </select>
+          <select ng-model="visit.disease_id" ng-options="disease.id as disease.disease for disease in diseases">       </select>
         </label>
 
         <li class="item item-toggle">
