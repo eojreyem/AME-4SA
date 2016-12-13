@@ -75,14 +75,11 @@ angular.module('ameApp')
           $scope.visitQueen = null;
         }
         if (visits[visitIndex].queen_status_id!=null){
-          VisitHelper.getQueenStatus(visits[visitIndex].queen_status_id).then(function(status){
-            visits[visitIndex].queenStatus = status.status;
-            if (status.id>2){
-              document.getElementById("pastQueenStatus").style.color = 'red';
-            }else {
-              document.getElementById("pastQueenStatus").style.color = 'black';
-            }
-          });
+          if (visits[visitIndex].queen_status_id>2){
+            document.getElementById("pastQueenStatus").style.color = 'red';
+          }else {
+            document.getElementById("pastQueenStatus").style.color = 'black';
+          }
         };
         if (visits[visitIndex].hive_type_id!=null){
           VisitHelper.getHiveType(visits[visitIndex].hive_type_id).then(function(type){

@@ -50,13 +50,15 @@ angular.module('ameApp')
   //get drop down choices
   VisitHelper.getQueenStatuses().then(function (statuses){
     $scope.queenStatuses = statuses;
+    console.log(statuses);
   });
   VisitHelper.getHiveTypes().then(function (hiveTypes){
-    console.log(hiveTypes);
     $scope.hiveTypes = hiveTypes;
+    console.log(hiveTypes);
   });
   VisitHelper.getDiseases().then(function (diseases){
     $scope.diseases = diseases;
+    console.log(diseases);
   });
   VisitHelper.getDataTypes().then(function (dataTypes){
     $scope.dataTypes = dataTypes;
@@ -65,6 +67,7 @@ angular.module('ameApp')
 
   //load visit, yard, and colony
   VisitHelper.getVisitById($stateParams.visitId).then(function(existingVisit){
+    console.log(existingVisit);
     if (existingVisit == null){
       VisitHelper.getLastVisitByColonyId(newVisit.colony_id).then(function(lastVisit){
         if (lastVisit!=null){
@@ -73,8 +76,8 @@ angular.module('ameApp')
           newVisit.qty_boxes=lastVisit.qty_boxes;
           newVisit.is_feeding=lastVisit.is_feeding;
         }
+        $scope.visit = newVisit;
       });
-      $scope.visit = newVisit;
     }
     else {
       $scope.visit = existingVisit;  //load visit if it already exists

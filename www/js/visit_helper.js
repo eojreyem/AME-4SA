@@ -34,7 +34,7 @@ angular.module('ameApp')
     console.log(colonyId);
     var query = "SELECT Visits.*, Hive_Types.type AS hive_type, Queen_Statuses.status AS queen_status, Diseases.disease AS disease FROM Visits "+
                 "LEFT JOIN Hive_Types ON Visits.hive_type_id = Hive_Types.id "+
-                "LEFT JOIN Queen_Statuses ON Visits.queen_status_id = queen_status_id "+
+                "LEFT JOIN Queen_Statuses ON Visits.queen_status_id = Queen_Statuses.id "+
                 "LEFT JOIN Diseases ON Visits.disease_id = Diseases.id "+
                 "WHERE colony_id = ? ORDER BY date_time DESC LIMIT 1";
                 console.log(query);
@@ -80,22 +80,6 @@ angular.module('ameApp')
   }
 
 
-  //TODO remove is_reminder on hold.
-
-  service.getQueenStatus = function(id){
-    var deferred = $q.defer();
-    var statusi =[];
-    var query = "SELECT * FROM Queen_Statuses WHERE id = ?"
-    $cordovaSQLite.execute(db, query, [id]).then(function(res) {
-      if(res.rows.length == 1) {
-        statusi = res.rows.item(0);
-        deferred.resolve(statusi);
-      } else {
-          console.log("Queen Status failed to retreive!");
-      }
-    });
-    return deferred.promise;
-  };
 
   service.getHiveType = function(id){
     var deferred = $q.defer();
