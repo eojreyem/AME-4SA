@@ -16,7 +16,7 @@ angular.module('ameApp')
     templateType: 'modal'       //Optional
   };
   var qqq = [];
-  $scope.queens = qqq;
+  $scope.queens = [];
   var newQueen = {
     name: null,
     in_colony_id: $stateParams.colonyId,
@@ -164,7 +164,9 @@ angular.module('ameApp')
     QueenHelper.saveQueen(newQueen).then(function(insertId){
       if (insertId !=null){
         newQueen.id = insertId;
-        $scope.queens.push(newQueen);
+        QueenHelper.getQueensInColony($scope.currentColony.id).then(function(queens){
+          $scope.queens = queens;
+        });
       }
     });
     //TODO saveQueen must return promise, then refresh queen list
