@@ -67,34 +67,34 @@
       </div>
 
       <!--Card with a summary of the last visit.-->
-      <div class="card" ng-hide = "visits.length>0">
+      <div class="card" ng-hide = "numOfVisits>0">
         <item class="item">No Visit History</item>
       </div>
-      <div class="card" ng-hide="visits.length==0">
+      <div class="card" ng-hide="numOfVisits==0">
         <div class="item item-divider item-dark text-center">
-          <b>{{visits.length}} Visits</b>
+          <b>{{numOfVisits}} Visits</b>
         </div>
 
         <div class="button-bar ">
-          <a class="button col-33 button-positive icon-left ion-chevron-left" ng-click="changeVisitViewBy(1)" ng-disabled = "visitViewIndex>=visits.length-1"> Older</a>
-          <a class="button button-outline button-dark ion-edit icon-right" ng-click="goToVisit(visits[visitViewIndex])"> Edit </a>
-          <a class="button col-33 button-positive icon-right ion-chevron-right" ng-click="changeVisitViewBy(-1)" ng-disabled = "visitViewIndex<=0"> Newer </a>
+          <a class="button col-33 button-positive icon-left ion-chevron-left" ng-click="changeVisitViewBy(1)" ng-disabled = "visitIndex>=numOfVisits-1"> Older</a>
+          <a class="button button-outline button-dark ion-edit icon-right" ng-click="goToVisit(visit)"> Edit </a>
+          <a class="button col-33 button-positive icon-right ion-chevron-right" ng-click="changeVisitViewBy(-1)" ng-disabled = "visitIndex<=0"> Newer </a>
         </div>
         <div class="item">
-          {{visits[visitViewIndex].date_time| date:'MMM d, yyyy @ hh:mm a'}}
+          {{visit.date_time| date:'MMM d, yyyy @ hh:mm a'}}
           <span class="item-note"> days ago </span>
         </div>
         <div class="item item-icon-left">
           <i class="icon ion-record" id="visitQueenColorBtn"></i><b>{{visitQueen.id}}</b> {{visitQueen.name}}
-          <span class="item-note" id="pastQueenStatus">
-            {{visits[visitViewIndex].queen_status}}
+          <span class="item-note" id="pastQueenStatus" ng-show="visit.queen_status">
+            {{visit.queen_status}}
           </span>
         </div>
         <div class="item">
           <!--TODO fill with actual db info-->
-          <b>{{visits[visitViewIndex].qty_boxes}}</b> boxes
+          <b>{{visit.qty_boxes}}</b> x {{visit.hive_type}} boxes {{visit.disease}}, {{visit.is_feeding}}, {{visit.is_feeding}}, {{visit.is_feeding}}
           <span class="item-note">
-            {{visits[visitViewIndex].hiveType}}
+
           </span>
         </div>
       </div>

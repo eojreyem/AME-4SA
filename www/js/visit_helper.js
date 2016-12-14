@@ -171,14 +171,21 @@ angular.module('ameApp')
   }
 
   service.getVisitsForColony = function(id) { //returns visits for a given colony
+    var deferred = $q.defer();
     var visits = [];
-    var query = "SELECT * FROM Visits WHERE colony_id = ? ORDER BY date_time DESC";
+    var query = "SELECT Visits.*, Hive_Types.type AS hive_type, Queen_Statuses.status AS queen_status, Diseases.disease AS disease, Yards.name AS yard_name FROM Visits "+
+                "LEFT JOIN Hive_Types ON Visits.hive_type_id = Hive_Types.id "+
+                "LEFT JOIN Queen_Statuses ON Visits.queen_status_id = Queen_Statuses.id "+
+                "LEFT JOIN Diseases ON Visits.disease_id = Diseases.id "+
+                "LEFT JOIN Yards ON Visits.yard_id = Yards.id "+
+                "WHERE colony_id = ? ORDER BY date_time DESC";
     $cordovaSQLite.execute(db, query, [id]).then(function(res) {
       if(res.rows.length > 0) {
         for (i = 0; i < res.rows.length; i++) {
           console.log("SELECTED -> " + res.rows.item(i));
           visits.push(res.rows.item(i));
         }
+        deferred.resolve(visits);
 
       } else {
           console.log("No visits found for colony");
@@ -186,7 +193,7 @@ angular.module('ameApp')
     }, function (err) {
         console.error(err);
     });
-    return visits;
+    return deferred.promise;
   };
 
   service.saveVisit = function (visit) {

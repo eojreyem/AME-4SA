@@ -26,7 +26,8 @@ angular.module('ameApp')
     mark_color_hex:'#000000', //hexColor
   };
 
-  $scope.visitViewIndex = 0;
+  visitViewI = 0; //visit viewer index for colony's visits array
+  colonysVisits = [];  // to be filled with visits for the current colony
 
 
   document.getElementById("queenColorButton").style.color = newQueen.mark_color_hex;
@@ -36,7 +37,11 @@ angular.module('ameApp')
   //Load current colony into currentColony
   ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
     $scope.currentColony = colony;
-    $scope.visits = VisitHelper.getVisitsForColony(colony.id);
+    VisitHelper.getVisitsForColony(colony.id).then(function(visits){
+      colonysVisits = visits;
+      $scope.changeVisitViewBy(0);
+      $scope.numOfVisits = visits.length;
+    });
     VisitNotesHelper.getRemindersByColonyId(colony.id).then(function(reminders){
       $scope.reminders = reminders;
       console.log(reminders);
@@ -54,43 +59,36 @@ angular.module('ameApp')
 
   $scope.changeVisitViewBy = function(num){
     console.log("change by " + num);
-      visitIndex = $scope.visitViewIndex;
-      visits = $scope.visits;
-      visitIndex=visitIndex+num;
-      if (visitIndex<0){
-        visitIndex = 0;
-      }
-      if (visitIndex>visits.length-1){
-        visitIndex = visits.length-1;
-      }
 
-      //TODO add names to visit properties
-      if (visits.length>0){
-        if (visits[visitIndex].queen_id!=null){
-          QueenHelper.getQueenById(visits[visitIndex].queen_id).then(function(queen){
-            $scope.visitQueen = queen;
-            document.getElementById("visitQueenColorBtn").style.color = queen.mark_color_hex;
-          });
-        }else{
-          $scope.visitQueen = null;
-        }
-        if (visits[visitIndex].queen_status_id!=null){
-          if (visits[visitIndex].queen_status_id>2){
-            document.getElementById("pastQueenStatus").style.color = 'red';
-          }else {
-            document.getElementById("pastQueenStatus").style.color = 'black';
-          }
-        };
-        if (visits[visitIndex].hive_type_id!=null){
-          VisitHelper.getHiveType(visits[visitIndex].hive_type_id).then(function(type){
-            visits[visitIndex].hiveType = type.type;
-          });
-        };
+      visitViewI=visitViewI+num;
+      if (visitViewI<0){
+        visitViewI = 0;
+      }
+      if (visitViewI>colonysVisits.length-1){
+        visitViewI = colonysVisits.length-1;
       }
 
+      $scope.visit = colonysVisits[visitViewI];
+      $scope.visitIndex = visitViewI;
 
-      $scope.visits = visits;
-      $scope.visitViewIndex = visitIndex;
+      //Color change to draw attention to problematic queen statuses
+
+      if (colonysVisits[visitViewI].queen_status_id>2){
+        document.getElementById("pastQueenStatus").style.color = 'red';
+      }else {
+        document.getElementById("pastQueenStatus").style.color = 'black';
+      }
+
+      if (colonysVisits[visitViewI].queen_id!=null){
+        QueenHelper.getQueenById(colonysVisits[visitViewI].queen_id).then(function(queen){
+          $scope.visitQueen = queen;
+          document.getElementById("visitQueenColorBtn").style.color = queen.mark_color_hex;
+        });
+      }else{
+        $scope.visitQueen = null;
+        document.getElementById("visitQueenColorBtn").style.color = 'black';
+      }
+
 
   }
 

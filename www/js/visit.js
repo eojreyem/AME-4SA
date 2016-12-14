@@ -89,6 +89,7 @@ angular.module('ameApp')
             }
             else {
               $scope.reigningQueen = null;
+              document.getElementById("queenMarkIcon").style.color = 'black';
             }
           });
         }
@@ -162,6 +163,10 @@ angular.module('ameApp')
                             QueenHelper.updateQueenInactive($scope.reigningQueen.id, $scope.choice.reasonId);
                             $scope.reigningQueen = null;
                             $scope.visit.queen_id = null;
+                            QueenHelper.getQueensInColony($scope.currentColony.id).then(function (colonysQueens){
+                              $scope.colonysQueens = colonysQueens;
+                            });
+
                             document.getElementById("queenMarkIcon").style.color = '#000000';
                           } else {
                             console.log("No inactive reason selected.");
