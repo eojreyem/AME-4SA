@@ -35,7 +35,7 @@ angular
 
     //Tables of Keys
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Queen_Statuses (id INTEGER PRIMARY KEY, status TEXT)");
-    $cordovaSQLite.execute(db, "INSERT INTO Queen_Statuses (status) VALUES ('Not Seen'), ('Seen'), ('Not Found'), ('Confined'), ('Cell'), ('Queenless'), ('Virgin'), ('Other')");
+    $cordovaSQLite.execute(db, "INSERT INTO Queen_Statuses (status) VALUES ('Not Seen'), ('Seen'), ('Confined'), ('Not Found'), ('Cell'), ('Queenless'), ('Virgin'), ('Other')");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Hive_Types (id INTEGER PRIMARY KEY, type TEXT)");
     $cordovaSQLite.execute(db, "INSERT INTO Hive_Types (type) VALUES ('10FR'), ('5FR'), ('2FR'), ('Other')");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Queen_Inactive_Reasons (id INTEGER PRIMARY KEY, reason TEXT)");

@@ -70,25 +70,20 @@
 
     <ion-content class="has-header">
       <div class="list padding ">
+        <p ng-hide="visit.yard_id == currentYard.id" class="positive">Colony was in {{visit.yard_name}}</p>
         <div class="row">
           <button class="button col-60 button-block button-outline button-dark" ng-click="openDatePicker()">{{visit.date_time | date:'EEE - MMM d, yyyy'}}</button>
           <button class="button col-40 button-block button-outline button-dark">{{visit.date_time | date:'hh:mm a'}}</button>
         </div>
-        <p ng-hide="visit.yardName==currentYard.name">Colony was in {{visit.yardName}}</p>
 
-
-
-
-        <label class="item item-input item-select" >
-          <div class="input-label">Queen</div>
-          <select ng-model="visit.queen_id">
-            <option ng-repeat="queen in queens" value="{{queen.id}}"><b>{{queen.id}}</b> {{queen.name}}</option>
-          </select>
+        <label class="item item-input item-select item-dark" ng-click = "removeReigningQueen()">
+          <div class="input-label"><i class="icon ion-record" id="queenMarkIcon" ></i> {{reigningQueen.id}}-{{reigningQueen.name}}</div>
+          <select ng-model="visit.queen_status_id" ng-change="queenStatusChange()" ng-disabled="reigningQueen.date_inactive !=null" ng-options="status.id as status.status for status in queenStatuses">{{status.status}}</select>
         </label>
 
-        <label class="item item-input item-select" >
-          <div class="input-label">Queen Status</div>
-          <select ng-model="visit.queen_status_id" ng-options="status.id as status.status for status in queenStatuses">{{status.status}}</select>
+        <label class="item item-input item-select" ng-show="reigningQueen==null">
+          <div class="input-label">Queen</div>
+          <select ng-model="visit.queen_id" ng-options="queen.id as queen.id for queen in colonysQueens" ng-change="reigningQueenChanged()">          </select>
         </label>
 
         <label class="item item-input">

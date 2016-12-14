@@ -13,6 +13,7 @@ angular.module('ameApp')
     console.log(id);
     console.log(query);
     $cordovaSQLite.execute(db, query, [id]).then(function(res) {
+      console.log(res);
       queen = res.rows.item(0);
       deferred.resolve(queen);
     }, function (err) {
@@ -72,7 +73,7 @@ angular.module('ameApp')
   service.updateQueenInactive = function (queenId, reasonId) {
     var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
     date = (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1);
-    var query = "UPDATE Queens SET date_inactive = ?, reason_inactive_id = ? WHERE id = ?";
+    var query = "UPDATE Queens SET date_inactive = ?, reason_inactive_id = ?, in_colony_id = null WHERE id = ?";
     $cordovaSQLite.execute(db, query, [date, reasonId, queenId]).then(function(res) {
       console.log("Queen Inactive");
     }, function (err) {
