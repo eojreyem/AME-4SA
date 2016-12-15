@@ -132,6 +132,36 @@ angular.module('ameApp')
     document.getElementById("queenMarkIcon").style.color = "#000000";
   }
 
+  $scope.showAddDataPopup = function(){
+    var addDataPopup = $ionicPopup.show({
+      title: 'Add a Measurement to This Visit',
+      scope:$scope,
+      template: '<div class="list">'+
+      '  <label class="item item-input item-select">'+
+        '  <div class="input-label">       Type          </div>'+
+          '<select class="item item-input item-select">'+
+            '  <option ng-repeat="dataTypes in dataTypes">{{dataTypes.type}}</option>          </select>        </label>'+
+        '<label class="item item-input">'+
+          '<input type="number" placeholder="Qty measured">        </label>      </div>',
+      buttons: [
+        {text: 'Cancel'},
+        {text: 'Add Data',
+          type: 'button-positive',
+          onTap: function (e){
+            console.log("TODO: Save Data");
+            /*VisitHelper.saveVisit($scope.visit).then(function(visitId){
+              note.visit_id = visitId;
+              VisitNotesHelper.saveNote(note);
+              $scope.note.note = null;
+              $scope.note.is_reminder = false;
+
+            });*/
+          }
+
+        }]
+      })
+    }
+
   $scope.showAddNotePopup = function(){
     var addNotePopup = $ionicPopup.show({
       title: 'Add a Note to This Visit',
