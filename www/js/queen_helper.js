@@ -10,12 +10,16 @@ angular.module('ameApp')
   service.getQueenById = function(id) { //returns a queen object when given a valid ID
     var deferred = $q.defer();
     var query = "SELECT * FROM Queens WHERE id = ?";
-    console.log(id);
-    console.log(query);
     $cordovaSQLite.execute(db, query, [id]).then(function(res) {
-      console.log(res);
-      queen = res.rows.item(0);
-      deferred.resolve(queen);
+      if (res.rows.length == 0){
+        deferred.resolve(null);
+        console.log("Failed to retreive queen with id: "+ id);
+        console.log(res);
+      }
+      else {
+        queen = res.rows.item(0);
+        deferred.resolve(queen);
+      }
     }, function (err) {
         console.error(err);
     });
@@ -42,45 +46,29 @@ angular.module('ameApp')
   service.saveQueen = function (queen) {
     var deferred = $q.defer();
     // TODO: test for queen name duplicates
-    var query = "INSERT INTO Queens (name, in_colony_id, mother_queen_id, origin, date_emerged, mark_color_hex) VALUES (?,?,?,?,?,?)";
-    $cordovaSQLite.execute(db, query, [queen.name, queen.in_colony_id, queen.mother_queen_id, queen.origin, queen.date_emerged, queen.mark_color_hex]).then(function(res) {
-        console.log("INSERT QUEEN ID -> " + res.insertId);
-        deferred.resolve(res.insertId);
-    }, function (err) {
-        console.error(err);
+    console.log(queen.id);
+    service.getQueenById(queen.id).then(function(existingQueen){
+      if (existingQueen == null){
+        var query = "INSERT INTO Queens (name, in_colony_id, mother_queen_id, origin, date_emerged, mark_color_hex) VALUES (?,?,?,?,?,?)";
+        $cordovaSQLite.execute(db, query, [queen.name, queen.in_colony_id, queen.mother_queen_id, queen.origin, queen.date_emerged, queen.mark_color_hex]).then(function(res) {
+            console.log("INSERT QUEEN ID -> " + res.insertId);
+            deferred.resolve(res.insertId);
+        }, function (err) {
+            console.error(err);
+        });
+      }
+      else{
+        var query = "UPDATE Queens SET name = ?, in_colony_id = ?, mother_queen_id = ?, origin = ?, date_emerged = ?, mark_color_hex = ? WHERE id = " + queen.id;
+        $cordovaSQLite.execute(db, query, [queen.name, queen.in_colony_id, queen.mother_queen_id, queen.origin, queen.date_emerged, queen.mark_color_hex]).then(function(res) {
+          deferred.resolve(null);
+        }, function (err) {
+            console.error(err);
+        });
+      }
+
     });
     return deferred.promise;
-  }
-
-  service.updateQueenColony = function (queenId, colonyId) {
-    var query = "UPDATE Queens SET in_colony_id = ? WHERE id = ?";
-    $cordovaSQLite.execute(db, query, [colonyId, queenId]).then(function(res) {
-      console.log("Moved Queen");
-    }, function (err) {
-        console.error(err);
-    });
-  }
-
-  service.updateQueenMark = function (queenId, markColor) {
-    var query = "UPDATE Queens SET mark_color_hex = ? WHERE id = ?";
-    $cordovaSQLite.execute(db, query, [markColor, queenId]).then(function(res) {
-      console.log("changed queen " + queenId+ " color to "+ markColor);
-    }, function (err) {
-        console.error(err);
-    });
-  }
-
-  service.updateQueenInactive = function (queenId, reasonId) {
-    var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
-    date = (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1);
-    var query = "UPDATE Queens SET date_inactive = ?, reason_inactive_id = ?, in_colony_id = null WHERE id = ?";
-    $cordovaSQLite.execute(db, query, [date, reasonId, queenId]).then(function(res) {
-      console.log("Queen Inactive");
-    }, function (err) {
-        console.error(err);
-    });
-  }
-
+  };
 
   service.getQueensInColony = function(colonyId) { //return all queens in a colonyId
     var deferred = $q.defer();

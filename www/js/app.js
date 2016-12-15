@@ -10,6 +10,12 @@ angular
 ])
 
 .run(function($ionicPlatform, $cordovaSQLite){
+
+  //make hardware back button function.  This just disables it?
+  $ionicPlatform.registerBackButtonAction(function(e){
+    e.preventDefault();
+  },1000);
+
   $ionicPlatform.ready(function() {
     if (window.cordova) {
       db = $cordovaSQLite.openDB({name: 'AME_4SA.db', location: 'default'}); //device

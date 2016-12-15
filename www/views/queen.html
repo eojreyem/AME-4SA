@@ -1,59 +1,38 @@
-<ion-side-menus>
 
-
-  <!-- Right menu = Colonies the queen has been in -->
-  <ion-side-menu side="right">
-    <header class="bar bar-header bar-dark">
-      <h1 class="title">Queen's Colonies</h1>
-    </header>
-    <ion-content class="has-header">
-      <div class="list">
-        <item class="item">
-          <label>Future Feature. </label>
-        </item>
-        <item class="item">
-          <label>List colonies </label>
-        </item>
-        <item class="item">
-          <label>she's been in.</label>
-        </item>
-      </div>
-    </ion-content>
-  </ion-side-menu>
-
-  <ion-side-menu-content>
     <ion-header-bar class="bar-dark">
         <button class="button button-icon ion-home" ng-click="goHome()">></button>
         <button class="button button-icon ion-location" ng-click="goToYard()">{{currentYard.name}} ></button>
         <button class="button button-icon ion-ios-box" ng-click="goToColony()"> {{currentColony.number}} ></button>
         <button class="button button-icon ion-female"> {{currentQueen.id}}</button>
-        <button menu-toggle="right" class="button button-icon ion-ios-box"></button>
 
     </ion-header-bar>
     <ion-content class="has-header">
 
       <div class="list list-inset">
-        <button class="button item-icon-left button-block button-dark" ng-click="showQueenColorPopup(currentQueen)">Change Mark Color <i class="icon ion-record"  id="queenColorButton"></i></button>
-        <div class="item">
-          <b>Date Emerged:</b> {{currentQueen.date_emerged | date:'MMMM d, yyyy'}}
+        <div class="item item-button-right">
+          Name:
+          <span class="item-note">{{currentQueen.name}}</span>
+          <button class="button button-positive" ng-click="showGiveQueenNamePopup(currentQueen)" ng-show="currentQueen.name == null">Name</button>
+        </div>
+        <div class="item" ng-show="currentQueen.mother_queen_id">
+          Mother:
+          <span class="item-note">{{currentQueen.mother_queen_id}}</span> <!--TODO display entire lineage-->
         </div>
         <div class="item">
-          <b>Origin:</b> {{currentQueen.origin}}
+          <b>Date Emerged:</b>
+          <span class="item-note">{{currentQueen.date_emerged | date:'MMMM d, yyyy'}}</span>
         </div>
-        <div class="item">
-          <b>Mother:</b> {{currentQueen.mother_queen_id}}
+        <div class="item item-text-wrap">
+          <h2>Origin:</h2>
+          {{currentQueen.origin}}
+        </div>
+        <div class="item item-button-right">
+          <b>Mark Color:</b>
+          <button class="button item-icon-left button-dark " ng-click="showQueenColorPopup(currentQueen)"><i class="icon ion-record" id="queenColorButton"></i>. . . . .</button>
         </div>
 
-        <div class="item">
-          <button class="button button-small button-outline button-dark" ng-click="showQueenInactivePopup(currentQueen)">Inactive</button>
+        <div class="row ">
+            <button class="button button-outline button-dark col-33" ng-click="showQueenInactivePopup(currentQueen)">Inactive</button>
+            <button class="button button-balanced col-33 col-offset-33" ng-click="showMoveQueenPopup(currentQueen)">Move To</button>
         </div>
       </div>
-
-
-
-    </ion-content>
-
-  </ion-side-menu-content>
-
-
-  </ion-side-menus>

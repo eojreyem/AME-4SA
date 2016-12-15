@@ -15,9 +15,9 @@ angular.module('ameApp')
     closeOnSelect: false,       //Optional
     templateType: 'modal'       //Optional
   };
-  var qqq = [];
   $scope.queens = [];
   var newQueen = {
+    id: "new",
     name: null,
     in_colony_id: $stateParams.colonyId,
     mother_queen_id: null, //motherId
@@ -177,46 +177,6 @@ angular.module('ameApp')
 
   $scope.openDatePicker = function(){
     ionicDatePicker.openDatePicker(datePickerObj);
-  };
-
-
-  $scope.showMoveQueenPopup = function(queen) {
-    $scope.destination = {};
-    var moveQueenPopup = $ionicPopup.show({
-      title: 'Enter the Colony\'s number',
-      subTitle: 'that queen ' +queen.name+ " will move to.",
-      template: '<label class="item item-input">  <input type="number" ng-model="destination.colonyNum"></label>',
-      scope: $scope,
-      buttons: [
-        { text: 'Cancel' },
-        { text: 'Move',
-          type: 'button-positive',
-          onTap: function(e) {
-          if ($scope.destination.colonyNum>0) {
-            e.preventDefault();
-            ColonyHelper.getColonyByNumber($scope.destination.colonyNum).then(function (destinationColony){
-              //TODO: if destinationColony is not null.
-              if (destinationColony!= null){
-                console.log("move queen " +queen.name+ " to " +destinationColony.number);
-                QueenHelper.updateQueenColony(queen.id, destinationColony.id)
-                QueenHelper.getQueensInColony($scope.currentColony.id).then(function(queens){
-                  $scope.queens = queens;
-                });
-                moveQueenPopup.close();
-              }
-              else{
-                console.log("Enter Valid Colony Number.");
-              }
-            });
-
-          } else {
-            console.log("Enter Valid Colony Number.");
-            e.preventDefault();
-            }
-          }
-        }
-      ]
-    })
   };
 
 

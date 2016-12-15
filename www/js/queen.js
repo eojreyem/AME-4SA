@@ -7,6 +7,8 @@ angular.module('ameApp')
 
 .controller('QueenCtrl', function($scope, $location, $stateParams, $ionicPopup, ColonyHelper, YardHelper, QueenHelper) {
 
+  var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
+
 
   //Load current queen into currentQueen
   QueenHelper.getQueenById($stateParams.queenId).then(function (queen){
@@ -46,7 +48,8 @@ angular.module('ameApp')
             type: 'button-positive',
             onTap: function(e) {
               document.getElementById("queenColorButton").style.color = $scope.hexColor.hex;
-              QueenHelper.updateQueenMark(queen.id, $scope.hexColor.hex)
+              queen.mark_color_hex = $scope.hexColor.hex;
+              QueenHelper.saveQueen(queen);
 
             }
           }
@@ -55,6 +58,64 @@ angular.module('ameApp')
 
   };
 
+  $scope.showGiveQueenNamePopup = function(queen) {
+    var queenNamePopup = $ionicPopup.show({
+      title: 'Enter a Name for queen #' + queen.id,
+      subTitle: 'This is optional and typically done just for breeders',
+      template: '<label class="item item-input">  <input type="text" ng-model="currentQueen.name"></label>',
+      scope: $scope,
+      buttons: [
+        { text: 'Cancel' },
+        { text: 'Name',
+          type: 'button-positive',
+          onTap: function(e) {
+            //TODO save queen    check to make sure name is unique
+            QueenHelper.saveQueen($scope.currentQueen);
+          }
+        }
+      ]
+    });
+  }
+
+  $scope.showMoveQueenPopup = function(queen) {
+    $scope.destination = {};
+    var moveQueenPopup = $ionicPopup.show({
+      title: 'Enter the Colony\'s number',
+      subTitle: 'that queen ' +queen.id +" - "+queen.name+ " will move to.",
+      template: '<label class="item item-input">  <input type="number" ng-model="destination.colonyNum"></label>',
+      scope: $scope,
+      buttons: [
+        { text: 'Cancel' },
+        { text: 'Move',
+          type: 'button-positive',
+          onTap: function(e) {
+          if ($scope.destination.colonyNum>0) {
+            e.preventDefault();
+            ColonyHelper.getColonyByNumber($scope.destination.colonyNum).then(function (destinationColony){
+              //TODO: if destinationColony is not null.
+              if (destinationColony!= null){
+                console.log("move queen " +queen.name+ " to " +destinationColony.number);
+                queen.in_colony_id = destinationColony.id;
+                console.log(queen);
+                QueenHelper.saveQueen(queen)
+
+                moveQueenPopup.close();
+                $scope.goToColony($scope.currentColony)
+              }
+              else{
+                console.log("Enter Valid Colony Number.");
+              }
+            });
+
+          } else {
+            console.log("Enter Valid Colony Number.");
+            e.preventDefault();
+            }
+          }
+        }
+      ]
+    })
+  };
 
   $scope.showQueenInactivePopup = function(queen) {
     $scope.choice = {};
@@ -74,7 +135,11 @@ angular.module('ameApp')
             onTap: function(e) {
             if ($scope.choice.reasonId>0) {
               console.log("selected "+reasons[$scope.choice.reasonId-1].reason+", store to queen");
-              QueenHelper.updateQueenInactive(queen.id, $scope.choice.reasonId);
+              queen.reason_inactive_id = $scope.choice.reasonId;
+              queen.date_inactive = (new Date(Date.now()-tzoffset)).toISOString().slice(0,-1);
+              queen.in_colony_id = null;
+              QueenHelper.saveQueen(queen);
+              $scope.goToColony($scope.currentColony);
             } else {
               console.log("Select reason to remove queen.");
               e.preventDefault();
