@@ -73,7 +73,7 @@ angular.module('ameApp')
 
       //Color change to draw attention to problematic queen statuses
 
-      if (colonysVisits[visitViewI].queen_status_id>2){
+      if ($scope.visit.queen_status_id>2){
         document.getElementById("pastQueenStatus").style.color = 'red';
       }else {
         document.getElementById("pastQueenStatus").style.color = 'black';

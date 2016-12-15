@@ -70,7 +70,7 @@
       <div class="card" ng-hide = "numOfVisits>0">
         <item class="item">No Visit History</item>
       </div>
-      <div class="card" ng-hide="numOfVisits==0">
+      <div class="card" ng-show="numOfVisits>0">
         <div class="item item-divider item-dark text-center">
           <b>{{numOfVisits}} Visits</b>
         </div>
@@ -114,7 +114,6 @@
 
           </div>
         </div>
-      </div>
 
     </ion-content>
 

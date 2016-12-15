@@ -43,7 +43,6 @@ angular.module('ameApp')
                 "LEFT JOIN Diseases ON Visits.disease_id = Diseases.id "+
                 "LEFT JOIN Yards ON Visits.yard_id = Yards.id "+
                 "WHERE colony_id = ? ORDER BY date_time DESC LIMIT 1";
-                console.log(query);
     $cordovaSQLite.execute(db, query, [colonyId]).then(function(res) {
       if (res.rows.length == 0){
         deferred.resolve(null);
