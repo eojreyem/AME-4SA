@@ -3,29 +3,7 @@
   //Enter a note or data
   <ion-side-menu side="right">
     <ion-content>
-      <div class="item item-divider item-dark">
-        Enter a Note
-      </div>
-      <form ng-submit="createNote(note)">
-        <div class="list">
-          <label class="item item-input item-stacked-label">
-            <textarea rows="4" placeholder="Type Note Text" ng-model="note.note"></textarea>
-          </label>
-          <li class="item item-toggle">
-            Reminder
-            <label class="toggle toggle-assertive">
-              <input type="checkbox" ng-model="note.is_reminder">
-              <div class="track">
-                <div class="handle"></div>
-              </div>
-            </label>
-          </li>
-          <item class="col col-50 col-offset-50 padding">
-            <button type="submit" class="button button-block button-positive">Save Note</button>
-          </item>
-        </div>
-        </div>
-      </form>
+      
       <div class="item item-divider item-dark">
         Record Data
       </div>
@@ -46,12 +24,6 @@
           <item class="col col-50 col-offset-50 padding">
             <button type="submit" class="button button-block button-positive">Save Data</button>
           </item>
-          <div class="item item-divider item-dark">
-            Notes and Data
-          </div>
-            <!--TODO:Display list of notes and data-->
-          <p>  -> Honey Harvested (lbs) 50           </p>
-          <p>-> Removed some drone comb</p>
         </div>
       </form>
 
@@ -131,8 +103,10 @@
           </label>
         </li>
 
-        <item class="col col-offset-20 col-60 padding">
-          <button class="button button-block button-positive" ng-click='saveVisit(visit)'>Save Visit</button>
+        <item class="row">
+          <button class="button button-block button-positive col-25" ng-click='showAddNotePopup()'>Add Note</button>
+          <button class="button button-block button-positive col-25 col-offset-10" ng-click='showAddDataPopup()'>Add Data</button>
+          <button class="button button-block button-positive col-offset-10 col-25" ng-click='saveVisit(visit)'>Save</button>
         </item>
 
       </div>

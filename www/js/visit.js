@@ -132,6 +132,39 @@ angular.module('ameApp')
     document.getElementById("queenMarkIcon").style.color = "#000000";
   }
 
+  $scope.showAddNotePopup = function(){
+    var addNotePopup = $ionicPopup.show({
+      title: 'Add a Note to This Visit',
+      scope:$scope,
+      template: '<div class="list">'+
+        '<textarea rows="4" placeholder="colony is pretty" ng-model="note.note"></textarea></label>'+
+        '<li class="item item-toggle"> Reminder'+
+        '  <label class="toggle toggle-assertive">'+
+          '  <input type="checkbox" ng-model="note.is_reminder">'+
+          '  <div class="track">'+
+          '    <div class="handle"></div>'+
+        '    </div>'+
+      '  </li>'+
+      '    </div>',
+      buttons: [
+        {text: 'Cancel'},
+        {text: 'Add Note',
+          type: 'button-positive',
+          onTap: function (e){
+            console.log("Save Note");
+            VisitHelper.saveVisit($scope.visit).then(function(visitId){
+              note.visit_id = visitId;
+              VisitNotesHelper.saveNote(note);
+              $scope.note.note = null;
+              $scope.note.is_reminder = false;
+            });
+          }
+
+        }]
+      })
+    }
+
+
   $scope.queenStatusChange = function(){
     if ($scope.visit.queen_status_id>3 && $scope.visit.queen_id !=null){
           var inactiveQuestionPopup = $ionicPopup.show({
@@ -188,10 +221,6 @@ angular.module('ameApp')
     ionicDatePicker.openDatePicker(datePickerObj);
   };
 
-  $scope.createNote = function(note) {
-    note.visit_id = $scope.visit.id;
-    VisitNotesHelper.saveNote(note);
-  }
 
   $scope.saveVisit = function(visit) {
     VisitHelper.saveVisit(visit).then(function (visitId){
