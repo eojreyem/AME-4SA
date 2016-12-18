@@ -58,8 +58,8 @@ angular.module('ameApp')
         });
       }
       else{
-        var query = "UPDATE Queens SET name = ?, in_colony_id = ?, mother_queen_id = ?, origin = ?, date_emerged = ?, mark_color_hex = ? WHERE id = " + queen.id;
-        $cordovaSQLite.execute(db, query, [queen.name, queen.in_colony_id, queen.mother_queen_id, queen.origin, queen.date_emerged, queen.mark_color_hex]).then(function(res) {
+        var query = "UPDATE Queens SET name = ?, in_colony_id = ?, mother_queen_id = ?, origin = ?, date_emerged = ?, mark_color_hex = ?, reason_inactive_id = ?, date_inactive = ? WHERE id = " + queen.id;
+        $cordovaSQLite.execute(db, query, [queen.name, queen.in_colony_id, queen.mother_queen_id, queen.origin, queen.date_emerged, queen.mark_color_hex, queen.reason_inactive_id, queen.date_inactive]).then(function(res) {
           deferred.resolve(null);
         }, function (err) {
             console.error(err);

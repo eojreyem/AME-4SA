@@ -27,6 +27,8 @@ angular.module('ameApp')
     is_reminder: false
   };
 
+  var changeQueenPopup = [];
+
   //Load current yard into currentYard for nav at the bottom.
   YardHelper.getYardById($stateParams.yardId).then(function (yard){
     $scope.currentYard = yard;
@@ -76,23 +78,27 @@ angular.module('ameApp')
       VisitHelper.getLastVisitByColonyId(newVisit.colony_id).then(function(lastVisit){
         if (lastVisit!=null){  //If it is not the first visit, load info from last visit
           newVisit.hive_type_id = lastVisit.hive_type_id;
-          newVisit.queen_id=lastVisit.queen_id;
           newVisit.qty_boxes=lastVisit.qty_boxes;
           newVisit.is_feeding=lastVisit.is_feeding;
+          if(lastVisit.queen_id!=null){  //if the last visit had a queen...
+            QueenHelper.getQueenById(lastVisit.queen_id).then(function(reigningQueen){
+              if (reigningQueen.date_inactive==null){ // check if it's still alive...
+                newVisit.queen_id=lastVisit.queen_id; // and set as default queen for this visit.
+                $scope.reigningQueen = reigningQueen;
+                document.getElementById("queenMarkIcon").style.color = reigningQueen.mark_color_hex;
+              }
+              else {    //otherwise, leave queen blank.
+                $scope.reigningQueen = null;
+                document.getElementById("queenMarkIcon").style.color = 'black';
+              }
+            });
+          }else {
+            $scope.reigningQueen = null;
+            document.getElementById("queenMarkIcon").style.color = 'black';
+          }
+
         }
         $scope.visit = newVisit;
-        if (newVisit.queen_id != null){
-          QueenHelper.getQueenById(newVisit.queen_id).then(function(reigningQueen){
-            if (reigningQueen.date_inactive==null){
-              $scope.reigningQueen = reigningQueen;
-              document.getElementById("queenMarkIcon").style.color = reigningQueen.mark_color_hex;
-            }
-            else {
-              $scope.reigningQueen = null;
-              document.getElementById("queenMarkIcon").style.color = 'black';
-            }
-          });
-        }
       });
     }
     else {
@@ -116,21 +122,47 @@ angular.module('ameApp')
     }
   });
 
-  $scope.reigningQueenChanged = function() {
+  $scope.changeQueen = function(queen) {
     console.log("QUEEN CHANGE");
-    if ($scope.visit.queen_id != null){
-      QueenHelper.getQueenById($scope.visit.queen_id).then(function(reigningQueen){
-        $scope.reigningQueen = reigningQueen;
-        document.getElementById("queenMarkIcon").style.color = reigningQueen.mark_color_hex;
-      });
+    if (queen==null){
+      $scope.reigningQueen = null;
+      $scope.visit.queen_id = null;
+      document.getElementById("queenMarkIcon").style.color = "black";
+    }else {
+      $scope.reigningQueen = queen;
+      $scope.visit.queen_id = queen.id;
+      document.getElementById("queenMarkIcon").style.color = queen.mark_color_hex;
     }
+    changeQueenPopup.close();
   }
 
-  $scope.removeReigningQueen = function(){
-    $scope.reigningQueen = null;
-    $scope.visit.queen_id = null;
-    document.getElementById("queenMarkIcon").style.color = "#000000";
-  }
+  $scope.showChangeQueenPopup = function(){
+    QueenHelper.getQueensInColony($scope.currentColony.id).then(function (colonysQueens){
+      $scope.colonysQueens = colonysQueens;
+      changeQueenPopup = $ionicPopup.show({
+        title: 'Choose Reigning Queen',
+        subTitle: 'long press for queen\'s page',
+        scope: $scope,
+        template: '<div class="list">'+
+                  '  <a class="item" ng-repeat="queen in colonysQueens" ng-click="changeQueen(queen)" on-hold="goToQueen(queen)" >{{queen.id}} {{queen.name}} </a> '+
+                  '  <a class="item" ng-click="changeQueen()">-- N/A --</a></div>',
+
+        buttons: [
+          {text: 'Cancel'},
+          {text: 'New Queen',
+            type: 'button-positive',
+            onTap: function (e){
+              console.log("TODO: create queen popup");
+
+            }
+          }
+        ]
+      });      
+    });
+
+  };
+
+
 
   $scope.showAddDataPopup = function(){
     var addDataPopup = $ionicPopup.show({
@@ -223,13 +255,11 @@ angular.module('ameApp')
                           onTap: function(e) {
                           if ($scope.choice.reasonId>0) {
                             console.log("selected "+reasons[$scope.choice.reasonId-1].reason+", store to queen");
-                            QueenHelper.updateQueenInactive($scope.reigningQueen.id, $scope.choice.reasonId);
-                            $scope.reigningQueen = null;
-                            $scope.visit.queen_id = null;
-                            QueenHelper.getQueensInColony($scope.currentColony.id).then(function (colonysQueens){
-                              $scope.colonysQueens = colonysQueens;
-                            });
-
+                            $scope.reigningQueen.reason_inactive_id = $scope.choice.reasonId;
+                            $scope.reigningQueen.date_inactive = (new Date(Date.now()-tzoffset)).toISOString().slice(0,-1);
+                            $scope.reigningQueen.in_colony_id = null;
+                            QueenHelper.saveQueen($scope.reigningQueen);
+                            $scope.changeQueen(null);
                             document.getElementById("queenMarkIcon").style.color = '#000000';
                           } else {
                             console.log("No inactive reason selected.");
@@ -270,6 +300,13 @@ angular.module('ameApp')
     console.log("nav to yard");
     $location.url('/yard/' + $scope.currentYard.id );
   }
+
+  $scope.goToQueen = function(queen) {
+    console.log("nav to queen");
+    changeQueenPopup.close();
+    $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id + '/queen/' + queen.id );
+  }
+
   $scope.goHome = function () {
     $location.url('/')
   }

@@ -14,15 +14,11 @@
         <button class="button col-40 button-block button-outline button-dark">{{visit.date_time | date:'hh:mm a'}}</button>
       </div>
 
-      <label class="item item-input item-select item-dark" ng-click = "removeReigningQueen()">
-        <div class="input-label"><i class="icon ion-record" id="queenMarkIcon" ></i> {{reigningQueen.id}}-{{reigningQueen.name}}</div>
+      <label class="item item-input item-select item-dark" ng-click = "showChangeQueenPopup()">
+        <div class="input-label"><i class="icon ion-record" id="queenMarkIcon"></i> <b>{{reigningQueen.id}}</b> {{reigningQueen.name}}</div>
         <select ng-model="visit.queen_status_id" ng-change="queenStatusChange()" ng-disabled="reigningQueen.date_inactive !=null" ng-options="status.id as status.status for status in queenStatuses">{{status.status}}</select>
       </label>
 
-      <label class="item item-input item-select" ng-show="reigningQueen==null">
-        <div class="input-label">Queen</div>
-        <select ng-model="visit.queen_id" ng-options="queen.id as queen.id for queen in colonysQueens" ng-change="reigningQueenChanged()">          </select>
-      </label>
 
       <label class="item item-input">
         <span class="input-label">F.O.Bees</span>
