@@ -71,16 +71,17 @@
         <item class="item">No Visit History</item>
       </div>
       <div class="card" ng-show="numOfVisits>0">
-        <div class="item item-divider item-dark text-center">
-          <b>{{numOfVisits}} Visits</b>
-        </div>
 
-        <div class="button-bar ">
-          <a class="button col-33 button-positive icon-left ion-chevron-left" ng-click="changeVisitViewBy(1)" ng-disabled = "visitIndex>=numOfVisits-1"> Older</a>
-          <a class="button button-outline button-dark ion-edit icon-right" ng-click="goToVisit(visit)"> Edit </a>
-          <a class="button col-33 button-positive icon-right ion-chevron-right" ng-click="changeVisitViewBy(-1)" ng-disabled = "visitIndex<=0"> Newer </a>
-        </div>
-        <div class="item">
+          <div class="row">
+            <button class="button button-positive icon-left ion-chevron-left col-25" ng-click="changeVisitViewBy(1)" ng-disabled = "visitIndex>=numOfVisits-1"> Older</button>
+            <div class="col col-50 text-center">
+              <h3>{{numOfVisits}} Visits</h3>
+            </div>
+            <button class="button col-25 button-positive icon-right ion-chevron-right" ng-click="changeVisitViewBy(-1)" ng-disabled = "visitIndex<=0"> Newer </button>
+          </div>
+
+
+        <div class="item item-divider">
           {{visit.date_time| date:'MMM d, yyyy @ hh:mm a'}}
           <span class="item-note"> days ago </span>
         </div>
@@ -100,7 +101,10 @@
       </div>
 
       <div class="row">
-        <div class="col col-offset-50 col-50 padding">
+        <div class="col col-33">
+          <button class="button button-outline button-dark ion-edit icon-right" ng-click="goToVisit(visit)"> Edit </button>
+        </div>
+        <div class="col col-offset-33 col-33 padding">
           <button class="button button-block button-positive" ng-click="newVisit()">New Visit</button>
         </div>
       </div>
