@@ -36,7 +36,6 @@ angular.module('ameApp')
 
   service.getLastVisitByColonyId = function(colonyId) { //returns a visit object when given a valid colony ID
     var deferred = $q.defer();
-    console.log(colonyId);
     var query = "SELECT Visits.*, Hive_Types.type AS hive_type, Queen_Statuses.status AS queen_status, Diseases.disease AS disease, Yards.name AS yard_name FROM Visits "+
                 "LEFT JOIN Hive_Types ON Visits.hive_type_id = Hive_Types.id "+
                 "LEFT JOIN Queen_Statuses ON Visits.queen_status_id = Queen_Statuses.id "+

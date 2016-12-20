@@ -12,8 +12,8 @@ angular.module('ameApp')
     yard_id: $stateParams.yardId,
     colony_id: $stateParams.colonyId,
     queen_id: null,
-    hive_type_id: null,
-    qty_boxes: null,
+    hive_type_id: 1,
+    qty_boxes: 1,
     queen_status_id: null,
     frames_of_bees: null,
     frames_of_brood: null,
@@ -71,6 +71,9 @@ angular.module('ameApp')
     $scope.dataTypes = dataTypes;
   });
 
+  //assume no queen visit loading will replace if there is.
+  $scope.reigningQueen = {name:"click for queens"};
+  document.getElementById("queenMarkIcon").style.color = 'black';
 
   //load visit
   VisitHelper.getVisitById($stateParams.visitId).then(function(existingVisit){
@@ -87,16 +90,11 @@ angular.module('ameApp')
                 $scope.reigningQueen = reigningQueen;
                 document.getElementById("queenMarkIcon").style.color = reigningQueen.mark_color_hex;
               }
-              else {    //otherwise, leave queen blank.
-                $scope.reigningQueen = null;
-                document.getElementById("queenMarkIcon").style.color = 'black';
-              }
             });
-          }else {
-            $scope.reigningQueen = null;
-            document.getElementById("queenMarkIcon").style.color = 'black';
           }
-
+        } else {
+          document.getElementById("hiveTypeSelector").style.color = 'limegreen';
+          document.getElementById("numberBoxesBtn").style.color = 'limegreen';
         }
         $scope.visit = newVisit;
       });
@@ -114,10 +112,6 @@ angular.module('ameApp')
           document.getElementById("queenMarkIcon").style.color = reigningQueen.mark_color_hex;
         });
 
-      }else {
-        $scope.reigningQueen = null;
-        $scope.visit.queen_id = null;
-        document.getElementById("queenMarkIcon").style.color = "#000000";
       }
     }
   });
@@ -125,15 +119,25 @@ angular.module('ameApp')
   $scope.changeQueen = function(queen) {
     console.log("QUEEN CHANGE");
     if (queen==null){
-      $scope.reigningQueen = null;
+      $scope.reigningQueen = {name:"click for queens"};
+      document.getElementById("queenMarkIcon").style.color = 'black';
       $scope.visit.queen_id = null;
-      document.getElementById("queenMarkIcon").style.color = "black";
     }else {
       $scope.reigningQueen = queen;
       $scope.visit.queen_id = queen.id;
       document.getElementById("queenMarkIcon").style.color = queen.mark_color_hex;
     }
     changeQueenPopup.close();
+  }
+
+  $scope.changeNumBoxes = function(num){
+    console.log(num);
+    var boxes = $scope.visit.qty_boxes;
+    boxes = boxes + num;
+    if (boxes<1){
+      boxes = 1;
+    }
+    $scope.visit.qty_boxes = boxes;
   }
 
   $scope.showChangeQueenPopup = function(){
@@ -157,7 +161,7 @@ angular.module('ameApp')
             }
           }
         ]
-      });      
+      });
     });
 
   };
@@ -260,7 +264,6 @@ angular.module('ameApp')
                             $scope.reigningQueen.in_colony_id = null;
                             QueenHelper.saveQueen($scope.reigningQueen);
                             $scope.changeQueen(null);
-                            document.getElementById("queenMarkIcon").style.color = '#000000';
                           } else {
                             console.log("No inactive reason selected.");
                             e.preventDefault();

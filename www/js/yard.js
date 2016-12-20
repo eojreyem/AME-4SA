@@ -25,21 +25,19 @@ angular.module('ameApp')
         colonies.reduce(function(doesntMatter, colony){
           VisitHelper.getLastVisitByColonyId(colony.id).then(function(lastVisit){
             if (lastVisit != null){
-
+              //calculate time since last visit in days and hours.
               msAgo = (new Date(Date.now()-tzoffset)) - (new Date(lastVisit.date_time));
               colony.daysAgo = parseInt(msAgo/(3600000*24),10);
               colony.hoursAgo = parseInt(((msAgo/(3600000))%24),10);
-              if (colony.daysAgo>=24){
+              //turn text red if it's been over 2 weeks since last visit!
+              if (colony.daysAgo>=14){
                 document.getElementById("timeSinceVisit").style.color = "red";
               }
-
               colony.qty_boxes = lastVisit.qty_boxes;
               colony.last_visit_date_time= lastVisit.date_time;
               colony.last_queen_status = lastVisit.queen_status;
               colony.last_hive_type = lastVisit.hive_type;
               colony.last_disease = lastVisit.disease;
-              console.log(colony);
-
             };
           });
         },0);

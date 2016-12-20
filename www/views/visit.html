@@ -11,11 +11,26 @@
       <p ng-hide="visit.yard_id == currentYard.id" class="positive">Colony was in {{visit.yard_name}}</p>
       <div class="row">
         <button class="button col-60 button-block button-outline button-dark" ng-click="openDatePicker()">{{visit.date_time | date:'EEE - MMM d, yyyy'}}</button>
-        <button class="button col-40 button-block button-outline button-dark">{{visit.date_time | date:'hh:mm a'}}</button>
+        <button class="button col-40 button-block button-outline button-dark" disabled>{{visit.date_time | date:'hh:mm a'}}</button>
+      </div>
+
+      <div class="row">
+        <div class="col-50">
+          <label class="item item-input item-select" >
+            <div class="input-label"> Boxes
+            </div>
+            <select id="hiveTypeSelector" ng-model="visit.hive_type_id" ng-options="hiveType.id as hiveType.type for hiveType in hiveTypes">          </select>
+          </label>
+        </div>
+        <div class="button-bar col-50">
+          <button class="button button-outline" ng-click="changeNumBoxes(-1)">-</button>
+          <button class="button button-outline button-dark"><b id="numberBoxesBtn">{{visit.qty_boxes}}</b></button>
+          <button class="button button-positive" ng-click="changeNumBoxes(1)">+</button>
+        </div>
       </div>
 
       <label class="item item-input item-select item-dark" ng-click = "showChangeQueenPopup()">
-        <div class="input-label"><i class="icon ion-record" id="queenMarkIcon"></i> <b>{{reigningQueen.id}}</b> {{reigningQueen.name}}</div>
+        <div class="input-label"><i class="icon ion-record" id="queenMarkIcon"></i> <b> {{reigningQueen.id}} </b> {{reigningQueen.name}}</div>
         <select ng-model="visit.queen_status_id" ng-change="queenStatusChange()" ng-disabled="reigningQueen.date_inactive !=null" ng-options="status.id as status.status for status in queenStatuses">{{status.status}}</select>
       </label>
 
@@ -40,15 +55,6 @@
         </label>
       </li>
 
-      <label class="item item-input item-select" >
-        <div class="input-label">Hive Type</div>
-        <select ng-model="visit.hive_type_id" ng-options="hiveType.id as hiveType.type for hiveType in hiveTypes">          </select>
-      </label>
-
-      <label class="item item-input">
-        <span class="input-label">Hive Bodies</span>
-        <input type="number" ng-model="visit.qty_boxes">
-      </label>
 
       <label class="item item-input item-select" >
         <div class="input-label">Diseases</div>
@@ -66,9 +72,9 @@
       </li>
 
       <item class="row">
-        <button class="button button-block button-positive col-25" ng-click='showAddNotePopup()'>Add Note</button>
-        <button class="button button-block button-positive col-25 col-offset-10" ng-click='showAddDataPopup()'>Add Data</button>
-        <button class="button button-block button-positive col-offset-10 col-25" ng-click='saveVisit(visit)'>Save</button>
+        <button class="button button-block button-positive col-25" ng-click='showAddNotePopup()'>+Note</button>
+        <button class="button button-block button-positive col-25 col-offset-10" ng-click='showAddDataPopup()'>+Data</button>
+        <button class="button button-block button-positive col-offset-10 col-30" ng-click='saveVisit(visit)'>Save</button>
       </item>
 
     </div>
