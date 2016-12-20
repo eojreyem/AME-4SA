@@ -71,8 +71,11 @@ angular.module('ameApp')
       $scope.visit = colonysVisits[visitViewI];
       $scope.visitIndex = visitViewI;
 
-      //Color change to draw attention to problematic queen statuses
+      msAgo = (new Date(Date.now()-tzoffset)) - (new Date(colonysVisits[visitViewI].date_time));
+      $scope.daysAgo = parseInt(msAgo/(3600000*24),10);
+      $scope.hoursAgo = parseInt(((msAgo/(3600000))%24),10);
 
+      //Color change to draw attention to problematic queen statuses
       if ($scope.visit.queen_status_id>2){
         document.getElementById("pastQueenStatus").style.color = 'red';
       }else {
@@ -115,6 +118,7 @@ angular.module('ameApp')
             onTap: function(e) {
             if ($scope.choice.reasonId>0) {
               console.log("selected "+reasons[$scope.choice.reasonId-1].reason+", store to colony");
+              //TODO use Save colony instead of specific function.  Also add date_inactive
               ColonyHelper.setColonyInactive(colony.id, $scope.choice.reasonId);
             } else {
               console.log("UPDATE THIS WHEN YOU KNOW MORE.");

@@ -83,7 +83,7 @@
 
         <div class="item item-divider">
           {{visit.date_time| date:'MMM d, yyyy @ hh:mm a'}}
-          <span class="item-note"> days ago </span>
+          <span class="item-note"> {{daysAgo}}d {{hoursAgo}}h ago</span>
         </div>
         <div class="item item-icon-left">
           <i class="icon ion-record" id="visitQueenColorBtn"></i><b>{{visitQueen.id}}</b> {{visitQueen.name}}
@@ -93,7 +93,7 @@
         </div>
         <div class="item">
           <!--TODO fill with actual db info-->
-          <b>{{visit.qty_boxes}}</b> x {{visit.hive_type}} boxes {{visit.disease}}, {{visit.is_feeding}}, {{visit.is_feeding}}, {{visit.is_feeding}}
+          <b>{{visit.qty_boxes}}</b> x {{visit.hive_type}} box {{visit.disease}}, {{visit.is_feeding}}, {{visit.is_feeding}}, {{visit.is_feeding}}
           <span class="item-note">
 
           </span>

@@ -52,7 +52,9 @@
 
             <div class="col-40 col-offset-20">
               <h2 ng-hide="colony.qty_boxes == null"><b>{{colony.qty_boxes}}</b> x {{colony.last_hive_type}} boxes </h2>
-              <p ng-show="colony.last_visit_date_time == null">Never </p><p>Visited {{colony.last_visit_date_time | date:'MMM d, yy'}}</p>
+              <span ng-show="colony.last_visit_date_time == null">Never </span>
+              <span>Visited </span>
+              <span ng-hide="colony.last_visit_date_time == null" id="timeSinceVisit">{{colony.daysAgo}}d {{colony.hoursAgo}}h ago</span>
             </div>
 
             <div class="col-40 col-offset-20">
