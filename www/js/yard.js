@@ -7,6 +7,7 @@ angular.module('ameApp')
   var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
 
   var newColony = {
+    id: "new",
     in_yard_id: $stateParams.yardId,
     number: null,
     date_active: (new Date(Date.now()-tzoffset)).toISOString().slice(0,-1),
@@ -16,36 +17,43 @@ angular.module('ameApp')
   };
   $scope.newColony = newColony;
 
-  //Load current yard into currentYard
-  YardHelper.getYardById($stateParams.yardId).then(function (yard){
-    $scope.currentYard = yard;
 
-    YardHelper.getColoniesInYard(yard.id).then(function (colonies){
-      if (colonies!=null){
-        colonies.reduce(function(doesntMatter, colony){
-          VisitHelper.getLastVisitByColonyId(colony.id).then(function(lastVisit){
-            if (lastVisit != null){
-              //calculate time since last visit in days and hours.
-              msAgo = (new Date(Date.now()-tzoffset)) - (new Date(lastVisit.date_time));
-              colony.daysAgo = parseInt(msAgo/(3600000*24),10);
-              colony.hoursAgo = parseInt(((msAgo/(3600000))%24),10);
-              //turn text red if it's been over 2 weeks since last visit!
-              if (colony.daysAgo>=14){
-                document.getElementById("timeSinceVisit").style.color = "red";
-              }
-              colony.qty_boxes = lastVisit.qty_boxes;
-              colony.last_visit_date_time= lastVisit.date_time;
-              colony.last_queen_status = lastVisit.queen_status;
-              colony.last_hive_type = lastVisit.hive_type;
-              colony.last_disease = lastVisit.disease;
-            };
-          });
-        },0);
-        $scope.colonies = colonies;
-      }
+  //Load current yard into currentYard
+  $scope.refreshColonies = function(){
+    YardHelper.getYardById($stateParams.yardId).then(function (yard){
+      $scope.currentYard = yard;
+      YardHelper.getColoniesInYard(yard.id).then(function (colonies){
+        if (colonies!=null){
+          colonies.reduce(function(doesntMatter, colony){
+            VisitHelper.getLastVisitByColonyId(colony.id).then(function(lastVisit){
+              if (lastVisit != null){
+                //calculate time since last visit in days and hours.
+                msAgo = (new Date(Date.now()-tzoffset)) - (new Date(lastVisit.date_time));
+                colony.daysAgo = parseInt(msAgo/(3600000*24),10);
+                colony.hoursAgo = parseInt(((msAgo/(3600000))%24),10);
+                //turn text red if it's been over 2 weeks since last visit!
+                if (colony.daysAgo>=14){
+                  document.getElementById("timeSinceVisit").style.color = "red";
+                }
+                colony.qty_boxes = lastVisit.qty_boxes;
+                colony.last_visit_date_time= lastVisit.date_time;
+                colony.last_queen_status = lastVisit.queen_status;
+                colony.last_hive_type = lastVisit.hive_type;
+                colony.last_disease = lastVisit.disease;
+              };
+            });
+          },0);
+          $scope.colonies = colonies;
+        }else {
+          $scope.colonies = [];
+        }
+
+      });
+
     });
 
-  });
+  }
+  $scope.refreshColonies();
 
   datePickerObj = {
     callback: function (val) {  //Mandatory
@@ -110,10 +118,10 @@ angular.module('ameApp')
             //don't allow "move" button to do anything if no yard is selected.
             e.preventDefault();
           } else {
-            ColonyHelper.updateColonyYard(colony.id, $scope.choice.yardId);
-            YardHelper.getColoniesInYard($scope.currentYard.id).then(function (colonies){
-              $scope.colonies = colonies;
-            });
+            colony.in_yard_id = $scope.choice.yardId;
+            console.log(colony);
+            ColonyHelper.saveColony(colony);
+            $scope.refreshColonies();
             console.log("moving colony ID" + colony.id + "to yard ID:" +$scope.choice.yardId)
             }
         }

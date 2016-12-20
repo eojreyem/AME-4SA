@@ -9,11 +9,18 @@ angular.module('ameApp')
 
   service.getColonyById = function(id) { //returns a colony object when given a valid ID
     var deferred = $q.defer();
-    var query = "SELECT * FROM Colonies WHERE id = " + id;
-    $cordovaSQLite.execute(db, query).then(function(res) {
-      colony = res.rows.item(0);
-      deferred.resolve(colony);
-      console.log("Selected colony");
+    var query = "SELECT * FROM Colonies WHERE id = ?";
+    $cordovaSQLite.execute(db, query, [id]).then(function(res) {
+      if (res.rows.length == 0){
+        deferred.resolve(null);
+        console.log("No colony with id:" + id);
+        console.log(res);
+      }else {
+        colony = res.rows.item(0);
+        deferred.resolve(colony);
+      }
+    }, function (err) {
+      console.error(err);
     });
     return deferred.promise;
   }
@@ -37,24 +44,44 @@ angular.module('ameApp')
     return deferred.promise;
   }
 
+  //function saves a new colony and returns it's index (id)
+  //if colony already exisits it updates the colony with that id to the colony object provided. returns null
   service.saveColony = function (colony) {
     var deferred = $q.defer();
-    service.getColonyByNumber(colony.number).then(function (activeColony){ //check if tag is assigned
-      if (activeColony==null){ //If no active colony is assigned the tag allow new colony create
-        var query = "INSERT INTO Colonies (in_yard_id, number, date_active, origin) VALUES (?,?,?,?)";
-        $cordovaSQLite.execute(db, query, [colony.in_yard_id, colony.number, colony.date_active, colony.origin]).then(function(res) {
-            console.log("INSERT COLONY ID -> " + res.insertId);
-            deferred.resolve(res.insertId);
-        }, function (err) {
-            console.error(err);
+    console.log(colony);
+    //check if colony exists, if no create, if yes update.
+    service.getColonyById(colony.id).then(function(existingColony){
+      if (existingColony==null){
+        console.log("no existing colony");
+        //it exists, check the tag isn't already being used.
+        service.getColonyByNumber(colony.number).then(function (activeColony){
+          if (activeColony==null){ //If no active colony is assigned the tag allow new colony create
+            var query = "INSERT INTO Colonies (in_yard_id, number, date_active, origin) VALUES (?,?,?,?)";
+            console.log(query);
+            $cordovaSQLite.execute(db, query, [colony.in_yard_id, colony.number, colony.date_active, colony.origin]).then(function(res) {
+                console.log("INSERT COLONY ID -> " + res.insertId);
+                deferred.resolve(res.insertId);
+            }, function (err) {
+                console.error(err);
+            });
+          }else{
+            console.log("Already a colony with that number");
+            document.getElementById("newColonyNumber").style.color = "red";
+          }
         });
-      }else{
-        console.log(activeColony); //TODO: tell user there is an active colony w/ that tag in yard X
-        document.getElementById("newColonyNumber").style.color = "red";
+      }else {
+        var query = "UPDATE Colonies SET in_yard_id = ?, number = ?, date_active = ?, origin = ?, reason_inactive_id = ?, date_inactive = ? WHERE id = ?";
+        $cordovaSQLite.execute(db, query, [colony.in_yard_id, colony.number, colony.date_active, colony.origin, colony.reason_inactive_id, colony.date_inactive, colony.id]).then(function(res) {
+          deferred.resolve(null);
+          console.log(res);
+          console.log("colony "+colony.id+" updated");
+        });
       }
     });
     return deferred.promise;
   }
+
+
 
   service.getColonyInactiveReasons = function() { //returns reasons a colony might be inactive
     var deferred = $q.defer();
@@ -73,14 +100,6 @@ angular.module('ameApp')
     return deferred.promise;
   }
 
-  service.updateColonyYard = function (colonyId, yardId) {
-    var query = "UPDATE Colonies SET in_yard_id = ? WHERE id = ?";
-    $cordovaSQLite.execute(db, query, [yardId, colonyId]).then(function(res) {
-      console.log("Moved Colony");
-    }, function (err) {
-        console.error(err);
-    });
-  }
 
   service.setColonyInactive = function (colonyId, reasonId) {
     var query = "UPDATE Colonies SET date_inactive = ?, reason_inactive_id = ? WHERE id = ?";
