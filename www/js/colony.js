@@ -4,33 +4,69 @@ angular.module('ameApp')
 
   var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
 
+  var newColony = {
+    id: "new",
+    in_yard_id: $stateParams.yardId,
+    number: null,
+    date_active: (new Date(Date.now()-tzoffset)).toISOString().slice(0,-1),
+    origin: null,
+    date_inactive: null,
+    reason_inactive_id: null,
+  };
+
+  datePickerObj = {
+    callback: function (val) {  //Mandatory
+      console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+      $scope.newColony.date_active = (new Date(val).toISOString().slice(0,-1));
+    },
+    from: new Date(2014, 1, 1), //Optional
+    to: new Date(), //Optional
+    inputDate: new Date(),      //Optional
+    closeOnSelect: false,       //Optional
+    templateType: 'modal'       //Optional
+  };
+
+
+  $scope.openDatePicker = function(){
+    ionicDatePicker.openDatePicker(datePickerObj);
+  };
+
+  $scope.changeTextBlack = function() { //changes tag number to black (incase it was red) when user clicks to edit
+    document.getElementById("newColonyNumber").style.color = "black";
+  }
+
+
+
   $scope.queens = [];
 
   visitViewI = 0; //visit viewer index for colony's visits array
   colonysVisits = [];  // to be filled with visits for the current colony
 
-
+  //Load yard into currentYard
+  YardHelper.getYardById($stateParams.yardId).then(function (yard){
+    $scope.currentYard = yard;
+  });
 
   //Load current colony into currentColony
   ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
-    $scope.currentColony = colony;
-    VisitHelper.getVisitsForColony(colony.id).then(function(visits){
-      colonysVisits = visits;
-      $scope.changeVisitViewBy(0);
-      $scope.numOfVisits = visits.length;
-    });
-    VisitNotesHelper.getRemindersByColonyId(colony.id).then(function(reminders){
-      $scope.reminders = reminders;
-      console.log(reminders);
-    });
-
-    QueenHelper.getQueensInColony(colony.id).then(function(queens){
-      $scope.queens = queens;
-    });
-    //Load colony's yard into currentYard
-    YardHelper.getYardById(colony.in_yard_id).then(function (yard){
-      $scope.currentYard = yard;
-    });
+    if (colony!=null){
+      $scope.currentColony = colony;
+      VisitHelper.getVisitsForColony(colony.id).then(function(visits){
+        colonysVisits = visits;
+        $scope.changeVisitViewBy(0);
+        $scope.numOfVisits = visits.length;
+      });
+      VisitNotesHelper.getRemindersByColonyId(colony.id).then(function(reminders){
+        $scope.reminders = reminders;
+        console.log(reminders);
+      });
+      /*QueenHelper.getQueensInColony(colony.id).then(function(queens){
+        $scope.queens = queens;
+      });*/
+    }else {
+      $scope.currentColony = {number:"new"};
+      $scope.newColony = newColony;
+    }
 
   });
 
@@ -68,13 +104,20 @@ angular.module('ameApp')
         $scope.visitQueen = null;
         document.getElementById("visitQueenColorBtn").style.color = 'black';
       }
-
-
   }
 
   $scope.dismissReminder = function(reminderNote){
     console.log("dismissing?");
     VisitNotesHelper.dismissReminder(reminderNote);
+  }
+
+  $scope.createColony = function(colony) {
+    ColonyHelper.saveColony(colony).then(function (insertId){
+      if (insertId!=null){
+        colony.id = insertId;
+        $scope.currentColony = colony;
+      }
+    })
   }
 
   $scope.showColonyInactivePopup = function(colony) {

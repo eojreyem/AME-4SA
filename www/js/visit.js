@@ -156,10 +156,8 @@ angular.module('ameApp')
           {text: 'New Queen',
             type: 'button-positive',
             onTap: function (e){
-              newQueen = {id:'new'};
-              $scope.goToQueen(newQueen);
-              console.log("TODO: create queen popup");
-
+              changeQueenPopup.close();
+              $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id + '/visit/' + $scope.visit.id + '/queen/new' );
             }
           }
         ]
@@ -302,13 +300,10 @@ angular.module('ameApp')
     $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id);
   }
   $scope.goToYard = function() {
-    console.log("nav to yard");
     $location.url('/yard/' + $scope.currentYard.id );
   }
 
   $scope.goToQueen = function(queen) {
-    console.log("nav to queen");
-    changeQueenPopup.close();
     $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id + '/visit/' + $scope.visit.id + '/queen/' + queen.id );
   }
 

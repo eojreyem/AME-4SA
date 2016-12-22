@@ -31,7 +31,8 @@
     <ion-header-bar class="bar-dark">
       <button class="button button-icon ion-home" ng-click="goHome()">></button>
       <button class="button button-icon ion-location">{{currentYard.name}}</button>
-      <button menu-toggle="right" class="button button-icon ion-ios-box">+</button>
+      <div class="col">
+      </div>
     </ion-header-bar>
 
     <ion-content class="has-header">
@@ -68,5 +69,10 @@
 
 
     </ion-content>
+    <ion-footer-bar>
+      <div class="col">
+      </div>
+      <button class="button button-icon ion-ios-box" ng-click="createColony()">+</button>
+    </ion-footer-bar>
   </ion-side-menu-content>
 </ion-side-menus>

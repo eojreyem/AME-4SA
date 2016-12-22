@@ -3,19 +3,8 @@ angular.module('ameApp')
 
 .controller('YardCtrl', function($scope, $ionicPopup, $stateParams, $location, $cordovaSQLite, $ionicSideMenuDelegate, ColonyHelper, YardHelper, VisitHelper, ionicDatePicker) {
 
-  var moveColonyPopup = $ionicPopup;
   var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
-
-  var newColony = {
-    id: "new",
-    in_yard_id: $stateParams.yardId,
-    number: null,
-    date_active: (new Date(Date.now()-tzoffset)).toISOString().slice(0,-1),
-    origin: null,
-    date_inactive: null,
-    reason_inactive_id: null,
-  };
-  $scope.newColony = newColony;
+  var moveColonyPopup = $ionicPopup;
 
 
   //Load current yard into currentYard
@@ -55,34 +44,9 @@ angular.module('ameApp')
   }
   $scope.refreshColonies();
 
-  datePickerObj = {
-    callback: function (val) {  //Mandatory
-      console.log('Return value from the datepicker popup is : ' + val, new Date(val));
-      $scope.newColony.date_active = (new Date(val).toISOString().slice(0,-1));
-    },
-    from: new Date(2014, 1, 1), //Optional
-    to: new Date(), //Optional
-    inputDate: new Date(),      //Optional
-    closeOnSelect: false,       //Optional
-    templateType: 'modal'       //Optional
-  };
-
-  $scope.openDatePicker = function(){
-    ionicDatePicker.openDatePicker(datePickerObj);
-  };
-
-  $scope.changeTextBlack = function() { //changes tag number to black (incase it was red) when user clicks to edit
-    document.getElementById("newColonyNumber").style.color = "black";
-  }
 
   $scope.createColony = function(newColony) {
-    ColonyHelper.saveColony(newColony).then(function(insertId){
-      if (insertId!=null){
-        newColony.id = insertId;
-        $scope.colonies.push(newColony);
-        $ionicSideMenuDelegate.toggleRight();
-      }
-    });
+    $location.url('/yard/'+ $scope.currentYard.id + '/colony/new');
   };
 
   //custom sort function for ng-repeat to put nulls on top, then sort by date.
