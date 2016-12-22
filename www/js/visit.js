@@ -317,6 +317,8 @@ angular.module('ameApp')
   }
 
   $scope.goToQueen = function(queen) {
+    changeQueenPopup.close();
+
     $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id + '/visit/' + $scope.visit.id + '/queen/' + queen.id );
   }
 

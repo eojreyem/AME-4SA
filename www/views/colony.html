@@ -8,12 +8,6 @@
 </ion-header-bar>
 <ion-content class="has-header">
 
-  <label class="item item-button-right item-text-wrap" ng-show="currentColony.id !=new">
-    <p >Active on {{currentColony.date_active| date:'MMM d, yyyy'}}</p><p>Origin: {{currentColony.origin}}.</p>
-    <button class="button button-outline button-dark" ng-click="showColonyInactivePopup(currentColony)">Inactive</button>
-  </label>
-
-
   <!--display reminder notes as a list at the top.-->
   <div class="list">
     <a class="item item-icon-left item-text-wrap" ng-repeat="reminder in reminders" on-hold="dismissReminder(reminder)">
@@ -86,3 +80,10 @@
 
 
 </ion-content>
+<div class="bar bar-footer" ng-hide="currentColony.id==new">
+  <button class="button button-outline button-dark" ng-click="showColonyInactivePopup(currentColony)">Inactive</button>
+  <div class="col">
+    <span> Active on {{currentColony.date_active| date:'MMM d, yyyy'}}<span>
+  </div>
+  <button class="button button-icon ion-information-circled"></button>
+</div>

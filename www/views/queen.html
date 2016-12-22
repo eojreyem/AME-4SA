@@ -1,63 +1,60 @@
+<ion-header-bar class="bar-dark">
+    <button class="button button-icon ion-home" ng-click="goHome()">></button>
+    <button class="button button-icon ion-location" ng-click="goToYard()"> ></button>
+    <button class="button button-icon ion-ios-box" ng-click="goToColony()"> {{currentColony.number}} ></button>
+    <button class="button button-icon ion-clipboard" ng-click="goToVisit()"> {{visitId}} ></button>
+    <button class="button button-icon ion-female"> {{queen.id}}</button>
+    <div class="col">
 
-    <ion-header-bar class="bar-dark">
-        <button class="button button-icon ion-home" ng-click="goHome()">></button>
-        <button class="button button-icon ion-location" ng-click="goToYard()"> ></button>
-        <button class="button button-icon ion-ios-box" ng-click="goToColony()"> {{currentColony.number}} ></button>
-        <button class="button button-icon ion-clipboard" ng-click="goToVisit()"> {{visitId}} ></button>
-        <button class="button button-icon ion-female"> {{queen.id}}</button>
-        <div class="col">
+    </div>
 
-        </div>
+</ion-header-bar>
+<ion-content class="has-header">
 
-    </ion-header-bar>
-    <ion-content class="has-header">
+  <div class="list">
+    <div class="item item-button-right" ng-hide="queen.id=='new'">
+      <b>In Colony <i class="ion-ios-pricetag"></i> {{queen.in_colony_number}}</b>
+      <button class="button button-balanced" ng-click="showMoveQueenPopup(queen)" ng-show="queen.date_inactive==null">Move</button>
+    </div>
 
+    <label class="item item-input item-select" >
+      <div class="input-label">Mother ID:</div>
+      <input ng-model="queen.mother_queen_id" type="number" placeholder="Enter # or Select">
+      <select ng-model="queen.mother_queen_id" ng-options="queen.id as queen.name for queen in breeders">       </select>
+    </label>
 
-      <div class="list">
-        <div class="item item-button-right">
-          <b>In Colony <i class="ion-ios-pricetag"></i> {{queen.in_colony_number}}</b>
-          <button class="button button-balanced" ng-click="showMoveQueenPopup(queen)" ng-show="queen.date_inactive==null">Move</button>
-        </div>
+    <div class="item item-button-right">
+      <b>Mark Color:</b>
+      <button class="button button-dark col-33" ng-click="showQueenColorPopup(queen)"><i class="icon ion-record" id="queenColorButton"></i>- change</button>
+    </div>
 
-        <label class="item item-input">
-          <span  class="input-label"><b>Name</b> (if breeder)</span>
-          <input ng-model="queen.name" type="text" placeholder="Elizabeth">
-        </label>
+    <label class="item item-input item-button-right">
+      <span class="input-label"><b>Date Emerged</b></span>
+      <button class="button button-outline button-dark" ng-click="openDatePicker()">{{queen.date_emerged | date:'MMM d, yyyy'}} </button>
+    </label>
 
-        <div class="item item-button-right">
-          <b>Mark Color:</b>
-          <button class="button button-dark col-33" ng-click="showQueenColorPopup(queen)"><i class="icon ion-record" id="queenColorButton"></i>- change</button>
-        </div>
+    <label class="item item-input">
+      <span  class="input-label"><b>Name</b> (if breeder)</span>
+      <input ng-model="queen.name" type="text" placeholder="Elizabeth">
+    </label>
 
-        <label class="item item-input item-button-right">
-          <span class="input-label"><b>Date Emerged</b></span>
-          <button class="button button-outline button-dark" ng-click="openDatePicker()">{{queen.date_emerged | date:'MMM d, yyyy'}} </button>
-        </label>
+    <label class="item item-input item-stacked-label">
+      <span  class="input-label"><b>Origin</b></span>
+      <input ng-model="queen.origin" type="text" placeholder="Note about where this queen came from.">
+    </label>
 
-        <label class="item item-input item-stacked-label">
-          <span  class="input-label">Origin</span>
-          <input ng-model="queen.origin" type="text" placeholder="Note about where this queen came from.">
-        </label>
+    <label class="item" ng-hide="queen.date_inactive==null">
+      <span  class="label">Date Inactive</span>
+      <span class="item-note">{{queen.date_inactive| date:'MMM d, yyyy'}}</span>
+    </label>
 
-        <label class="item item-input item-select" >
-          <div class="input-label">Mother ID:</div>
-          <input ng-model="queen.mother_queen_id" type="number" placeholder="Enter # or Select">
-          <select ng-model="queen.mother_queen_id" ng-options="queen.id as queen.name for queen in breeders">       </select>
-        </label>
+    <label class="item" ng-hide="queen.inactive_reason==null">
+      <span  class="label">Reason Inactive:</span>
+      <span class="item-note">{{queen.inactive_reason}}</span>
+    </label>
 
-        <label class="item" ng-hide="queen.date_inactive==null">
-          <span  class="label">Date Inactive</span>
-          <span class="item-note">{{queen.date_inactive| date:'MMM d, yyyy'}}</span>
-        </label>
-
-        <label class="item" ng-hide="queen.inactive_reason==null">
-          <span  class="label">Reason Inactive:</span>
-          <span class="item-note">{{queen.inactive_reason}}</span>
-        </label>
-
-
-      </div>
-      <div class="button-bar">
-          <button class="button button-outline button-dark col-33" ng-click="showQueenInactivePopup(queen)" ng-show="queen.date_inactive==null">Inactive</button>
-          <button class="button button-positive" ng-click="saveQueen(queen)">Save</button>
-      </div>
+  </div>
+  <div class="button-bar">
+      <button class="button button-outline button-dark col-33" ng-click="showQueenInactivePopup(queen)" ng-show="queen.date_inactive==null" ng-hide="queen.id=='new'">Inactive</button>
+      <button class="button button-positive" ng-click="saveQueen(queen)">Save</button>
+  </div>
