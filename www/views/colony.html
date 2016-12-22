@@ -46,18 +46,22 @@
   <!--Card with a summary of the last visit.-->
   <div class="card" ng-show="numOfVisits>0">
 
-      <div class="row">
-        <button class="button button-positive icon-left ion-chevron-left col-25" ng-click="changeVisitViewBy(1)" ng-disabled = "visitIndex>=numOfVisits-1"> Older</button>
-        <div class="col col-50 text-center">
-          <h3>{{numOfVisits}} Visits</h3>
-        </div>
-        <button class="button col-25 button-positive icon-right ion-chevron-right" ng-click="changeVisitViewBy(-1)" ng-disabled = "visitIndex<=0"> Newer </button>
+    <div class="item item-divider item-dark">
+      <b>{{numOfVisits}} Visits</b>
+    </div>
+    <div class="row">
+      <button class="button button-positive icon-left ion-chevron-left col-25" ng-click="changeVisitViewBy(1)" ng-disabled = "visitIndex>=numOfVisits-1"> Older</button>
+      <div class="col col-50 text-center">
+        <h3>{{daysAgo}} days ago </h3>
       </div>
+      <button class="button col-25 button-positive icon-right ion-chevron-right" ng-click="changeVisitViewBy(-1)" ng-disabled = "visitIndex<=0"> Newer </button>
+    </div>
 
 
-    <div class="item item-divider">
+
+    <div class="item">
       {{visit.date_time| date:'MMM d, yyyy @ hh:mm a'}}
-      <span class="item-note"> {{daysAgo}}d {{hoursAgo}}h ago</span>
+      <span class="item-note"> {{daysAgo}} days {{hoursAgo}}h ago</span>
     </div>
     <div class="item item-icon-left">
       <i class="icon ion-record" id="visitQueenColorBtn"></i><b>{{visitQueen.id}}</b> {{visitQueen.name}}

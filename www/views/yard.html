@@ -1,78 +1,46 @@
-<ion-side-menus >
-  <!-- Right menu = Create Colony -->
-  <ion-side-menu side="right">
-    <header class="bar bar-header bar-stable">
-      <h1 class="title">New Colony</h1>
-    </header>
-    <ion-content class="has-header">
-        <div class="list">
-          <label class="item item-input item-stacked-label">
-            <span class="input-label">Date Active</span>
-            <button class="button button-outline button-dark" ng-click="openDatePicker()">{{newColony.date_active | date:'MMM d, yyyy'}} </button>
-          </label>
-          <label class="item item-input item-stacked-label">
-            <span class="input-label ion-ios-pricetag-outline"> Number</span>
-            <input id="newColonyNumber" ng-model="newColony.number" min="1" max="999" type="number" placeholder="200" ng-click="changeTextBlack()">
-          </label>
-          <label class="item item-input item-stacked-label">
-            <span  class="input-label">Origin</span>
-            <input ng-model="newColony.origin" type="text" placeholder="Note about start of this colony">
-          </label>
+<ion-header-bar class="bar-dark">
+  <button class="button button-icon ion-home" ng-click="goHome()">></button>
+  <button class="button button-icon ion-location">{{currentYard.name}}</button>
+  <div class="col">
+  </div>
+</ion-header-bar>
+
+<ion-content class="has-header">
+
+  <div class="padding">
+    <span class = "item-note">*long press to move colony</span>
+  </div>
+
+  <!-- List of Colonies in this yard -->
+  <div class="card" ng-show="colonies.length<1">
+    Yard is empty, click the icon in the upper right to add a colony
+  </div>
+
+  <div class="card padding" ng-repeat="colony in colonies | orderBy :nullsOnTop" ng-click="goToColony(colony)" on-hold="showMoveColonyPopup(colony)">
+    <div class="item item-icon-left item-stable">
+      <i class="icon ion-ios-pricetag-outline"> {{colony.number}}</i>
+      <div class="row" >
+
+        <div class="col-40 col-offset-20">
+          <h2 ng-hide="colony.qty_boxes == null"><b>{{colony.qty_boxes}}</b> x {{colony.last_hive_type}} boxes </h2>
+          <span ng-show="colony.last_visit_date_time == null">Never </span>
+          <span>Visited </span>
+          <span ng-hide="colony.last_visit_date_time == null" id="timeSinceVisit">{{colony.daysAgo}}d {{colony.hoursAgo}}h ago</span>
         </div>
-        <div class="padding">
-          <button ng-click="createColony(newColony)" class="button button-positive button-block">Add Colony  <i class="icon ion-ios-box"></i></button>
+
+        <div class="col-40 col-offset-20">
+          <h2><b>{{colony.last_queen_status}}</b></h2>
+          <p>{{colony.last_disease}}</p>
         </div>
-    </ion-content>
-  </ion-side-menu>
 
-  <!-- Main = List Yards & basic info then navigate to them -->
-  <ion-side-menu-content>
-
-    <ion-header-bar class="bar-dark">
-      <button class="button button-icon ion-home" ng-click="goHome()">></button>
-      <button class="button button-icon ion-location">{{currentYard.name}}</button>
-      <div class="col">
       </div>
-    </ion-header-bar>
-
-    <ion-content class="has-header">
-
-      <div class="padding">
-        <span class = "item-note">*long press to move colony</span>
-      </div>
-
-      <!-- List of Colonies in this yard -->
-      <div class="card" ng-show="colonies.length<1">
-        Yard is empty, click the icon in the upper right to add a colony
-      </div>
-
-      <div class="card padding" ng-repeat="colony in colonies | orderBy :nullsOnTop" ng-click="goToColony(colony)" on-hold="showMoveColonyPopup(colony)">
-        <div class="item item-icon-left item-stable">
-          <i class="icon ion-ios-pricetag-outline"> {{colony.number}}</i>
-          <div class="row" >
-
-            <div class="col-40 col-offset-20">
-              <h2 ng-hide="colony.qty_boxes == null"><b>{{colony.qty_boxes}}</b> x {{colony.last_hive_type}} boxes </h2>
-              <span ng-show="colony.last_visit_date_time == null">Never </span>
-              <span>Visited </span>
-              <span ng-hide="colony.last_visit_date_time == null" id="timeSinceVisit">{{colony.daysAgo}}d {{colony.hoursAgo}}h ago</span>
-            </div>
-
-            <div class="col-40 col-offset-20">
-              <h2><b>{{colony.last_queen_status}}</b></h2>
-              <p>{{colony.last_disease}}</p>
-            </div>
-
-          </div>
-        </div>
-      </div>
+    </div>
+  </div>
 
 
-    </ion-content>
-    <ion-footer-bar>
-      <div class="col">
-      </div>
-      <button class="button button-icon ion-ios-box" ng-click="createColony()">+</button>
-    </ion-footer-bar>
-  </ion-side-menu-content>
-</ion-side-menus>
+</ion-content>
+<ion-footer-bar>
+  <div class="col">
+  </div>
+  <button class="button button-icon ion-ios-box" ng-click="createColony()">+</button>
+</ion-footer-bar>

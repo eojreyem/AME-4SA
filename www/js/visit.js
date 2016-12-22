@@ -38,6 +38,19 @@ angular.module('ameApp')
   //Load current colony into currentYard for nav at the bottom.
   ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
     $scope.currentColony = colony;
+
+    datePickerObj = {
+      callback: function (val) {  //Mandatory
+        console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+        $scope.visit.date_time = (new Date(val).toISOString().slice(0,-1));
+      },
+      from: colony.date_active, //Optional
+      to: new Date(), //Optional
+      inputDate: new Date(),      //Optional
+      closeOnSelect: false,       //Optional
+      templateType: 'modal'       //Optional
+    };
+
     QueenHelper.getQueensInColony(colony.id).then(function (colonysQueens){
       $scope.colonysQueens = colonysQueens;
     });
