@@ -37,9 +37,14 @@ angular.module('ameApp')
     $scope.currentYard = yard;
   })
 
+  QueenHelper.getNamedQueens().then(function (namedQueens){
+    $scope.breeders = namedQueens;
+  })
+
   //Load current colony into currentYard for nav at the bottom.
   ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
     $scope.currentColony = colony;
+    newQueen.in_colony_number = colony.number;
   })
 
   $scope.visitId = $stateParams.visitId;

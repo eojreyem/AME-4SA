@@ -39,9 +39,10 @@
           <input ng-model="queen.origin" type="text" placeholder="Note about where this queen came from.">
         </label>
 
-        <label class="item item-input">
-          <span  class="input-label">Mother</span>
+        <label class="item item-input item-select" >
+          <div class="input-label">Mother ID:</div>
           <input ng-model="queen.mother_queen_id" type="number" placeholder="TODO Selector">
+          <select ng-model="queen.mother_queen_id" ng-options="queen.id as queen.name for queen in breeders">       </select>
         </label>
 
         <label class="item" ng-hide="queen.date_inactive==null">

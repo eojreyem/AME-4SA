@@ -46,6 +46,28 @@ angular.module('ameApp')
     return deferred.promise;
   }
 
+  service.getNamedQueens = function () {
+    var deferred = $q.defer();
+    queens = [];
+    var query = "SELECT * FROM Queens WHERE name IS NOT NULL";
+    $cordovaSQLite.execute(db, query).then(function(res) {
+      if(res.rows.length > 0) {
+        for (i = 0; i < res.rows.length; i++) {
+          console.log("SELECTED -> " + res.rows.item(i));
+          queens.push(res.rows.item(i));
+        }
+        deferred.resolve(queens);
+
+      }else {
+          console.log("No queens with names");
+          deferred.resolve(null);
+      }
+    }, function (err) {
+        console.error(err);
+    });
+    return deferred.promise;
+  }
+
   service.saveQueen = function (queen) {
     var deferred = $q.defer();
     // TODO: test for queen name duplicates
