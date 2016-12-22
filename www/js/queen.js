@@ -5,23 +5,54 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('ameApp')
 
-.controller('QueenCtrl', function($scope, $location, $stateParams, $ionicPopup, ColonyHelper, YardHelper, QueenHelper) {
+.controller('QueenCtrl', function($scope, $location, $stateParams, $ionicPopup, ionicDatePicker, ColonyHelper, YardHelper, QueenHelper) {
 
   var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
 
+  var newQueen = {
+    id: "new",
+    name: null,
+    in_colony_id: $stateParams.colonyId,
+    mother_queen_id: null, //motherId
+    origin: null,
+    //date emerge is prepopulated with 20 days ago.
+    date_emerged: (new Date(Date.now()-tzoffset - 1728000000)).toISOString().slice(0,-1),
+    mark_color_hex:'#000000', //hexColor
+  };
 
-  //Load current queen into currentQueen
+  datePickerObj = {
+    callback: function (val) {  //Mandatory
+      console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+      $scope.queen.date_emerged = (new Date(val).toISOString().slice(0,-1));
+    },
+    from: new Date(2014, 1, 1), //Optional
+    to: new Date(), //Optional
+    inputDate: new Date(),      //Optional
+    closeOnSelect: false,       //Optional
+    templateType: 'modal'       //Optional
+  };
+
+  //Load current yard into currentYard for nav at the bottom.
+  YardHelper.getYardById($stateParams.yardId).then(function (yard){
+    $scope.currentYard = yard;
+  })
+
+  //Load current colony into currentYard for nav at the bottom.
+  ColonyHelper.getColonyById($stateParams.colonyId).then(function (colony){
+    $scope.currentColony = colony;
+  })
+
+  $scope.visitId = $stateParams.visitId;
+
+  //Load current queen into queen
   QueenHelper.getQueenById($stateParams.queenId).then(function (queen){
-    $scope.currentQueen = queen;
-    document.getElementById("queenColorButton").style.color = queen.mark_color_hex;
-    //Load her colony into currentColony
-    ColonyHelper.getColonyById(queen.in_colony_id).then(function (colony){
-      $scope.currentColony = colony;
-      //Load colony's yard into currentYard
-      YardHelper.getYardById(colony.in_yard_id).then(function (yard){
-        $scope.currentYard = yard;
-      });
-    });
+    if (queen != null){
+      $scope.queen = queen;
+    }else {
+      $scope.queen = newQueen;
+    }
+    document.getElementById("queenColorButton").style.color = $scope.queen.mark_color_hex;
+
   });
 
   $scope.showQueenColorPopup = function(queen) {
@@ -48,9 +79,7 @@ angular.module('ameApp')
             type: 'button-positive',
             onTap: function(e) {
               document.getElementById("queenColorButton").style.color = $scope.hexColor.hex;
-              queen.mark_color_hex = $scope.hexColor.hex;
-              QueenHelper.saveQueen(queen);
-
+              $scope.queen.mark_color_hex = $scope.hexColor.hex;
             }
           }
         ]
@@ -58,24 +87,9 @@ angular.module('ameApp')
 
   };
 
-  $scope.showGiveQueenNamePopup = function(queen) {
-    var queenNamePopup = $ionicPopup.show({
-      title: 'Enter a Name for queen #' + queen.id,
-      subTitle: 'This is optional and typically done just for breeders',
-      template: '<label class="item item-input">  <input type="text" ng-model="currentQueen.name"></label>',
-      scope: $scope,
-      buttons: [
-        { text: 'Cancel' },
-        { text: 'Name',
-          type: 'button-positive',
-          onTap: function(e) {
-            //TODO save queen    check to make sure name is unique
-            QueenHelper.saveQueen($scope.currentQueen);
-          }
-        }
-      ]
-    });
-  }
+  $scope.openDatePicker = function(){
+    ionicDatePicker.openDatePicker(datePickerObj);
+  };
 
   $scope.showMoveQueenPopup = function(queen) {
     $scope.destination = {};
@@ -94,13 +108,13 @@ angular.module('ameApp')
             ColonyHelper.getColonyByNumber($scope.destination.colonyNum).then(function (destinationColony){
               //TODO: if destinationColony is not null.
               if (destinationColony!= null){
-                console.log("move queen " +queen.name+ " to " +destinationColony.number);
+                console.log("move queen " +queen.id+ " to " +destinationColony.number);
                 queen.in_colony_id = destinationColony.id;
-                console.log(queen);
-                QueenHelper.saveQueen(queen)
+                queen.in_colony_number = destinationColony.number;
+                $scope.queen = queen;
 
                 moveQueenPopup.close();
-                $scope.goToColony($scope.currentColony)
+              //  $scope.goToColony($scope.currentColony)
               }
               else{
                 console.log("Enter Valid Colony Number.");
@@ -151,6 +165,19 @@ angular.module('ameApp')
     });
 
   };
+
+  $scope.saveQueen = function (queen){
+    console.log("saving queen");
+    QueenHelper.saveQueen(queen).then(function (insertId){
+      if (insertId != null){
+        $scope.queen.id = insertId;
+      }
+    });
+  }
+
+  $scope.goToVisit = function(visit) {
+    $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id  + '/visit/' + $scope.visitId);
+  }
 
   $scope.goToColony = function() {
     $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id);

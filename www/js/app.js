@@ -45,7 +45,7 @@ angular
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Hive_Types (id INTEGER PRIMARY KEY, type TEXT)");
     $cordovaSQLite.execute(db, "INSERT INTO Hive_Types (type) VALUES ('10FR'), ('5FR'), ('2FR'), ('Other')");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Queen_Inactive_Reasons (id INTEGER PRIMARY KEY, reason TEXT)");
-    $cordovaSQLite.execute(db, "INSERT INTO Queen_Inactive_Reasons (reason) VALUES ('Superceded'), ('Poor Performance'), ('Drone Layer'), ('Inujured'), ('Accident'), ('Swarmed'), ('Unknown'), ('Not Accepted'), ('Sold'), ('Other')");
+    $cordovaSQLite.execute(db, "INSERT INTO Queen_Inactive_Reasons (reason) VALUES ('Superceded'), ('Poor Performance'), ('Drone Layer'), ('Injured'), ('Accident'), ('Swarmed'), ('Unknown'), ('Not Accepted'), ('Sold'), ('Other')");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Diseases (id INTEGER PRIMARY KEY, disease TEXT)");
     $cordovaSQLite.execute(db, "INSERT INTO Diseases (disease) VALUES ('AFB'), ('EFB'), ('Chalkbrood'), ('Hive Beetles'), ('DWV'), ('PMS'), ('The Crud'), ('Wax Moths'), ('Sacbrood'), ('Mold'), ('Dysentry'), ('Other')");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Colony_Inactive_Reasons (id INTEGER PRIMARY KEY, reason TEXT)");
@@ -73,15 +73,15 @@ angular
     templateUrl: 'views/colony.html',
     controller: 'ColonyCtrl'
   })
-  .state('queen', {
-    url: '/yard/{yardId}/colony/{colonyId}/queen/{queenId}',
-    templateUrl: 'views/queen.html',
-    controller: 'QueenCtrl'
-  })
   .state('visit', {
     url: '/yard/{yardId}/colony/{colonyId}/visit/{visitId}',
     templateUrl: 'views/visit.html',
     controller: 'VisitCtrl'
+  })
+  .state('queen', {
+    url: '/yard/{yardId}/colony/{colonyId}/visit/{visitId}/queen/{queenId}',
+    templateUrl: 'views/queen.html',
+    controller: 'QueenCtrl'
   })
   $urlRouterProvider.otherwise('/');
 });

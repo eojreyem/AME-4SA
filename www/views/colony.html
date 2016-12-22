@@ -1,128 +1,73 @@
-<ion-side-menus >
+<ion-header-bar class="bar-dark">
+  <button class="button button-icon ion-home" ng-click="goHome()">></button>
+  <button class="button button-icon ion-location" ng-click="goToYard()">{{currentYard.name}} ></button>
+  <button class="button button-icon ion-ios-box" ng-click="goToColony()"> {{currentColony.number}}</button>
+  <div class="col">
+  </div>
 
-  <!-- Right menu = Queens -->
-  <ion-side-menu side="right">
-    <header class="bar bar-header bar-dark">
-      <h1 class="title">Queens in Colony</h1>
-    </header>
-    <ion-content class="has-header">
-            <div class="list">
-        <item class="item" ng-repeat="queen in queens" ng-click='goToQueen(queen)'>
-          <label>{{queen.id}} - {{queen.name}}</label>
-        </item>
-        <item class="item item-divider">
-          <label class="item-note">*long press to move queen</label>
-        </item>
-        <div class="item item-divider item-dark">
-          New Queen
-        </div>
-        <form>
-          <div class="list">
-            <label class="item">
-              <button class="button item-icon-left button-block button-dark" ng-click="showQueenColorPopup()">Change Mark Color <i class="icon ion-record"  id="queenColorButton"></i></button>
-            </label>
-            <label class="item">
-              <span class="label">Emerge Date</span>
-              <button class="button button-outline button-dark" ng-click="openDatePicker()">{{newQueen.date_emerged | date:'MMM d, yyyy'}}</button>
-            </label>
-            <label class="item item-input">
-              <span class="input-label">Name (Breeder)</span>
-              <input ng-model="newQueen.name" type="text" placeholder="Elizabeth">
-            </label>
-            <label class="item item-input">
-              <span class="input-label">Mother ID#</span>
-              <input ng-model="newQueen.mother_queen_id" type="text" placeholder="508">
-            </label>
-            <label class="item item-input item-stacked-label">
-              <span  class="input-label">Origin</span>
-              <input ng-model="newQueen.origin" type="text" placeholder="Note about queen's origin">
-            </label>
-            <item class="col padding">
-              <button class="button button-positive button-block" type="submit" ng-click="createQueen(newQueen)">Create Queen</button>
-            </item>
-          </div>
-        </form>
+</ion-header-bar>
+<ion-content class="has-header">
 
-      </div>
-    </ion-content>
-  </ion-side-menu>
+  <!--display reminder notes as a list at the top.-->
+  <div class="list">
+    <a class="item item-icon-left item-text-wrap" ng-repeat="reminder in reminders" on-hold="dismissReminder(reminder)">
+      <i class="icon ion-android-alert"></i>
+      {{reminder.note}}
+      <!--TODO:Long press to dismiss (remove reminder flag) -->
+    </a>
+  </div>
 
-
-  <ion-side-menu-content>
-    <ion-header-bar class="bar-dark">
-      <button class="button button-icon ion-home" ng-click="goHome()">></button>
-      <button class="button button-icon ion-location" ng-click="goToYard()">{{currentYard.name}} ></button>
-      <button class="button button-icon ion-ios-box" ng-click="goToColony()"> {{currentColony.number}}</button>
-      <button menu-toggle="right" class="button button-icon ion-female"></button>
-    </ion-header-bar>
-    <ion-content class="has-header">
-
-      <!--display reminder notes as a list at the top.-->
-      <div class="list">
-        <a class="item item-icon-left item-text-wrap" ng-repeat="reminder in reminders" on-hold="dismissReminder(reminder)">
-          <i class="icon ion-android-alert"></i>
-          {{reminder.note}}
-          <!--TODO:Long press to dismiss (remove reminder flag) -->
-        </a>
-      </div>
-
-      <!--Card with a summary of the last visit.-->
-      <div class="card" ng-hide = "numOfVisits>0">
-        <item class="item">No Visit History</item>
-      </div>
-      <div class="card" ng-show="numOfVisits>0">
-
-          <div class="row">
-            <button class="button button-positive icon-left ion-chevron-left col-25" ng-click="changeVisitViewBy(1)" ng-disabled = "visitIndex>=numOfVisits-1"> Older</button>
-            <div class="col col-50 text-center">
-              <h3>{{numOfVisits}} Visits</h3>
-            </div>
-            <button class="button col-25 button-positive icon-right ion-chevron-right" ng-click="changeVisitViewBy(-1)" ng-disabled = "visitIndex<=0"> Newer </button>
-          </div>
-
-
-        <div class="item item-divider">
-          {{visit.date_time| date:'MMM d, yyyy @ hh:mm a'}}
-          <span class="item-note"> {{daysAgo}}d {{hoursAgo}}h ago</span>
-        </div>
-        <div class="item item-icon-left">
-          <i class="icon ion-record" id="visitQueenColorBtn"></i><b>{{visitQueen.id}}</b> {{visitQueen.name}}
-          <span class="item-note" id="pastQueenStatus" ng-show="visit.queen_status">
-            {{visit.queen_status}}
-          </span>
-        </div>
-        <div class="item">
-          <!--TODO fill with actual db info-->
-          <b>{{visit.qty_boxes}}</b> x {{visit.hive_type}} box {{visit.disease}}, {{visit.is_feeding}}, {{visit.is_feeding}}, {{visit.is_feeding}}
-          <span class="item-note">
-
-          </span>
-        </div>
-      </div>
+  <!--Card with a summary of the last visit.-->
+  <div class="card" ng-hide = "numOfVisits>0">
+    <item class="item">No Visit History</item>
+  </div>
+  <div class="card" ng-show="numOfVisits>0">
 
       <div class="row">
-        <div class="col col-33">
-          <button class="button button-outline button-dark ion-edit icon-right" ng-click="goToVisit(visit)"> Edit </button>
+        <button class="button button-positive icon-left ion-chevron-left col-25" ng-click="changeVisitViewBy(1)" ng-disabled = "visitIndex>=numOfVisits-1"> Older</button>
+        <div class="col col-50 text-center">
+          <h3>{{numOfVisits}} Visits</h3>
         </div>
-        <div class="col col-offset-33 col-33 padding">
-          <button class="button button-block button-positive" ng-click="newVisit()">New Visit</button>
-        </div>
+        <button class="button col-25 button-positive icon-right ion-chevron-right" ng-click="changeVisitViewBy(-1)" ng-disabled = "visitIndex<=0"> Newer </button>
       </div>
 
-      <div class="list">
 
-        <div class="item item-button-right item-text-wrap">
-          <button class="button button-small button-outline button-dark" ng-click="showColonyInactivePopup(currentColony)">Inactive</button>
-            <h3>Created {{currentColony.date_active| date:'MMM d, yyyy'}}</h3>
-            <p>Origin: {{currentColony.origin}}</p>
+    <div class="item item-divider">
+      {{visit.date_time| date:'MMM d, yyyy @ hh:mm a'}}
+      <span class="item-note"> {{daysAgo}}d {{hoursAgo}}h ago</span>
+    </div>
+    <div class="item item-icon-left">
+      <i class="icon ion-record" id="visitQueenColorBtn"></i><b>{{visitQueen.id}}</b> {{visitQueen.name}}
+      <span class="item-note" id="pastQueenStatus" ng-show="visit.queen_status">
+        {{visit.queen_status}}
+      </span>
+    </div>
+    <div class="item">
+      <!--TODO fill with actual db info-->
+      <b>{{visit.qty_boxes}}</b> x {{visit.hive_type}} box {{visit.disease}}, {{visit.is_feeding}}, {{visit.is_feeding}}, {{visit.is_feeding}}
+      <span class="item-note">
 
-          </div>
-        </div>
+      </span>
+    </div>
+  </div>
 
-    </ion-content>
+  <div class="row">
+    <div class="col col-33">
+      <button class="button button-outline button-dark ion-edit icon-right" ng-click="goToVisit(visit)"> Edit </button>
+    </div>
+    <div class="col col-offset-33 col-33 padding">
+      <button class="button button-block button-positive" ng-click="newVisit()">New Visit</button>
+    </div>
+  </div>
 
+  <div class="list">
 
+    <div class="item item-button-right item-text-wrap">
+      <button class="button button-small button-outline button-dark" ng-click="showColonyInactivePopup(currentColony)">Inactive</button>
+        <h3>Created {{currentColony.date_active| date:'MMM d, yyyy'}}</h3>
+        <p>Origin: {{currentColony.origin}}</p>
 
-  </ion-side-menu-content>
+      </div>
+    </div>
 
-</ion-side-menus>
+</ion-content>

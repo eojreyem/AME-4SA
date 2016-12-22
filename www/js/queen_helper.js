@@ -9,7 +9,10 @@ angular.module('ameApp')
 
   service.getQueenById = function(id) { //returns a queen object when given a valid ID
     var deferred = $q.defer();
-    var query = "SELECT * FROM Queens WHERE id = ?";
+    var query = "SELECT Queens.*, Queen_Inactive_Reasons.reason AS inactive_reason, Colonies.number AS in_colony_number FROM Queens "+
+                "LEFT JOIN Queen_Inactive_Reasons ON Queens.reason_inactive_id = Queen_Inactive_Reasons.id "+
+                "LEFT JOIN Colonies ON Queens.in_colony_id = Colonies.id "+
+                "WHERE Queens.id = ?";
     $cordovaSQLite.execute(db, query, [id]).then(function(res) {
       if (res.rows.length == 0){
         deferred.resolve(null);
@@ -46,7 +49,6 @@ angular.module('ameApp')
   service.saveQueen = function (queen) {
     var deferred = $q.defer();
     // TODO: test for queen name duplicates
-    console.log(queen.id);
     service.getQueenById(queen.id).then(function(existingQueen){
       if (existingQueen == null){
         var query = "INSERT INTO Queens (name, in_colony_id, mother_queen_id, origin, date_emerged, mark_color_hex) VALUES (?,?,?,?,?,?)";
