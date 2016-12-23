@@ -138,9 +138,12 @@ angular.module('ameApp')
     }else {
       $scope.reigningQueen = queen;
       $scope.visit.queen_id = queen.id;
+      queen.in_colony_id = $scope.currentColony.id;
+      QueenHelper.saveQueen(queen);
       document.getElementById("queenMarkIcon").style.color = queen.mark_color_hex;
     }
     changeQueenPopup.close();
+    colonylessQueenPopup.close();
   }
 
   $scope.changeNumBoxes = function(num){
@@ -161,8 +164,11 @@ angular.module('ameApp')
         subTitle: 'long press for queen\'s page',
         scope: $scope,
         template: '<div class="list">'+
+                  '  <button class="button button-block button-outline button-dark" ng-click="showColonyLessQueens()">Queens w/o colony</button>'+
+                  '  <button class="button button-block button-outline button-dark" ng-click="changeQueen()">Leave Blank</button>'+
+                  '  <div class="item item-divider" ng-show="colonysQueens"><b>Queens in this colony</b></div>'+
                   '  <a class="item" ng-repeat="queen in colonysQueens" ng-click="changeQueen(queen)" on-hold="goToQueen(queen)" >{{queen.id}} {{queen.name}} </a> '+
-                  '  <a class="item" ng-click="changeQueen()">-- N/A --</a></div>',
+                  '</div>  ',
 
         buttons: [
           {text: 'Cancel'},
@@ -173,6 +179,27 @@ angular.module('ameApp')
               $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id + '/visit/' + $scope.visit.id + '/queen/new' );
             }
           }
+        ]
+      });
+    });
+
+  };
+
+  $scope.showColonyLessQueens = function(){
+    QueenHelper.getQueensWOColony().then(function (colonylessQueens){
+      $scope.colonylessQueens = colonylessQueens;
+      colonylessQueenPopup = $ionicPopup.show({
+        title: 'Choose Reigning Queen',
+        subTitle: 'long press for queen\'s page',
+        scope: $scope,
+        template: '<div class="list" ng-show="colonylessQueens">'+
+                  '  <div class="item item-divider"><b>Queens not in a colony</b></div>'+
+                  '  <a class="item" ng-repeat="queen in colonylessQueens" ng-click="changeQueen(queen)" on-hold="goToQueen(queen)" >{{queen.id}} {{queen.name}} </a> '+
+                  '</div>  '+
+                  '<p ng-hide="colonylessQueens">All queens are in colonies!</p>',
+
+        buttons: [
+          {text: 'Cancel'}
         ]
       });
     });
@@ -318,7 +345,7 @@ angular.module('ameApp')
 
   $scope.goToQueen = function(queen) {
     changeQueenPopup.close();
-
+    colonylessQueenPopup.close();
     $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id + '/visit/' + $scope.visit.id + '/queen/' + queen.id );
   }
 

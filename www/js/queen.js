@@ -96,7 +96,26 @@ angular.module('ameApp')
     ionicDatePicker.openDatePicker(datePickerObj);
   };
 
-  $scope.showMoveQueenPopup = function(queen) {
+
+  // A confirm dialog
+ $scope.showRemoveQueenFromColony = function(queen) {
+   var removeQueenFromColonyPopup = $ionicPopup.show({
+     title: 'Remove This Queen?',
+     subTitle: 'PUT HER # ON CAGE: ' + queen.id ,
+     buttons: [
+       {text: 'Cancel'},
+       {text: 'Remove',
+        type: 'button-assertive',
+        onTap: function(e) {
+          queen.in_colony_id = null;
+          queen.in_colony_number = null;
+          $scope.queen = queen;
+        }
+       }]
+    });
+  }
+ /*
+  $scope.removeQueenPopup = function(queen) {
     $scope.destination = {};
     var moveQueenPopup = $ionicPopup.show({
       title: 'Enter the Colony\'s number',
@@ -134,7 +153,7 @@ angular.module('ameApp')
         }
       ]
     })
-  };
+  }; */
 
   $scope.showQueenInactivePopup = function(queen) {
     $scope.choice = {};

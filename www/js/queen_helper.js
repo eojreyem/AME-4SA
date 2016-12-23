@@ -117,6 +117,29 @@ angular.module('ameApp')
 
   }
 
+  service.getQueensWOColony = function() { //return all active queens not in a colony
+    var deferred = $q.defer();
+    queens = [];
+    var query = "SELECT * FROM Queens WHERE in_colony_id IS NULL AND date_inactive IS NULL";
+    $cordovaSQLite.execute(db, query).then(function(res) {
+      if(res.rows.length > 0) {
+        for (i = 0; i < res.rows.length; i++) {
+          console.log("SELECTED -> " + res.rows.item(i));
+          queens.push(res.rows.item(i));
+        }
+        deferred.resolve(queens);
+
+      }else {
+          console.log("No queens found in this colony");
+          deferred.resolve(null);
+      }
+    }, function (err) {
+        console.error(err);
+    });
+    return deferred.promise;
+
+  }
+
 
   return service;
 });

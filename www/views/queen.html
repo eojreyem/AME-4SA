@@ -14,7 +14,7 @@
   <div class="list">
     <div class="item item-button-right" ng-hide="queen.id=='new'">
       <b>In Colony <i class="ion-ios-pricetag"></i> {{queen.in_colony_number}}</b>
-      <button class="button button-balanced" ng-click="showMoveQueenPopup(queen)" ng-show="queen.date_inactive==null">Move</button>
+      <button class="button button-balanced" ng-click="showRemoveQueenFromColony(queen)" ng-show="queen.date_inactive==null">Remove</button>
     </div>
 
     <label class="item item-input item-select" >
