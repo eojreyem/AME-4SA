@@ -157,7 +157,28 @@ angular.module('ameApp')
     //TODO: What happens to the queens in that colony?
   };
 
-
+  $scope.showColonyInfoPopup = function(colony) {
+    var colonyInfoPopup = $ionicPopup.show({
+      scope: $scope,
+      title: 'Colony Info',
+      template: '<div class="list">                                '+
+                '  <div class="item">Active on {{currentColony.date_active| date:"MMM d, yyyy"}}</div>'+
+                '  <div class="item item-text-wrap">Origin: {{currentColony.origin}}</div>'+
+                '</div>  ',
+      buttons: [
+        { text: 'Inactive',
+          type: 'button-assertive button-outline',
+          onTap: function (e) {
+            colonyInfoPopup.close();
+            $scope.showColonyInactivePopup(colony);
+          }
+        },
+        { text: 'Close',
+          type: 'button-positive'
+        }
+      ]
+    })
+  }
 
 
 
