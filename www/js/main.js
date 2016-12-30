@@ -6,9 +6,9 @@
 
 angular.module('ameApp')
 
-.controller('MainCtrl', function($ionicPlatform, $scope, $location, $cordovaSQLite, YardHelper, VisitHelper) {
-  var newYard = {name:null};
-  $scope.newYard = newYard;
+.controller('MainCtrl', function($ionicPlatform, $scope, $location, $cordovaSQLite, $ionicPopup, YardHelper, VisitHelper) {
+
+  $scope.newYard = {name:null};
 
   //loads a list of yards in 4SA
   $ionicPlatform.ready(function() {
@@ -16,7 +16,7 @@ angular.module('ameApp')
       yards.reduce(function(doesntMatter, yard){
         //Does the following for each yard in yards
         YardHelper.getColoniesInYard(yard.id).then(function(Colonies){
-          if (Colonies!=null){            
+          if (Colonies!=null){
             yard.numColoniesInYard = Colonies.length;
           }
         })
@@ -29,28 +29,33 @@ angular.module('ameApp')
     });
   });
 
-  //Create a new yard
-  $scope.createYard = function() {
-    YardHelper.saveYard($scope.newYard);
-    $scope.newYard = {};
-    YardHelper.getAllYards().then(function(yards){
-      $scope.yards = yards;
-    });
-  };
+  $scope.showCreateYardPopup = function(){
+    var createYardPopup = $ionicPopup.show({
+      title: 'Create New Yard',
+      scope: $scope,
+      template: '<label class="item item-input">'+
+                '  <input ng-model=newYard.name type="text" placeholder="Dandy Lion Lane">'+
+                '</label>',
+      buttons: [
+        { text: 'Cancel'},
+        { text: 'Add Yard',
+          type: 'button-positive',
+          onTap: function(e) {
+            YardHelper.createYard($scope.newYard).then(function(yardId){
+              if (yardId!=null){
+                $scope.newYard.id = yardId;
+                $scope.goToYard($scope.newYard);
+              }
+          })
+          }
+        }
+      ]
+
+    })
+  }
 
   $scope.goToYard = function (yard){
     $location.url('/yard/' + yard.id);
-  }
-
-  $scope.deleteYard = function (yard){
-    //TODO: if ($scope.numColoniesInYard == 0){    Remove redundant check in yard_helper.js
-    YardHelper.deleteYard(yard)
-    $scope.yards = $scope.yards.filter(function(el){
-      return el.name !== yard.name;
-    });
-
-    //TODO: refresh list of yards after deletion.
-    //TODO: archive yards instead of deleting.
   }
 
   $scope.dropColonies = function (){

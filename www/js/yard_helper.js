@@ -34,27 +34,35 @@ angular.module('ameApp')
     return deferred.promise;
   }
 
-  service.saveYard = function(yard) { //save new yard to the database
+  service.createYard = function(yard) { //adds a new yard to the database
+    //TODO deferred promise return insert Id
+    var deferred = $q.defer();
     if (yard.name !=null){
       var query = "INSERT INTO Yards (name) VALUES (?)";
       $cordovaSQLite.execute(db, query, [yard.name]).then(function(res) {
         console.log("INSERT ID -> " + res.insertId);
+        deferred.resolve(res.insertId);
       }, function (err) {
         console.error(err);
+        deferred.resolve(null);
       })
     }
     else{
       console.log("Yard needs a name!"); //Toast?
+      deferred.resolve(null);
     }
+    return deferred.promise;
   }
 
-  service.deleteYard = function(yard) { //deletes yard if null
+  service.deleteYard = function(yard) { //deletes yard if no colonies in it.
+    var deferred = $q.defer();
     service.getColoniesInYard(yard.id).then(function (colonies){
-      //TODO: remove empty yard check once that is done before calling function.
+      //TODO ask Eryn
+      //this check is redundant since button doesn't appear unless no colonies are in yard.
       if (colonies == null){
         var query = "DELETE FROM Yards WHERE id = ?";
         $cordovaSQLite.execute(db, query, [yard.id]).then(function(res) {
-          console.log("DELETED YARD");
+          deferred.resolve(1)
         }, function (err) {
           console.error(err);
         })
@@ -63,8 +71,9 @@ angular.module('ameApp')
         console.log("Yard must contain no colonies to delete");
       }
     });
+    return deferred.promise;
   }
-  
+
   service.getColoniesInYard = function(yardId) { //return all active colonies in a yardId
     var deferred = $q.defer();
     var colonies = [];

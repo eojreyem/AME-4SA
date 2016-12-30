@@ -59,6 +59,29 @@ angular.module('ameApp')
     }
   };
 
+  $scope.showConfirmYardDelete = function() {
+    var yardDeletePopup = $ionicPopup.confirm({
+      title: 'Delete Yard',
+      okText: 'DELETE',
+      okType: 'button-assertive',
+      template: '<h2>Are you sure?!</h2>'+
+                '<p class="assertive">Yard will be removed from the database. Use this feature only if no visits are associated with it!</p>'
+    });
+
+    yardDeletePopup.then(function(res) {
+      if(res) {
+        console.log('delete the yard');
+        YardHelper.deleteYard($scope.currentYard).then(function(is_deleted){
+          if (is_deleted){
+            $scope.goHome();
+          }
+        });
+      } else {
+        //do nothing
+      }
+    });
+  };
+
   $scope.showMoveColonyPopup = function(colony) {
     YardHelper.getAllYards().then(function (yards){
       $scope.yards = yards;

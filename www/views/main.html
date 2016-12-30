@@ -5,7 +5,7 @@
 <ion-content class="has-header">
   <!-- List of Yards -->
   <div class="list">
-    <a class="item item-icon-left" ng-repeat="yard in yards" on-hold="deleteYard(yard)" ng-click="goToYard(yard)">
+    <a class="item item-icon-left" ng-repeat="yard in yards" ng-click="goToYard(yard)">
       <i class="icon ion-location"></i>
       {{yard.name}} - {{yard.numColoniesInYard}} <i class="ion-ios-box"></i>
       <span class="item-note">
@@ -13,17 +13,6 @@
       </span>
     </a>
   </div>
-
-  <form ng-submit="createYard()">
-    <div class="item item-input">
-      <label class="item item-input">
-        <input ng-model=newYard.name type="text" placeholder="New Yard Name">
-      </label>
-      <div class="col">
-        <button type="submit" class="button button-positive">Add Yard <i class="icon ion-location"></i></button>
-      </div>
-    </div>
-  </form>
 
 </ion-content>
 <ion-footer-bar>
@@ -33,4 +22,6 @@
   <div class="col">
     Drop Tables!
   </div>
+  <button class="button button-positive" ng-click="showCreateYardPopup()">Add Yard</button>
+
 </ion-footer-bar>
