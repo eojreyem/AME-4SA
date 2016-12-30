@@ -41,24 +41,22 @@
   <div class="card" ng-show="numOfVisits>0">
 
     <div class="item item-divider item-dark">
-      <b>{{numOfVisits}} Visits</b>
+      <i class="title">Visit {{numOfVisits-visitIndex}} of {{numOfVisits}}</i>
+      <span class="item-note">ID:{{visit.id}}</span>
     </div>
-    <div class="row">
-      <button class="button button-positive icon-left ion-chevron-left col-25" ng-click="changeVisitViewBy(1)" ng-disabled = "visitIndex>=numOfVisits-1"> Older</button>
-      <div class="col col-50 text-center">
-        <h3>{{daysAgo}} days ago </h3>
-      </div>
-      <button class="button col-25 button-positive icon-right ion-chevron-right" ng-click="changeVisitViewBy(-1)" ng-disabled = "visitIndex<=0"> Newer </button>
+    <div class="button-bar">
+      <button class="button button-positive icon-left ion-chevron-left" ng-click="changeVisitViewBy(1)" ng-disabled = "visitIndex>=numOfVisits-1"> Older</button>
+      <button class="button icon ion-edit icon-right" ng-click="goToVisit(visit)">Edit</button>
+      <button class="button button-positive icon-right ion-chevron-right" ng-click="changeVisitViewBy(-1)" ng-disabled = "visitIndex<=0"> Newer </button>
     </div>
-
-
 
     <div class="item">
-      {{visit.date_time| date:'MMM d, yyyy @ hh:mm a'}}
-      <span class="item-note"> {{daysAgo}} days {{hoursAgo}}h ago</span>
+      <b>{{daysAgo}} days, {{hoursAgo}}h ago</b>
+      <span class="item-note">{{visit.date_time| date:'MMM d, yyyy @ hh:mm a'}}</span>
     </div>
-    <div class="item item-icon-left">
-      <i class="icon ion-record" id="visitQueenColorBtn"></i><b>{{visitQueen.id}}</b> {{visitQueen.name}}
+    <div class="item">
+      <button class="button icon-left button-dark" ng-show="visitQueen.id" ng-click="goToQueen(visit.id, visitQueen.id)"><i class="icon ion-record" id="visitQueenColorBtn"></i><b> {{visitQueen.id}}</b> {{visitQueen.name}}</button>
+
       <span class="item-note" id="pastQueenStatus" ng-show="visit.queen_status">
         {{visit.queen_status}}
       </span>
@@ -78,21 +76,17 @@
       <i class="icon ion-waterdrop energized" ng-show="visit.is_feeding"> Feeding </i>
       <p class="ion-arrow-right-b" ng-repeat="note in notes"> {{note.note}}<p>
     </div>
-    <div class="row">
-      <button class="button icon button-outline button-assertive ion-trash-a col-15" ng-click="deleteVisit(visit)"></button>
-      <button class="button button-outline button-dark ion-edit icon-right col-25 col-offset-50" ng-click="goToVisit(visit)"> Edit </button>
-    </div>
 
   </div>
 
-  <button class="button button-block button-positive col-33 col-offset-66" ng-click="newVisit()" ng-hide="currentColony.id==new">New Visit</button>
 
 
 </ion-content>
 <div class="bar bar-footer" ng-hide="currentColony.id==new">
-  <button class="button button-outline button-dark" ng-click="showColonyInactivePopup(currentColony)">Inactive</button>
+<!--  <button class="button button-outline button-dark" ng-click="showColonyInactivePopup(currentColony)">Inactive</button>
   <div class="col">
     <span> Active on {{currentColony.date_active| date:'MMM d, yyyy'}}<span>
-  </div>
+  </div>-->
   <button class="button button-icon ion-information-circled"></button>
+  <button class="button button-positive" ng-click="newVisit()" ng-hide="currentColony.id==new">New Visit</button>
 </div>

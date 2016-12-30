@@ -165,8 +165,8 @@ angular.module('ameApp')
   $scope.newVisit = function() {
     $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id  + '/visit/new');
   }
-  $scope.goToQueen = function(queen) {
-    $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id  + '/queen/' + queen.id);
+  $scope.goToQueen = function(visitId, queenId) {
+    $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id  + '/visit/' + visitId + '/queen/' + queenId);
   }
   $scope.goToVisit = function(visit) {
     console.log("ID PASSED:" + visit);
