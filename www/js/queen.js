@@ -57,6 +57,9 @@ angular.module('ameApp')
       $scope.queen = newQueen;
     }
     document.getElementById("queenColorButton").style.color = $scope.queen.mark_color_hex;
+    if ($scope.queen.in_colony_id != $scope.currentColony.id){
+      document.getElementById("inColonyWord").style.color = "#FF5533";
+    }
 
   });
 
