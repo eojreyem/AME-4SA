@@ -28,6 +28,7 @@ angular.module('ameApp')
   };
 
   var changeQueenPopup = [];
+  var colonylessQueenPopup = [];
 
   //Load current yard into currentYard for nav at the bottom.
   YardHelper.getYardById($stateParams.yardId).then(function (yard){

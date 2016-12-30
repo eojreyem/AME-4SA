@@ -145,6 +145,7 @@ angular.module('ameApp')
               console.log("selected "+reasons[$scope.choice.reasonId-1].reason+", store to colony");
               //TODO use Save colony instead of specific function.  Also add date_inactive
               ColonyHelper.setColonyInactive(colony.id, $scope.choice.reasonId);
+              $scope.goToYard();
             } else {
               console.log("UPDATE THIS WHEN YOU KNOW MORE.");
               e.preventDefault();
@@ -170,7 +171,7 @@ angular.module('ameApp')
           type: 'button-assertive button-outline',
           onTap: function (e) {
             colonyInfoPopup.close();
-            $scope.showColonyInactivePopup(colony);
+            $scope.showColonyInactivePopup($scope.currentColony);
           }
         },
         { text: 'Close',
