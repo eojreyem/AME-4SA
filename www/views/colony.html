@@ -65,9 +65,18 @@
     </div>
     <div class="item">
       <!--TODO fill with actual db info-->
-      <b>{{visit.qty_boxes}}</b> x {{visit.hive_type}} box {{visit.disease}}, {{visit.is_feeding}}, {{visit.is_feeding}}, {{visit.is_feeding}}
+      <b>{{visit.qty_boxes}}</b> x {{visit.hive_type}} box
       <span class="item-note">
+        <b>{{visit.frames_of_brood}}</b><span ng-show="visit.frames_of_brood"> F.O.Brood </span>
+        <b>{{visit.frames_of_bees}}</b><span ng-show="visit.frames_of_bees"> F.O.Bees </span>
       </span>
+    </div>
+
+    <div class="item ">
+      <i class="assertive" ng-show="visit.disease_id"> {{visit.disease}} </i>
+      <i class="icon ion-flame assertive" ng-show="visit.has_temper"> Temper </i>
+      <i class="icon ion-waterdrop energized" ng-show="visit.is_feeding"> Feeding </i>
+      <p class="ion-arrow-right-b" ng-repeat="note in notes"> {{note.note}}<p>
     </div>
     <div class="row">
       <button class="button icon button-outline button-assertive ion-trash-a col-15" ng-click="deleteVisit(visit)"></button>

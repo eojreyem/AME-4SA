@@ -73,6 +73,7 @@ angular.module('ameApp')
   $scope.changeVisitViewBy = function(num){
     console.log("change by " + num);
 
+      $scope.notes = null;
       visitViewI=visitViewI+num;
       if (visitViewI<0){
         visitViewI = 0;
@@ -82,6 +83,10 @@ angular.module('ameApp')
       }
 
       $scope.visit = colonysVisits[visitViewI];
+      VisitNotesHelper.getNotesForVisitById(colonysVisits[visitViewI].id).then(function (notes){
+        $scope.notes = notes;
+      })
+
       $scope.visitIndex = visitViewI;
 
       msAgo = (new Date(Date.now()-tzoffset)) - (new Date(colonysVisits[visitViewI].date_time));
