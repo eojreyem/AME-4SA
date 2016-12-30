@@ -9,6 +9,7 @@ angular.module('ameApp')
 .controller('MainCtrl', function($ionicPlatform, $scope, $location, $cordovaSQLite, $ionicPopup, YardHelper, VisitHelper) {
 
   $scope.newYard = {name:null};
+  var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
 
   //loads a list of yards in 4SA
   $ionicPlatform.ready(function() {
@@ -21,7 +22,12 @@ angular.module('ameApp')
           }
         })
         VisitHelper.getLastVisitByYardId(yard.id).then(function(lastVisit){
-          yard.lastVisit=lastVisit;
+          if (lastVisit){
+            yard.lastVisit=lastVisit;
+            //calculate time since last visit in days and hours.
+            msAgo = (new Date(Date.now()-tzoffset)) - (new Date(lastVisit.date_time));
+            yard.daysAgo = parseInt(msAgo/(3600000*24),10);
+          }
         })
       },0);
 

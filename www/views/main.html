@@ -4,14 +4,19 @@
 
 <ion-content class="has-header">
   <!-- List of Yards -->
-  <div class="list">
-    <a class="item item-icon-left" ng-repeat="yard in yards" ng-click="goToYard(yard)">
-      <i class="icon ion-location"></i>
-      {{yard.name}} - {{yard.numColoniesInYard}} <i class="ion-ios-box"></i>
-      <span class="item-note">
-        visited {{yard.lastVisit.date_time| date:'MMM d'}}
+  <div class="card" ng-repeat="yard in yards" ng-click="goToYard(yard)">
+    <div class="item item-divider item-icon-left">
+      <i class="icon ion-location"></i> {{yard.name}}
+      <span class="item-note" ng-show="yard.lastVisit">
+        visited {{yard.daysAgo}} days ago.
       </span>
-    </a>
+    </div>
+    <div class="item" ng-show="yard.numColoniesInYard">
+      {{yard.numColoniesInYard}} Colonies <!--TODO <span class="assertive"> - 4 neglected</span>-->
+    </div>
+    <div class="item" ng-hide="yard.numColoniesInYard">
+      yard is empty.
+    </div>
   </div>
 
 </ion-content>
