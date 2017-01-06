@@ -208,36 +208,37 @@ angular.module('ameApp')
   };
 
 
+  $scope.changeTimeBy = function(minuteChange){
+    dateObj = new Date($scope.visit.date_time);
+    dateObj.setMinutes(dateObj.getMinutes() + minuteChange);
+    $scope.visit.date_time = (new Date(dateObj).toISOString().slice(0,-1));
+  }
 
-  $scope.showAddDataPopup = function(){
-    var addDataPopup = $ionicPopup.show({
-      title: 'Add a Measurement to This Visit',
-      scope:$scope,
-      template: '<div class="list">'+
-      '  <label class="item item-input item-select">'+
-        '  <div class="input-label">       Type          </div>'+
-          '<select class="item item-input item-select">'+
-            '  <option ng-repeat="dataTypes in dataTypes">{{dataTypes.type}}</option>          </select>        </label>'+
-        '<label class="item item-input">'+
-          '<input type="number" placeholder="Qty measured">        </label>      </div>',
+
+  $scope.showChangeVisitTime = function(){
+    var changeVisitTime = $ionicPopup.show({
+      title: 'Time of Visit',
+      scope: $scope,
+      template: '<h1>{{visit.date_time | date:"h:mm a"}}</h1>'+
+                '<div class ="button-bar">'+
+                '<button class="button button-positive icon ion-minus-circled col-33" ng-click="changeTimeBy(-5)""></button>'+
+                '<button class="button button-dark button-outline col-33">5 MIN</button>'+
+                '<button class="button button-positive icon ion-plus-circled col-33" ng-click="changeTimeBy(5)""></button>'+
+                '</div>'+
+                '<div class ="button-bar">'+
+                '<button class="button button-positive icon ion-minus-circled col-33" ng-click="changeTimeBy(-60)""></button>'+
+                '<button class="button button-dark button-outline col-33">1 HR</button>'+
+                '<button class="button button-positive icon ion-plus-circled col-33" ng-click="changeTimeBy(60)""></button>'+
+                '</div>',
       buttons: [
-        {text: 'Cancel'},
-        {text: 'Add Data',
-          type: 'button-positive',
-          onTap: function (e){
-            console.log("TODO: Save Data");
-            /*VisitHelper.saveVisit($scope.visit).then(function(visitId){
-              note.visit_id = visitId;
-              VisitNotesHelper.saveNote(note);
-              $scope.note.note = null;
-              $scope.note.is_reminder = false;
+        {text: 'Done',
+         type: 'button-positive',
+         onTap: function (e){
 
-            });*/
-          }
-
-        }]
-      })
-    }
+         }
+      }]
+    })
+  }
 
   $scope.showAddNotePopup = function(){
     var addNotePopup = $ionicPopup.show({
