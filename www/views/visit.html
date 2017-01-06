@@ -25,15 +25,15 @@
           </label>
         </div>
         <div class="button-bar col-50">
-          <button class="button button-outline" ng-click="changeNumBoxes(-1)">-</button>
-          <button class="button button-outline button-dark"><b id="numberBoxesBtn">{{visit.qty_boxes}}</b></button>
-          <button class="button button-positive" ng-click="changeNumBoxes(1)">+</button>
+          <button class="button button-positive icon ion-minus-circled" ng-click="changeNumBoxes(-1)"></button>
+          <button class="button"><b id="numberBoxesBtn">{{visit.qty_boxes}}</b></button>
+          <button class="button button-positive icon ion-plus-circled" ng-click="changeNumBoxes(1)"></button>
         </div>
       </div>
 
       <label class="item item-input item-select item-dark" ng-click = "showChangeQueenPopup()">
         <div class="input-label"><i class="icon ion-record" id="queenMarkIcon"></i> <b> {{reigningQueen.id}} </b> {{reigningQueen.name}}</div>
-        <select ng-model="visit.queen_status_id" ng-change="queenStatusChange()" ng-disabled="reigningQueen.date_inactive !=null" ng-options="status.id as status.status for status in queenStatuses">{{status.status}}</select>
+        <select ng-model="visit.queen_status_id" ng-change="queenStatusChange()" ng-options="status.id as status.status for status in queenStatuses">{{status.status}}</select>
       </label>
 
 
@@ -73,33 +73,12 @@
         </label>
       </li>
 
-      <div class="row">
-        <div class="col-50">
-          <label class="item item-input item-select" >
-            <div class="input-label"> Data
-            </div>
-            <select ng-model="data.type" ng-options="type.id as type.type for type in dataTypes">{{type.type}}</select>
-          </label>
-        </div>
-        <div class="col-25">
-          <label class="item item-input">
-            <span class="input-label">#</span>
-            <input type="number" ng-model="data.value">
-          </label>
-        </div>
-
-        <button class="button button-positive col-25" ng-click="saveData()">+</button>
-
-      </div>
-
-
     </div>
-
-    <div class="bar footer-bar">
-      <button class="button button-outline button-assertive">Trash</button>
-      <button class="button button-positive" ng-click='showAddNotePopup()'>+Note</button>
-      <button class="button button-positive">Save & Exit</button>
-      <button class="button button-positive" ng-click='saveVisit(visit)'>Save</button>
-    </div>
-
   </ion-content>
+
+<ion-footer-bar>
+  <button class="button button-outline button-assertive icon ion-trash-a" ng-click="showDeleteVisitPopup()"></button>
+  <button class="button button-positive" ng-click='showAddNotePopup()'>+Note</button>
+  <button class="button button-positive" ng-click='showAddDataPopup()'>+Data</button>
+  <button class="button button-positive" ng-click='saveCloseVisit(visit)'>Save & Close</button>
+</ion-footer-bar>

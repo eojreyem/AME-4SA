@@ -3,7 +3,7 @@
 
 angular.module('ameApp')
 
-.factory('VisitHelper', function($cordovaSQLite, $q) {
+.factory('VisitHelper', function($cordovaSQLite, $q, VisitNotesHelper) {
   var visit = [];
   var service = {};
 
@@ -217,6 +217,21 @@ angular.module('ameApp')
     });
     return deferred.promise;
   };
+
+  service.deleteVisit = function(visit) { //deletes visit and it's notes/data.
+    var deferred = $q.defer();
+
+    VisitNotesHelper.deleteVisitNotes(visit);
+    //VisitDataHelper.delteVisitData(visit);
+
+    var query = "DELETE FROM Visits WHERE id = ?";
+    $cordovaSQLite.execute(db, query, [visit.id]).then(function(res) {
+      deferred.resolve(1)
+    }, function (err) {
+      console.error(err);
+    });
+    return deferred.promise;
+  }
 
 
   return service;

@@ -68,7 +68,13 @@ angular.module('ameApp')
     });
   }
 
-
+  service.deleteVisitNotes = function(visit) { //deletes visit and it's notes/data.
+    var query = "DELETE FROM Visit_Notes WHERE visit_id = ?";
+    $cordovaSQLite.execute(db, query, [visit.id]).then(function(res) {
+    }, function (err) {
+      console.error(err);
+    });
+  }
 
 
   return service;

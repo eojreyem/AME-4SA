@@ -111,6 +111,7 @@ angular.module('ameApp')
           document.getElementById("numberBoxesBtn").style.color = 'limegreen';
         }
         $scope.visit = newVisit;
+        $scope.saveVisit(newVisit);
       });
     }
     else {
@@ -148,7 +149,6 @@ angular.module('ameApp')
   }
 
   $scope.changeNumBoxes = function(num){
-    console.log(num);
     var boxes = $scope.visit.qty_boxes;
     boxes = boxes + num;
     if (boxes<1){
@@ -156,6 +156,31 @@ angular.module('ameApp')
     }
     $scope.visit.qty_boxes = boxes;
   }
+
+
+  $scope.showDeleteVisitPopup = function (){
+    var visitDeletePopup = $ionicPopup.confirm({
+      title: 'Delete Visit',
+      okText: 'DELETE',
+      okType: 'button-assertive',
+      template: '<h2>Are you sure?!</h2>'+
+                '<p class="assertive">Visit will be deleted as well as all notes and data associated with it.</p>'
+    });
+
+    visitDeletePopup.then(function(res) {
+      if(res) {
+        console.log('delete the visit');
+        VisitHelper.deleteVisit($scope.visit).then(function(is_deleted){
+          if (is_deleted){
+            $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id);
+          }
+        });
+      } else {
+        //do nothing
+      }
+    });
+  };
+
 
   $scope.showChangeQueenPopup = function(){
     QueenHelper.getQueensInColony($scope.currentColony.id).then(function (colonysQueens){
@@ -272,6 +297,35 @@ angular.module('ameApp')
       })
     }
 
+    $scope.showAddDataPopup = function(){
+    var addDataPopup = $ionicPopup.show({
+      title: 'Add a Measurement to This Visit',
+      scope:$scope,
+      template: '<div class="list">'+
+      '  <label class="item item-input item-select">'+
+        '  <div class="input-label">       Type          </div>'+
+          '<select class="item item-input item-select">'+
+            '  <option ng-repeat="dataTypes in dataTypes">{{dataTypes.type}}</option>          </select>        </label>'+
+        '<label class="item item-input">'+
+          '<input type="number" placeholder="Qty measured">        </label>      </div>',
+      buttons: [
+        {text: 'Cancel'},
+        {text: 'Add Data',
+          type: 'button-positive',
+          onTap: function (e){
+            console.log("TODO: Save Data");
+            /*VisitHelper.saveVisit($scope.visit).then(function(visitId){
+              note.visit_id = visitId;
+              VisitNotesHelper.saveNote(note);
+              $scope.note.note = null;
+              $scope.note.is_reminder = false;
+            });*/
+          }
+
+        }]
+      })
+    }
+
 
   $scope.queenStatusChange = function(){
     if ($scope.visit.queen_status_id>3 && $scope.visit.queen_id !=null){
@@ -332,7 +386,12 @@ angular.module('ameApp')
       if (visitId != null){
         $scope.visit.id = visitId;
       }
-      //$location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id);
+    });
+  };
+
+  $scope.saveCloseVisit = function(visit) {
+    VisitHelper.saveVisit(visit).then(function (visitId){
+      $location.url('/yard/' + $scope.currentYard.id + '/colony/' + $scope.currentColony.id);
     });
   };
 
