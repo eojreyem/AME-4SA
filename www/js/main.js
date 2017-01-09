@@ -10,6 +10,7 @@ angular.module('ameApp')
 
   $scope.newYard = {name:null};
   var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
+  var remindersPopup = [];
 
   //loads a list of yards in 4SA
   $ionicPlatform.ready(function() {
@@ -34,6 +35,8 @@ angular.module('ameApp')
             //calculate time since last visit in days and hours.
             msAgo = (new Date(Date.now()-tzoffset)) - (new Date(lastVisit.date_time));
             yard.daysAgo = parseInt(msAgo/(3600000*24),10);
+          } else {
+            yard.lastVisit=null;
           }
         })
       },0);
@@ -65,6 +68,27 @@ angular.module('ameApp')
       ]
 
     })
+  }
+
+  $scope.showReminders = function(reminders){
+    console.log(reminders);
+    $scope.Reminders = reminders;
+    remindersPopup = $ionicPopup.show({
+      title: 'Colony Reminders in Yard',
+      scope:$scope,
+      template: '<div class="item" ng-repeat="reminder in Reminders" ng-click="goToColony(reminder.colony_id, reminder.yard_id)">'+
+                '  <i class="icon ion-ios-pricetag"> {{reminder.colony_number}}</i> - {{reminder.note}}'+
+                '</div>',
+      buttons: [
+        {text: 'Close'}
+      ]
+
+    })
+  }
+
+  $scope.goToColony = function(colonyId, yardId) {
+    remindersPopup.close();
+    $location.url('/yard/' + yardId + '/colony/' + colonyId);
   }
 
   $scope.goToYard = function (yard){

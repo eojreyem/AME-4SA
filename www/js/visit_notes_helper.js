@@ -34,7 +34,7 @@ angular.module('ameApp')
     var notesWithReminders = [];
     var deferred = $q.defer();
 
-    var query = "SELECT Visit_Notes.*, Colonies.number AS colony_number, Visits.colony_id AS colony_id, Visits.date_time AS date_time FROM Visit_Notes "+
+    var query = "SELECT Visit_Notes.*, Colonies.number AS colony_number, Visits.colony_id AS colony_id, Visits.yard_id AS yard_id, Visits.date_time AS date_time FROM Visit_Notes "+
                 "LEFT JOIN Visits ON Visits.id = Visit_Notes.visit_id "+
                 "LEFT JOIN Colonies ON Visits.colony_id = Colonies.id "+
                 "WHERE Visits.yard_id = ? AND Visit_Notes.is_reminder = 1"

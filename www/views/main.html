@@ -4,18 +4,20 @@
 
 <ion-content class="has-header">
   <!-- List of Yards -->
-  <div class="card" ng-repeat="yard in yards" ng-click="goToYard(yard)">
+  <div class="card" ng-repeat="yard in yards">
     <div class="item item-divider item-icon-left">
       <i class="icon ion-location"></i> {{yard.name}}
       <span class="item-note" ng-show="yard.lastVisit">
         visited {{yard.daysAgo}} days ago.
       </span>
     </div>
-    <div class="item" ng-show="yard.numColoniesInYard">
-      {{yard.numColoniesInYard}} Colonies <!--TODO <span class="assertive"> - 4 neglected</span>-->
+    <div class="item text-right" ng-show="yard.numColoniesInYard"> <!--TODO <span class="assertive"> - 4 neglected</span>-->
+      <button class="button button-outline button-positive button-small icon-right ion-ios-bell" ng-click="showReminders(yard.Reminders)">{{yard.Reminders.length}}</button>
+      <button class="button button-positive icon-right ion-chevron-right" ng-click="goToYard(yard)">{{yard.numColoniesInYard}} Colonies </button>
     </div>
+
  <!--
-    <button class="button button-outline button-small button-energized icon ion-android-alert" on-click="showReminders()"></button>
+
 
     <div class="item" ng-repeat="reminder in yard.Reminders">
       {{reminder.colony_number}} - {{reminder.note}}
