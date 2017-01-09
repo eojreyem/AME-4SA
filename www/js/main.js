@@ -6,7 +6,7 @@
 
 angular.module('ameApp')
 
-.controller('MainCtrl', function($ionicPlatform, $scope, $location, $cordovaSQLite, $ionicPopup, YardHelper, VisitHelper) {
+.controller('MainCtrl', function($ionicPlatform, $scope, $location, $cordovaSQLite, $ionicPopup, YardHelper, VisitHelper, VisitNotesHelper) {
 
   $scope.newYard = {name:null};
   var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
@@ -21,6 +21,13 @@ angular.module('ameApp')
             yard.numColoniesInYard = Colonies.length;
           }
         })
+        VisitNotesHelper.getRemindersByYardId(yard.id).then(function(Reminders){
+          if (Reminders!=null){
+            yard.Reminders = Reminders;
+            console.log(Reminders);
+          }
+        })
+
         VisitHelper.getLastVisitByYardId(yard.id).then(function(lastVisit){
           if (lastVisit){
             yard.lastVisit=lastVisit;
@@ -63,16 +70,5 @@ angular.module('ameApp')
   $scope.goToYard = function (yard){
     $location.url('/yard/' + yard.id);
   }
-
-  $scope.dropColonies = function (){
-    $cordovaSQLite.execute(db, "DROP TABLE Colonies"); //Use to remove a table
-  }
-  $scope.dropQueens = function (){
-    $cordovaSQLite.execute(db, "DROP TABLE Queens"); //Use to remove a table
-  }
-  $scope.dropVisits = function (){
-    $cordovaSQLite.execute(db, "DROP TABLE Visits"); //Use to remove a table
-  }
-
 
 });

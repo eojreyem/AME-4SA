@@ -150,6 +150,10 @@ angular.module('ameApp')
 
   $scope.changeNumBoxes = function(num){
     var boxes = $scope.visit.qty_boxes;
+
+    if (num==-1 && boxes>2){
+      //TODO prompt for lbs of honey harvested?
+    }
     boxes = boxes + num;
     if (boxes<1){
       boxes = 1;

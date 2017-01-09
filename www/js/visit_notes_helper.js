@@ -30,6 +30,33 @@ angular.module('ameApp')
     return deferred.promise;
   };
 
+  service.getRemindersByYardId = function(yardId){ //returns all visit notes with reminders for a given Yard via yard ID
+    var notesWithReminders = [];
+    var deferred = $q.defer();
+
+    var query = "SELECT Visit_Notes.*, Colonies.number AS colony_number, Visits.colony_id AS colony_id, Visits.date_time AS date_time FROM Visit_Notes "+
+                "LEFT JOIN Visits ON Visits.id = Visit_Notes.visit_id "+
+                "LEFT JOIN Colonies ON Visits.colony_id = Colonies.id "+
+                "WHERE Visits.yard_id = ? AND Visit_Notes.is_reminder = 1"
+
+    $cordovaSQLite.execute(db, query, [yardId]).then(function(res) {
+      if(res.rows.length > 0) {
+        for (i = 0; i < res.rows.length; i++) {
+          console.log("SELECTED -> " + res.rows.item(i));
+          notesWithReminders.push(res.rows.item(i));
+        }
+        deferred.resolve(notesWithReminders);
+
+      } else {
+          console.log("No reminders found in this yard");
+      }
+    }, function (err) {
+        console.error(err);
+    });
+    return deferred.promise;
+  };
+
+
   service.getNotesForVisitById = function(visitId){ //returns all visit notes for a visit via ID
     notes = [];
     var deferred = $q.defer();

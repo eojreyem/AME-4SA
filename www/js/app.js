@@ -51,7 +51,7 @@ angular
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Colony_Inactive_Reasons (id INTEGER PRIMARY KEY, reason TEXT)");
     $cordovaSQLite.execute(db, "INSERT INTO Colony_Inactive_Reasons (reason) VALUES ('Colapsed'), ('Disease'), ('Starvation'), ('Robbed'), ('Sold'), ('Combined'), ('Small Cluster'), ('Other')");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Data_Types (id INTEGER PRIMARY KEY, type TEXT)");
-    $cordovaSQLite.execute(db, "INSERT INTO Data_Types (type) VALUES ('Weight (lbs)'), ('Varroa/300'), ('Hygienic Empty'), ('Hygienic Unclean'), ('Harvest (lbs)')");
+    $cordovaSQLite.execute(db, "INSERT INTO Data_Types (type) VALUES ('Weight (lbs)'), ('Varroa/300'), ('Hygienic (Empty Cells)'), ('Hygienic (%)'), ('Honey (lbs)')");
   });
 })
 
