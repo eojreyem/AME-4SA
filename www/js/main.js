@@ -6,9 +6,10 @@
 
 angular.module('ameApp')
 
-.controller('MainCtrl', function($ionicPlatform, $scope, $location, $cordovaSQLite, $ionicPopup, YardHelper, VisitHelper, VisitNotesHelper) {
+.controller('MainCtrl', function($ionicPlatform, $scope, $location, $cordovaSQLite, $ionicPopup, YardHelper, ColonyHelper, VisitHelper, VisitNotesHelper) {
 
   $scope.newYard = {name:null};
+  $scope.searchColony = {tag:null};
   var tzoffset = (new Date()).getTimezoneOffset() * 60000; //timezone offset in milliseconds
   var remindersPopup = [];
 
@@ -44,6 +45,32 @@ angular.module('ameApp')
       $scope.yards = yards;
     });
   });
+
+  $scope.showFindColonyPopup = function(){
+    var findColonyPopup = $ionicPopup.show({
+      title: 'Find Colony',
+      scope: $scope,
+      template: '<label class="item item-input">'+
+                '  <input ng-model=searchColony.tag type="number" placeholder="999">'+
+                '</label>',
+      buttons: [
+        { text: 'Cancel'},
+        { text: 'Go To',
+          type: 'button-positive',
+          onTap: function(e) {
+            console.log($scope.searchColony.tag);
+            ColonyHelper.getColonyByNumber($scope.searchColony.tag).then(function(colony){
+              if (colony != null){
+                findColonyPopup.close();
+                $scope.goToColony(colony.id, colony.in_yard_id);
+              }
+            })
+          }
+        }
+      ]
+
+    })
+  }
 
   $scope.showCreateYardPopup = function(){
     var createYardPopup = $ionicPopup.show({
@@ -88,7 +115,7 @@ angular.module('ameApp')
   }
 
   $scope.goToColony = function(colonyId, yardId) {
-    remindersPopup.close();
+    //remindersPopup.close();
     $location.url('/yard/' + yardId + '/colony/' + colonyId);
   }
 
