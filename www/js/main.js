@@ -76,8 +76,9 @@ angular.module('ameApp')
     remindersPopup = $ionicPopup.show({
       title: 'Colony Reminders in Yard',
       scope:$scope,
-      template: '<div class="item" ng-repeat="reminder in Reminders" ng-click="goToColony(reminder.colony_id, reminder.yard_id)">'+
-                '  <i class="icon ion-ios-pricetag"> {{reminder.colony_number}}</i> - {{reminder.note}}'+
+      template: '<div class="card" ng-repeat="reminder in Reminders" ng-click="goToColony(reminder.colony_id, reminder.yard_id)">'+
+                ' <div class="item item-divider"><i class="icon ion-ios-pricetag"> {{reminder.colony_number}} on {{reminder.date_time| date:"MMM d, yyyy"}}</i></div>'+
+                '<div class="item item-text-wrap">{{reminder.note}}</div>'+
                 '</div>',
       buttons: [
         {text: 'Close'}

@@ -12,7 +12,7 @@
       </span>
     </div>
     <div class="item text-right" ng-show="yard.numColoniesInYard"> <!--TODO <span class="assertive"> - 4 neglected</span>-->
-      <button class="button button-outline button-positive button-small icon-right ion-ios-bell" ng-click="showReminders(yard.Reminders)">{{yard.Reminders.length}}</button>
+      <button class="button button-outline button-positive button-small icon-right ion-ios-bell" ng-click="showReminders(yard.Reminders)" ng-show="yard.Reminders">{{yard.Reminders.length}}</button>
       <button class="button button-positive icon-right ion-chevron-right" ng-click="goToYard(yard)">{{yard.numColoniesInYard}} Colonies </button>
     </div>
 
@@ -22,8 +22,8 @@
     <div class="item" ng-repeat="reminder in yard.Reminders">
       {{reminder.colony_number}} - {{reminder.note}}
     </div> -->
-    <div class="item" ng-hide="yard.numColoniesInYard">
-      yard is empty.
+    <div class="item text-right" ng-hide="yard.numColoniesInYard">
+      <button class="button button-positive icon-right ion-chevron-right" ng-click="goToYard(yard)">Empty </button>
     </div>
   </div>
 

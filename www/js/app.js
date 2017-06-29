@@ -31,13 +31,22 @@ angular
     $cordovaSQLite.execute(db, "DROP TABLE Diseases");
     $cordovaSQLite.execute(db, "DROP TABLE Data_Types");
 
+/* DELETE ALL!!!!!!!!!!!!!!!
+    $cordovaSQLite.execute(db, "DROP TABLE Yards");
+    $cordovaSQLite.execute(db, "DROP TABLE Visit_Notes");
+    $cordovaSQLite.execute(db, "DROP TABLE Visit_Data");
+    $cordovaSQLite.execute(db, "DROP TABLE Colonies");
+    $cordovaSQLite.execute(db, "DROP TABLE Queens");
+    $cordovaSQLite.execute(db, "DROP TABLE Visits");
+*/
+
     //Tables of data
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Yards (id INTEGER PRIMARY KEY, name TEXT)");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Visit_Notes (id INTEGER PRIMARY KEY, visit_id INTEGER, note TEXT, is_reminder INTEGER)");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Visit_Data (id INTEGER PRIMARY KEY, visit_id INTEGER, data_type_id INTEGER, data_value INTEGER)");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Colonies (id INTEGER PRIMARY KEY, date_entered DATETIME DEFAULT CURRENT_TIMESTAMP, in_yard_id INTEGER, number INTEGER, date_active TEXT, origin TEXT, date_inactive TEXT, reason_inactive_id INTEGER)");
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Queens (id INTEGER PRIMARY KEY, name TEXT, in_colony_id INTEGER, mother_queen_id INTEGER, origin TEXT, date_entered DATETIME DEFAULT CURRENT_TIMESTAMP, date_emerged TEXT, date_inactive TEXT, reason_inactive_id, mark_color_hex INTEGER)");
-    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Visits (id INTEGER PRIMARY KEY, date_entered DATETIME DEFAULT CURRENT_TIMESTAMP, date_time TEXT, yard_id INTEGER, colony_id INTEGER, queen_id INTEGER, hive_type_id, qty_boxes INTEGER, queen_status_id INTEGER, frames_of_bees INTEGER, frames_of_brood INTEGER, has_temper INTEGER, is_feeding INTEGER, disease_id INTEGER)");
+    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Visits (id INTEGER PRIMARY KEY, date_entered DATETIME DEFAULT CURRENT_TIMESTAMP, date_time TEXT, yard_id INTEGER, colony_id INTEGER, queen_id INTEGER, hive_type_id INTEGER, qty_boxes INTEGER, queen_status_id INTEGER, frames_of_bees INTEGER, frames_of_brood INTEGER, has_temper INTEGER, is_feeding INTEGER, disease_id INTEGER)");
 
     //Tables of Keys
     $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS Queen_Statuses (id INTEGER PRIMARY KEY, status TEXT)");
