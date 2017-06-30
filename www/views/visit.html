@@ -16,23 +16,26 @@
         <button class="button col-40 button-block button-outline button-dark" ng-click="showChangeVisitTime()">{{visit.date_time | date:'h:mm a'}}</button>
       </div>
 
-      <div class="row">
-        <div class="col-50">
-          <label class="item item-input item-select" >
-            <div class="input-label"> Boxes
-            </div>
-            <select id="hiveTypeSelector" ng-model="visit.hive_type_id" ng-options="hiveType.id as hiveType.type for hiveType in hiveTypes">          </select>
-          </label>
-        </div>
-        <div class="button-bar col-50">
-          <button class="button button-positive icon ion-minus-circled" ng-click="changeNumBoxes(-1)"></button>
-          <button class="button"><b id="numberBoxesBtn">{{visit.qty_boxes}}</b></button>
-          <button class="button button-positive icon ion-plus-circled" ng-click="changeNumBoxes(1)"></button>
-        </div>
+      <label class="item item-input item-select">
+        <div class="input-label">Hive Type</div>
+        <select id="hiveTypeSelector" ng-model="visit.hive_type_id" ng-options="hiveType.id as hiveType.type for hiveType in hiveTypes">          </select>
+      </label>
+
+      <div class="item item-input item-button-right">
+              <div class="input-label"># of Boxes </div>
+              <input type="number" ng-model="visit.qty_boxes" id="numberBoxesBtn">
+              <!--
+              <button class="button button-positive icon ion-minus-circled" ng-click="changeNumBoxes(-1)"></button>
+              <button class="button"><b id="numberBoxesBtn">{{visit.qty_boxes}}</b></button> -->
+              <button class="button button-positive" ng-click="changeNumBoxes(1)"> add one </button>
       </div>
 
-      <label class="item item-input item-select item-dark" ng-click = "showChangeQueenPopup()">
-        <div class="input-label"><i class="icon ion-record" id="queenMarkIcon"></i> <b> {{reigningQueen.id}} </b> {{reigningQueen.name}}</div>
+      <div class="item item-button-right"> Reigning Queen
+        <button class="button button-dark" ng-click = "showChangeQueenPopup()"><i class="icon ion-record" id="queenMarkIcon"></i> <b> {{reigningQueen.id}} </b> {{reigningQueen.name}}</button>
+      </div>
+
+      <label class="item item-input item-select">
+        <div class="input-label">Queen Status</div>
         <select ng-model="visit.queen_status_id" ng-change="queenStatusChange()" ng-options="status.id as status.status for status in queenStatuses">{{status.status}}</select>
       </label>
 
